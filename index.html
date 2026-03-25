@@ -114,23 +114,34 @@
 
     <!-- Navigation -->
     <nav id="navbar" class="fixed w-full z-[999] transition-all duration-300 py-4 px-6 md:px-12 flex justify-between items-center bg-transparent border-b border-transparent">
-        <div class="font-heading font-bold text-2xl tracking-wider text-white uppercase flex items-center gap-3">
+        <div class="font-heading font-bold text-2xl tracking-wider text-white uppercase flex items-center gap-3 relative z-50">
             <i data-lucide="gamepad-2" class="text-game-primary w-8 h-8"></i>
             [LOGO DO JOGO]
         </div>
-        <div class="hidden md:flex gap-8 font-sans text-sm font-semibold tracking-wide uppercase">
+        <div class="hidden md:flex gap-8 font-sans text-sm font-semibold tracking-wide uppercase relative z-50">
             <a href="#inicio" class="text-gray-300 hover:text-game-primary transition-colors drop-shadow-md">Início</a>
             <a href="#sobre" class="text-gray-300 hover:text-game-primary transition-colors drop-shadow-md">Sobre o Jogo</a>
             <a href="#universo" class="text-gray-300 hover:text-game-primary transition-colors drop-shadow-md">Universo</a>
             <a href="#gameplay" class="text-gray-300 hover:text-game-primary transition-colors drop-shadow-md">Gameplay</a>
         </div>
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-4 relative z-50">
             <a href="#newsletter" class="hidden md:block border border-game-primary text-game-primary hover:bg-game-primary hover:text-white px-6 py-2.5 rounded uppercase font-bold text-sm transition-all duration-300 shadow-[0_0_15px_rgba(225,29,72,0.3)] hover:shadow-[0_0_25px_rgba(225,29,72,0.6)]">
                 Acesso Antecipado
             </a>
-            <button class="md:hidden text-white hover:text-game-primary transition-colors">
+            <button id="mobile-btn" class="md:hidden text-white hover:text-game-primary transition-colors relative z-50">
                 <i data-lucide="menu" class="w-8 h-8"></i>
             </button>
+        </div>
+        
+        <!-- Menu Mobile Overlay -->
+        <div id="mobile-menu" class="fixed inset-0 bg-game-darker/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden transition-all duration-300 opacity-0 pointer-events-none -z-10">
+            <a href="#inicio" class="mobile-link font-heading text-3xl uppercase text-gray-300 hover:text-game-primary transition-colors">Início</a>
+            <a href="#sobre" class="mobile-link font-heading text-3xl uppercase text-gray-300 hover:text-game-primary transition-colors">Sobre o Jogo</a>
+            <a href="#universo" class="mobile-link font-heading text-3xl uppercase text-gray-300 hover:text-game-primary transition-colors">Universo</a>
+            <a href="#gameplay" class="mobile-link font-heading text-3xl uppercase text-gray-300 hover:text-game-primary transition-colors">Gameplay</a>
+            <a href="#newsletter" class="mobile-link mt-8 border border-game-primary text-game-primary hover:bg-game-primary hover:text-white px-8 py-4 rounded uppercase font-bold text-xl transition-all shadow-[0_0_15px_rgba(225,29,72,0.3)]">
+                Acesso Antecipado
+            </a>
         </div>
     </nav>
 
@@ -396,6 +407,26 @@
         </div>
     </section>
 
+    <!-- Call to Action / Newsletter -->
+    <section id="newsletter" class="py-24 bg-game-darker border-t border-gray-900 relative">
+        <div class="absolute inset-0 bg-game-primary/5 opacity-50"></div>
+        <div class="container mx-auto px-6 md:px-12 relative z-10 text-center max-w-3xl reveal">
+            <i data-lucide="mail" class="w-16 h-16 text-game-primary mx-auto mb-6"></i>
+            <h2 class="font-heading text-4xl md:text-5xl font-bold uppercase mb-4">Junte-se à Resistência</h2>
+            <p class="text-gray-400 mb-10 text-lg">
+                Inscreva-se na nossa newsletter para receber atualizações do desenvolvimento, acesso antecipado a betas e recompensas exclusivas no lançamento.
+            </p>
+            
+            <form class="flex flex-col sm:flex-row gap-4 justify-center" onsubmit="event.preventDefault(); alert('Obrigado por se inscrever! (Placeholder)');">
+                <input type="email" placeholder="Seu melhor e-mail" required class="bg-game-dark border border-gray-700 text-white px-6 py-4 rounded focus:outline-none focus:border-game-primary flex-grow max-w-md w-full transition-colors">
+                <button type="submit" class="bg-game-primary text-white px-8 py-4 rounded font-heading text-lg uppercase tracking-wider hover:bg-game-accent transition-colors shadow-[0_0_15px_rgba(225,29,72,0.4)] whitespace-nowrap">
+                    Inscrever-se
+                </button>
+            </form>
+            <p class="text-xs text-gray-600 mt-4 uppercase tracking-widest">Zero spam. Cancele quando quiser.</p>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="bg-black py-12 border-t border-gray-900">
         <div class="container mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-6">
@@ -431,6 +462,41 @@
                 navbar.classList.remove('bg-game-darker/95', 'backdrop-blur-xl', 'border-game-primary/30', 'shadow-[0_10px_30px_rgba(0,0,0,0.8)]', 'py-3');
                 navbar.classList.add('bg-transparent', 'border-transparent', 'py-4');
             }
+        });
+
+        // --- FUNCIONALIDADE MENU MOBILE ---
+        const mobileBtn = document.getElementById('mobile-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        let isMenuOpen = false;
+
+        function toggleMenu() {
+            isMenuOpen = !isMenuOpen;
+            if (isMenuOpen) {
+                // Abre o menu
+                mobileMenu.classList.remove('opacity-0', 'pointer-events-none', '-z-10');
+                mobileMenu.classList.add('opacity-100', 'pointer-events-auto', 'z-40');
+                mobileBtn.innerHTML = '<i data-lucide="x" class="w-8 h-8"></i>';
+                document.body.style.overflow = 'hidden'; // Impede a página de rolar ao fundo
+            } else {
+                // Fecha o menu
+                mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+                mobileMenu.classList.remove('opacity-100', 'pointer-events-auto', 'z-40');
+                // Adiciona um pequeno atraso antes de empurrar para trás (-z-10) para a animação rodar bem
+                setTimeout(() => mobileMenu.classList.add('-z-10'), 300);
+                mobileBtn.innerHTML = '<i data-lucide="menu" class="w-8 h-8"></i>';
+                document.body.style.overflow = ''; // Libera a rolagem
+            }
+            lucide.createIcons(); // Recarrega os ícones pós-troca
+        }
+
+        mobileBtn.addEventListener('click', toggleMenu);
+
+        // Fechar menu se clicar num dos links do telemóvel
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (isMenuOpen) toggleMenu();
+            });
         });
 
         // --- 1. REVELAÇÃO PADRÃO COM ANIME.JS (Intersection Observer) ---
