@@ -132,18 +132,18 @@
                 <i data-lucide="menu" class="w-8 h-8"></i>
             </button>
         </div>
-        
-        <!-- Menu Mobile Overlay -->
-        <div id="mobile-menu" class="fixed top-0 left-0 w-full h-[100dvh] bg-game-darker/98 backdrop-blur-2xl flex flex-col items-center justify-start pt-32 pb-12 gap-8 md:hidden transition-all duration-300 opacity-0 pointer-events-none -z-10 overflow-y-auto">
-            <a href="#inicio" class="mobile-link font-heading text-3xl uppercase text-gray-300 hover:text-game-primary transition-colors shrink-0">Início</a>
-            <a href="#sobre" class="mobile-link font-heading text-3xl uppercase text-gray-300 hover:text-game-primary transition-colors shrink-0">Sobre o Jogo</a>
-            <a href="#universo" class="mobile-link font-heading text-3xl uppercase text-gray-300 hover:text-game-primary transition-colors shrink-0">Universo</a>
-            <a href="#gameplay" class="mobile-link font-heading text-3xl uppercase text-gray-300 hover:text-game-primary transition-colors shrink-0">Gameplay</a>
-            <a href="#newsletter" class="mobile-link mt-4 border border-game-primary text-game-primary hover:bg-game-primary hover:text-white px-8 py-4 rounded uppercase font-bold text-xl transition-all shadow-[0_0_15px_rgba(225,29,72,0.3)] shrink-0">
-                Acesso Antecipado
-            </a>
-        </div>
     </nav>
+
+    <!-- Menu Mobile Overlay (Movido para fora da Nav para corrigir conflito de scroll/blur) -->
+    <div id="mobile-menu" class="fixed inset-0 z-[998] bg-game-darker flex flex-col items-center justify-start pt-32 pb-12 gap-8 md:hidden transition-opacity duration-300 opacity-0 pointer-events-none overflow-y-auto">
+        <a href="#inicio" class="mobile-link font-heading text-3xl uppercase text-gray-300 hover:text-game-primary transition-colors shrink-0">Início</a>
+        <a href="#sobre" class="mobile-link font-heading text-3xl uppercase text-gray-300 hover:text-game-primary transition-colors shrink-0">Sobre o Jogo</a>
+        <a href="#universo" class="mobile-link font-heading text-3xl uppercase text-gray-300 hover:text-game-primary transition-colors shrink-0">Universo</a>
+        <a href="#gameplay" class="mobile-link font-heading text-3xl uppercase text-gray-300 hover:text-game-primary transition-colors shrink-0">Gameplay</a>
+        <a href="#newsletter" class="mobile-link mt-4 border border-game-primary text-game-primary hover:bg-game-primary hover:text-white px-8 py-4 rounded uppercase font-bold text-xl transition-all shadow-[0_0_15px_rgba(225,29,72,0.3)] shrink-0">
+            Acesso Antecipado
+        </a>
+    </div>
 
     <!-- Hero Section -->
     <section id="inicio" class="hero-bg relative h-screen flex flex-col items-center justify-center text-center px-4">
@@ -284,7 +284,7 @@
                             Um labirinto interconectado de arranha-céus em ruínas e esgotos tóxicos. Descubra atalhos escondidos, áreas secretas inexploradas e o submundo corporativo esquecido.
                         </p>
                     </div>
-                </ div>
+                </div>
 
                 <!-- Card 3: Itens -->
                 <div class="lore-card absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] md:w-full max-h-[85vh] flex flex-col md:flex-row bg-game-darker/80 backdrop-blur-2xl border border-game-primary/40 rounded-2xl opacity-0 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden">
@@ -474,16 +474,14 @@
             isMenuOpen = !isMenuOpen;
             if (isMenuOpen) {
                 // Abre o menu
-                mobileMenu.classList.remove('opacity-0', 'pointer-events-none', '-z-10');
-                mobileMenu.classList.add('opacity-100', 'pointer-events-auto', 'z-40');
+                mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
+                mobileMenu.classList.add('opacity-100', 'pointer-events-auto');
                 mobileBtn.innerHTML = '<i data-lucide="x" class="w-8 h-8"></i>';
                 document.body.style.overflow = 'hidden'; // Impede a página de rolar ao fundo
             } else {
                 // Fecha o menu
                 mobileMenu.classList.add('opacity-0', 'pointer-events-none');
-                mobileMenu.classList.remove('opacity-100', 'pointer-events-auto', 'z-40');
-                // Adiciona um pequeno atraso antes de empurrar para trás (-z-10) para a animação rodar bem
-                setTimeout(() => mobileMenu.classList.add('-z-10'), 300);
+                mobileMenu.classList.remove('opacity-100', 'pointer-events-auto');
                 mobileBtn.innerHTML = '<i data-lucide="menu" class="w-8 h-8"></i>';
                 document.body.style.overflow = ''; // Libera a rolagem
             }
