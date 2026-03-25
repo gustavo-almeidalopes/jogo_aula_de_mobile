@@ -1,0 +1,579 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[Inserir Nome do Jogo] - Ação 2D</title>
+    <!-- Tailwind CSS --> 
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Anime.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        heading: ['Oswald', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        game: {
+                            dark: '#0a0a0c',
+                            darker: '#050506',
+                            primary: '#e11d48', // Red/Crimson for action vibe
+                            accent: '#fb7185'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0a0a0c;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050506;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e11d48;
+            border-radius: 4px;
+        }
+
+        /* Scroll Animations (Preparadas para AnimeJS) */
+        .reveal {
+            opacity: 0;
+        }
+
+        /* Glitch Effect for main title */
+        .glitch-wrapper {
+            position: relative;
+        }
+        .glitch-wrapper::before,
+        .glitch-wrapper::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+        }
+        .glitch-wrapper::before {
+            left: 2px;
+            text-shadow: -2px 0 #fb7185;
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim 3s infinite linear alternate-reverse;
+        }
+        .glitch-wrapper::after {
+            left: -2px;
+            text-shadow: -2px 0 #0ea5e9;
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-anim {
+            0% { clip: rect(31px, 9999px, 94px, 0); }
+            20% { clip: rect(62px, 9999px, 42px, 0); }
+            40% { clip: rect(16px, 9999px, 78px, 0); }
+            60% { clip: rect(89px, 9999px, 13px, 0); }
+            80% { clip: rect(45px, 9999px, 56px, 0); }
+            100% { clip: rect(98px, 9999px, 24px, 0); }
+        }
+
+        /* Hero Background Overlay */
+        .hero-bg {
+            background: radial-gradient(circle at center, rgba(225, 29, 72, 0.15) 0%, rgba(10, 10, 12, 1) 70%),
+                        url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop') center/cover;
+            background-attachment: fixed;
+        }
+
+        /* Grid Background Animado para a Seção Universo */
+        .cyber-grid {
+            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+            -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-game-primary selection:text-white">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-[999] transition-all duration-300 py-4 px-6 md:px-12 flex justify-between items-center bg-transparent border-b border-transparent">
+        <div class="font-heading font-bold text-2xl tracking-wider text-white uppercase flex items-center gap-3">
+            <i data-lucide="gamepad-2" class="text-game-primary w-8 h-8"></i>
+            [LOGO DO JOGO]
+        </div>
+        <div class="hidden md:flex gap-8 font-sans text-sm font-semibold tracking-wide uppercase">
+            <a href="#inicio" class="text-gray-300 hover:text-game-primary transition-colors drop-shadow-md">Início</a>
+            <a href="#sobre" class="text-gray-300 hover:text-game-primary transition-colors drop-shadow-md">Sobre o Jogo</a>
+            <a href="#universo" class="text-gray-300 hover:text-game-primary transition-colors drop-shadow-md">Universo</a>
+            <a href="#gameplay" class="text-gray-300 hover:text-game-primary transition-colors drop-shadow-md">Gameplay</a>
+        </div>
+        <div class="flex items-center gap-4">
+            <a href="#newsletter" class="hidden md:block border border-game-primary text-game-primary hover:bg-game-primary hover:text-white px-6 py-2.5 rounded uppercase font-bold text-sm transition-all duration-300 shadow-[0_0_15px_rgba(225,29,72,0.3)] hover:shadow-[0_0_25px_rgba(225,29,72,0.6)]">
+                Acesso Antecipado
+            </a>
+            <button class="md:hidden text-white hover:text-game-primary transition-colors">
+                <i data-lucide="menu" class="w-8 h-8"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero-bg relative h-screen flex flex-col items-center justify-center text-center px-4">
+        <!-- Overlay escuro para garantir leitura -->
+        <div class="absolute inset-0 bg-black/50 z-0"></div>
+        
+        <div class="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
+            <span class="text-game-primary font-bold tracking-[0.2em] uppercase mb-4 reveal">O novo patamar da ação 2D</span>
+            <h1 class="font-heading font-bold text-6xl md:text-8xl lg:text-9xl uppercase tracking-tighter text-white mb-6 glitch-wrapper reveal" data-text="[INSERIR NOME DO JOGO]">
+                [INSERIR NOME DO JOGO]
+            </h1>
+            <p class="text-lg md:text-xl text-gray-300 max-w-2xl font-light mb-10 reveal" style="transition-delay: 200ms;">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Entre em um mundo implacável onde cada corte conta.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 reveal" style="transition-delay: 400ms;">
+                <a href="#gameplay" class="bg-game-primary text-white px-8 py-4 rounded font-heading text-xl uppercase tracking-wider hover:bg-game-accent transition-colors flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(225,29,72,0.4)]">
+                    <i data-lucide="play" class="w-5 h-5 fill-current"></i> Ver Trailer
+                </a>
+                <a href="#sobre" class="bg-white/10 backdrop-blur-sm text-white border border-white/20 px-8 py-4 rounded font-heading text-xl uppercase tracking-wider hover:bg-white/20 transition-colors">
+                    Descobrir Mais
+                </a>
+            </div>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50">
+            <i data-lucide="chevron-down" class="w-8 h-8"></i>
+        </div>
+    </section>
+
+    <!-- Sobre o Jogo -->
+    <section id="sobre" class="py-24 bg-game-darker relative overflow-hidden">
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="flex flex-col md:flex-row items-center gap-16">
+                <div class="md:w-1/2 reveal">
+                    <h2 class="font-heading text-4xl md:text-6xl font-bold uppercase mb-6"><span class="text-game-primary">Sobre</span> o Jogo</h2>
+                    <p class="text-gray-400 mb-6 text-lg leading-relaxed">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim.
+                    </p>
+                    <p class="text-gray-400 mb-8 text-lg leading-relaxed">
+                        Phasellus pellentesque id justo vitae congue. Donec magna magna, auctor quis est at, cursus tempor dui. Suspendisse sagittis a diam ut scelerisque. 
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="sword" class="text-game-primary w-6 h-6"></i>
+                            <span class="font-semibold text-xl">Combate visceral e preciso</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="skull" class="text-game-primary w-6 h-6"></i>
+                            <span class="font-semibold text-xl">Chefões que testarão seus limites</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="map" class="text-game-primary w-6 h-6"></i>
+                            <span class="font-semibold text-xl">Mundo interconectado vasto</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="md:w-1/2 relative reveal" style="transition-delay: 200ms;">
+                    <!-- Placeholder visual 2D Art -->
+                    <div class="aspect-square bg-gradient-to-tr from-game-primary/20 to-game-dark rounded-2xl border border-game-primary/30 relative flex items-center justify-center overflow-hidden shadow-2xl shadow-game-primary/10">
+                        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20"></div>
+                        <div class="text-center p-8">
+                            <i data-lucide="image" class="w-16 h-16 text-game-primary/50 mx-auto mb-4"></i>
+                            <p class="font-heading text-2xl text-gray-500 uppercase">Arte do Jogo Aqui</p>
+                            <p class="text-sm text-gray-600">Screenshot ou Key Art</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- UNIVERSO / LORE (Rolagem Dinâmica Cinemática com AnimeJS) -->
+    <section id="universo" class="relative h-[400vh] bg-game-dark">
+        <!-- O container "sticky" prende a visualização na tela enquanto a seção real de 400vh é rolada -->
+        <div class="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
+            
+            <!-- Background Animado em Grid -->
+            <div class="absolute inset-0 cyber-grid opacity-30"></div>
+
+            <!-- Indicador de Timeline (Lateral Direita) -->
+            <div class="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-center gap-2">
+                <div class="timeline-dot w-3 h-3 rounded-full bg-gray-800 border border-gray-600 transition-all shadow-[0_0_0px_transparent]"></div>
+                <div class="w-[1px] h-16 bg-gradient-to-b from-gray-800 to-gray-800/20"></div>
+                <div class="timeline-dot w-3 h-3 rounded-full bg-gray-800 border border-gray-600 transition-all shadow-[0_0_0px_transparent]"></div>
+                <div class="w-[1px] h-16 bg-gradient-to-b from-gray-800 to-gray-800/20"></div>
+                <div class="timeline-dot w-3 h-3 rounded-full bg-gray-800 border border-gray-600 transition-all shadow-[0_0_0px_transparent]"></div>
+                <div class="w-[1px] h-16 bg-gradient-to-b from-gray-800 to-gray-800/20"></div>
+                <div class="timeline-dot w-3 h-3 rounded-full bg-gray-800 border border-gray-600 transition-all shadow-[0_0_0px_transparent]"></div>
+            </div>
+
+            <!-- Background giratório (Mapa/Anel Cibernético central) -->
+            <div class="lore-ring absolute w-[150vw] h-[150vw] md:w-[70vw] md:h-[70vw] rounded-full border-[0.5px] border-game-primary/20 flex items-center justify-center opacity-40">
+                <div class="absolute w-[90%] h-[90%] rounded-full border-2 border-dashed border-game-accent/20"></div>
+                <div class="absolute w-[60%] h-[60%] rounded-full border border-gray-800 flex items-center justify-center bg-game-primary/5 blur-3xl"></div>
+                <div class="absolute w-[70%] h-[70%] rounded-full border-[0.5px] border-gray-800 flex items-center justify-center">
+                    <div class="w-full h-[1px] bg-gradient-to-r from-transparent via-game-primary/30 to-transparent absolute top-1/2 left-0"></div>
+                    <div class="w-[1px] h-full bg-gradient-to-b from-transparent via-game-primary/30 to-transparent absolute top-0 left-1/2"></div>
+                </div>
+            </div>
+
+            <!-- Central Hub (Bússola estática no centro - fica por trás dos cards) -->
+            <div class="absolute z-10 w-24 h-24 md:w-32 md:h-32 rounded-full border-2 border-game-primary bg-game-dark flex items-center justify-center shadow-[0_0_30px_rgba(225,29,72,0.3)] animate-pulse">
+                <i data-lucide="crosshair" class="w-10 h-10 md:w-12 md:h-12 text-game-primary"></i>
+            </div>
+
+            <!-- Cards de Informação (Controlados pelo Scroll) -->
+            <!-- O translateX(-50%) no Tailwind foi mantido e será respeitado pelo AnimeJS agora -->
+            <div class="relative z-30 w-full max-w-5xl mx-auto px-6 h-full perspective-[1000px]">
+                
+                <!-- Card 1: Personagem -->
+                <div class="lore-card absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex flex-col md:flex-row bg-game-darker/80 backdrop-blur-2xl border border-game-primary/40 rounded-2xl opacity-0 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden">
+                    <div class="md:w-2/5 bg-gray-900 relative min-h-[250px] flex items-center justify-center border-b md:border-b-0 md:border-r border-gray-800">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1535295972055-1c762f4483e5?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center opacity-40 mix-blend-luminosity"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-game-darker to-transparent"></div>
+                        <i data-lucide="user" class="w-20 h-20 text-game-primary relative z-10 drop-shadow-[0_0_15px_rgba(225,29,72,1)]"></i>
+                    </div>
+                    <div class="md:w-3/5 p-8 md:p-12 text-left flex flex-col justify-center">
+                        <span class="text-game-accent font-mono text-sm tracking-widest uppercase mb-2">Arquivo #001</span>
+                        <h3 class="font-heading text-3xl md:text-5xl font-bold uppercase text-white mb-4">O Protagonista</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed">
+                            Um mercenário forjado nas sombras de Neon-City. Equipado com lâminas de plasma e reflexos aprimorados, ele é a última linha de defesa entre a humanidade e o colapso sintético.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 2: Mapa -->
+                <div class="lore-card absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex flex-col md:flex-row bg-game-darker/80 backdrop-blur-2xl border border-game-primary/40 rounded-2xl opacity-0 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden">
+                    <div class="md:w-2/5 bg-gray-900 relative min-h-[250px] flex items-center justify-center border-b md:border-b-0 md:border-r border-gray-800">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center opacity-40 mix-blend-luminosity"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-game-darker to-transparent"></div>
+                        <i data-lucide="map" class="w-20 h-20 text-game-primary relative z-10 drop-shadow-[0_0_15px_rgba(225,29,72,1)]"></i>
+                    </div>
+                    <div class="md:w-3/5 p-8 md:p-12 text-left flex flex-col justify-center">
+                        <span class="text-game-accent font-mono text-sm tracking-widest uppercase mb-2">Setor Comprometido</span>
+                        <h3 class="font-heading text-3xl md:text-5xl font-bold uppercase text-white mb-4">Distrito Zero</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed">
+                            Um labirinto interconectado de arranha-céus em ruínas e esgotos tóxicos. Descubra atalhos escondidos, áreas secretas inexploradas e o submundo corporativo esquecido.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 3: Itens -->
+                <div class="lore-card absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex flex-col md:flex-row bg-game-darker/80 backdrop-blur-2xl border border-game-primary/40 rounded-2xl opacity-0 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden">
+                    <div class="md:w-2/5 bg-gray-900 relative min-h-[250px] flex items-center justify-center border-b md:border-b-0 md:border-r border-gray-800">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1635830625698-3b9bd74671ca?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center opacity-40 mix-blend-luminosity"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-game-darker to-transparent"></div>
+                        <i data-lucide="cpu" class="w-20 h-20 text-game-primary relative z-10 drop-shadow-[0_0_15px_rgba(225,29,72,1)]"></i>
+                    </div>
+                    <div class="md:w-3/5 p-8 md:p-12 text-left flex flex-col justify-center">
+                        <span class="text-game-accent font-mono text-sm tracking-widest uppercase mb-2">Aprimoramentos</span>
+                        <h3 class="font-heading text-3xl md:text-5xl font-bold uppercase text-white mb-4">Relíquias Neurais</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed">
+                            Encontre módulos de memória ancestrais que alteram seu estilo de jogo, concedendo habilidades como dash aéreo contínuo, reflexão de projéteis e distorção de tempo.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 4: Boss -->
+                <div class="lore-card absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex flex-col md:flex-row bg-game-darker/80 backdrop-blur-2xl border border-game-primary/40 rounded-2xl opacity-0 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden">
+                    <div class="md:w-2/5 bg-gray-900 relative min-h-[250px] flex items-center justify-center border-b md:border-b-0 md:border-r border-gray-800">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1620503374956-c942862f0372?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center opacity-40 mix-blend-luminosity"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-game-darker to-transparent"></div>
+                        <i data-lucide="skull" class="w-20 h-20 text-game-primary relative z-10 drop-shadow-[0_0_15px_rgba(225,29,72,1)]"></i>
+                    </div>
+                    <div class="md:w-3/5 p-8 md:p-12 text-left flex flex-col justify-center">
+                        <span class="text-game-accent font-mono text-sm tracking-widest uppercase mb-2">Ameaça Classe S</span>
+                        <h3 class="font-heading text-3xl md:text-5xl font-bold uppercase text-white mb-4">Senhores de Aço</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed">
+                            Enfrente titãs mecânicos que dominam diferentes setores. Cada batalha exigirá precisão cirúrgica e a combinação perfeita de suas habilidades letais.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DYNAMIC SCROLLING VIDEO SECTION -->
+    <!-- Esta é a seção onde o vídeo fica preso na tela enquanto o texto rola -->
+    <section id="gameplay" class="py-24 bg-game-dark relative">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-heading text-4xl md:text-6xl font-bold uppercase"><span class="text-game-primary">Gameplay</span> Dinâmico</h2>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Role para descobrir as principais mecânicas que definem a experiência de [INSERIR NOME DO JOGO].</p>
+            </div>
+
+            <!-- O container flexível. No desktop, lado a lado. -->
+            <div class="flex flex-col lg:flex-row gap-12 relative items-start">
+                
+                <!-- Coluna do VÍDEO (Sticky / Preso) -->
+                <!-- No desktop, ele gruda no topo (top-24) e fica parado enquanto rola -->
+                <div class="w-full lg:w-1/2 lg:sticky top-24 z-20 reveal">
+                    <div class="rounded-xl overflow-hidden border border-gray-800 shadow-2xl shadow-black relative bg-black aspect-video group">
+                        <!-- Vídeo Placeholder Dinâmico -->
+                        <video 
+                            autoplay 
+                            loop 
+                            muted 
+                            playsinline
+                            class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500">
+                            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" type="video/mp4">
+                            Seu navegador não suporta vídeos HTML5.
+                        </video>
+                        <!-- Sobreposição de "Scanning" estilo HUD de jogo -->
+                        <div class="absolute inset-0 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30 mix-blend-overlay"></div>
+                        <div class="absolute inset-0 pointer-events-none border-2 border-game-primary/30 rounded-xl"></div>
+                        
+                        <!-- Etiqueta no canto -->
+                        <div class="absolute top-4 left-4 bg-game-primary text-white text-xs font-bold uppercase px-2 py-1 rounded">
+                            Imagens Pré-Alpha
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna do TEXTO (Rola normalmente) -->
+                <div class="w-full lg:w-1/2 flex flex-col space-y-32 py-10 lg:py-32">
+                    
+                    <!-- Bloco de Texto 1 -->
+                    <div class="reveal">
+                        <div class="w-12 h-12 bg-game-primary/20 rounded flex items-center justify-center mb-6 border border-game-primary/50">
+                            <span class="font-heading text-2xl font-bold text-game-primary">01</span>
+                        </div>
+                        <h3 class="font-heading text-3xl md:text-4xl font-bold uppercase mb-4 text-white">Mobilidade Acrobática</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed mb-4">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        </p>
+                        <p class="text-gray-500 text-base leading-relaxed">
+                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                        </p>
+                    </div>
+
+                    <!-- Bloco de Texto 2 -->
+                    <div class="reveal">
+                        <div class="w-12 h-12 bg-game-primary/20 rounded flex items-center justify-center mb-6 border border-game-primary/50">
+                            <span class="font-heading text-2xl font-bold text-game-primary">02</span>
+                        </div>
+                        <h3 class="font-heading text-3xl md:text-4xl font-bold uppercase mb-4 text-white">Sistema de Combos</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed mb-4">
+                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper.
+                        </p>
+                        <ul class="space-y-2 text-gray-400 mt-4">
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-game-primary"></i> Ataques leves e pesados</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-game-primary"></i> Cancelamento de animação (Dash)</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-game-primary"></i> Habilidades definitivas (Ultimates)</li>
+                        </ul>
+                    </div>
+
+                    <!-- Bloco de Texto 3 -->
+                    <div class="reveal">
+                        <div class="w-12 h-12 bg-game-primary/20 rounded flex items-center justify-center mb-6 border border-game-primary/50">
+                            <span class="font-heading text-2xl font-bold text-game-primary">03</span>
+                        </div>
+                        <h3 class="font-heading text-3xl md:text-4xl font-bold uppercase mb-4 text-white">Inimigos Adaptativos</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed">
+                            Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+  
+    <!-- Footer -->
+    <footer class="bg-black py-12 border-t border-gray-900">
+        <div class="container mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="font-heading font-bold text-2xl tracking-wider text-gray-500 uppercase">
+                [LOGO DO JOGO]
+            </div>
+            
+            <div class="flex gap-6">
+                <a href="#" class="text-gray-500 hover:text-game-primary transition-colors"><i data-lucide="twitter"></i></a>
+                <a href="#" class="text-gray-500 hover:text-game-primary transition-colors"><i data-lucide="youtube"></i></a>
+                <a href="#" class="text-gray-500 hover:text-game-primary transition-colors"><i data-lucide="message-square"></i></a> <!-- Discord icon placeholder -->
+            </div>
+            
+            <div class="text-gray-600 text-sm">
+                &copy; 2026 [Inserir Estúdio]. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Inicializa os ícones do Lucide
+        lucide.createIcons();
+
+        // Navbar muda de cor ao rolar a página
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-game-darker/95', 'backdrop-blur-xl', 'border-game-primary/30', 'shadow-[0_10px_30px_rgba(0,0,0,0.8)]');
+                navbar.classList.remove('bg-transparent', 'border-transparent', 'py-4');
+                navbar.classList.add('py-3');
+            } else {
+                navbar.classList.remove('bg-game-darker/95', 'backdrop-blur-xl', 'border-game-primary/30', 'shadow-[0_10px_30px_rgba(0,0,0,0.8)]', 'py-3');
+                navbar.classList.add('bg-transparent', 'border-transparent', 'py-4');
+            }
+        });
+
+        // --- 1. REVELAÇÃO PADRÃO COM ANIME.JS (Intersection Observer) ---
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
+        };
+
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Substitui a classe CSS antiga pela animação do Anime.js
+                    anime({
+                        targets: entry.target,
+                        translateY: [40, 0],
+                        opacity: [0, 1],
+                        duration: 800,
+                        easing: 'easeOutQuart',
+                        delay: entry.target.style.transitionDelay ? parseInt(entry.target.style.transitionDelay) : 0
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            revealObserver.observe(el);
+        });
+
+
+        // --- 2. ROLAGEM DINÂMICA (SCRUB) COM ANIME.JS NA SEÇÃO UNIVERSO ---
+        // Criamos uma timeline pausada. O scroll da página vai avançar ou retroceder esta timeline
+        const loreTimeline = anime.timeline({
+            autoplay: false,
+            duration: 4000, // Representa 100% da rolagem da seção
+            easing: 'linear' // Importante ser linear para mapear perfeitamente no movimento do mouse
+        });
+
+        // O Anel Cibernético no fundo gira continuamente do início ao fim e faz um leve zoom
+        loreTimeline.add({
+            targets: '.lore-ring',
+            rotate: [0, 90],
+            scale: [1, 1.2],
+            duration: 4000
+        }, 0);
+
+        // Animação sequencial dos Cards e dos Dots da Timeline
+        const cards = document.querySelectorAll('.lore-card');
+        const dots = document.querySelectorAll('.timeline-dot');
+        const cardDuration = 1000;
+
+        cards.forEach((card, index) => {
+            const startTime = index * cardDuration;
+            
+            // Entrada: Fade In, surge com blur de baixo e cresce
+            // MUDANÇA CRUCIAL: translateX: ['-50%', '-50%'] trava a horizontal para manter no centro!
+            loreTimeline.add({
+                targets: card,
+                opacity: [0, 1],
+                translateY: ['-20%', '-50%'], 
+                translateX: ['-50%', '-50%'], 
+                scale: [0.85, 1],
+                filter: ['blur(15px)', 'blur(0px)'], // Efeito cinemático de foco
+                duration: 350,
+                easing: 'easeOutSine'
+            }, startTime);
+
+            // Acender o pontinho na Timeline correspondente a este card
+            if(dots[index]) {
+                loreTimeline.add({
+                    targets: dots[index],
+                    backgroundColor: ['#1f2937', '#e11d48'], // gray-800 to game-primary
+                    borderColor: ['#4b5563', '#fb7185'], // gray-600 to game-accent
+                    scale: [1, 1.5],
+                    boxShadow: ['0 0 0px transparent', '0 0 15px rgba(225,29,72,0.8)'],
+                    duration: 300,
+                    easing: 'easeOutExpo'
+                }, startTime);
+            }
+
+            // Período de "Pausa/Hold" onde o card fica totalmente visível e estático no meio da tela
+            loreTimeline.add({
+                targets: card,
+                opacity: 1, 
+                translateY: '-50%',
+                translateX: '-50%',
+                filter: 'blur(0px)',
+                duration: 300
+            }, startTime + 350);
+
+            // Saída: Fade Out, sobe e perde foco. (O último card não sai para a transição ficar suave pro próximo bloco)
+            if (index < cards.length - 1) {
+                loreTimeline.add({
+                    targets: card,
+                    opacity: [1, 0],
+                    translateY: ['-50%', '-80%'],
+                    translateX: '-50%',
+                    scale: [1, 1.1],
+                    filter: ['blur(0px)', 'blur(10px)'],
+                    duration: 350,
+                    easing: 'easeInSine'
+                }, startTime + 650);
+
+                // Apagar o pontinho na Timeline quando o card for embora
+                if(dots[index]) {
+                    loreTimeline.add({
+                        targets: dots[index],
+                        backgroundColor: '#1f2937',
+                        borderColor: '#4b5563',
+                        scale: 1,
+                        boxShadow: '0 0 0px transparent',
+                        duration: 300,
+                        easing: 'easeInExpo'
+                    }, startTime + 650);
+                }
+            }
+        });
+
+        // Mapear a posição do Scroll na tela com o Timeline do AnimeJS
+        const universoSection = document.getElementById('universo');
+        
+        window.addEventListener('scroll', () => {
+            const rect = universoSection.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
+            
+            // maxScroll é a distância total que o usuário precisa rolar DENTRO da seção (total menos o tamanho da janela)
+            const maxScroll = rect.height - windowHeight;
+            // currentScroll é o quanto a seção subiu no navegador
+            const currentScroll = -rect.top; 
+            
+            // Progresso de 0.0 a 1.0
+            let scrollProgress = currentScroll / maxScroll;
+            
+            // Travar as bordas
+            if (scrollProgress < 0) scrollProgress = 0;
+            if (scrollProgress > 1) scrollProgress = 1;
+
+            // Fazer o "Scrub": Ir para o momento exato da animação com base na rolagem
+            loreTimeline.seek(loreTimeline.duration * scrollProgress);
+        });
+
+    </script>
+</body>
+</html>
