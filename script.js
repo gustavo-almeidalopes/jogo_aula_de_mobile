@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     requestAnimationFrame(raf);
 
-    // OTIMIZAÇÃO: Cache de variáveis do DOM para o scroll não fritar o processador
     let winHeight = window.innerHeight;
     let sobreOffset = document.getElementById('sobre')?.offsetTop || 0;
     const universoSection = document.getElementById('universo');
@@ -37,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 2. Cursor Customizado Magnético Otimizado
+    // 2. Cursor Customizado
     if (window.innerWidth >= 768) {
         const cursor = document.getElementById('custom-cursor');
         const cursorFollower = document.getElementById('custom-cursor-follower');
@@ -51,14 +50,12 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
-            // Calcula a centralização do ponto (tamanho 10px -> desvio de -5px)
             cursor.style.transform = `translate3d(${mouseX - 5}px, ${mouseY - 5}px, 0)`;
-        }, { passive: true }); // passive: true evita bloquear o scroll nativo
+        }, { passive: true });
 
         function animateCursor() {
             followerX += (mouseX - followerX) * 0.2;
             followerY += (mouseY - followerY) * 0.2;
-            // Calcula a centralização do aro (tamanho 30px -> desvio de -15px)
             cursorFollower.style.transform = `translate3d(${followerX - 15}px, ${followerY - 15}px, 0)`;
             requestAnimationFrame(animateCursor);
         }
@@ -70,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. Controlo de Tema (Light/Dark)
+    // 3. Controlo de Tema
     document.getElementById('theme-toggle')?.addEventListener('click', () => {
         document.documentElement.classList.toggle('dark');
         localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
@@ -98,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
     mobileBtn?.addEventListener('click', toggleMenu);
     document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', toggleMenu));
 
-    // 5. Parallax e Coreografia de Scroll (Usando as variáveis com cache)
+    // 5. Parallax
     const heroScrollImage = document.getElementById('hero-scroll-image');
     const navbar = document.getElementById('navbar');
     const cards = document.querySelectorAll('.lore-card');
@@ -107,17 +104,14 @@ document.addEventListener('DOMContentLoaded', () => {
     lenis.on('scroll', (e) => {
         const scrollY = e.scroll;
 
-        // OTIMIZAÇÃO: Animação Parallax do Hero usando offset cached
         if (heroScrollImage && sobreOffset > 0) {
             const progress = Math.min(Math.max(scrollY / sobreOffset, 0), 1);
             const rotation = -(progress * 225);
             const scale = 1 + (Math.pow(progress, 3) * 7);
             const translateY = progress * (winHeight * 0.45);
-
             heroScrollImage.style.transform = `translate3d(0, ${translateY}px, 0) rotate(${rotation}deg) scale(${scale})`;
         }
 
-        // OTIMIZAÇÃO: Navbar background toggle
         if (scrollY > 50) {
             navbar.classList.add('bg-white/80', 'dark:bg-[#050505]/80', 'backdrop-blur-xl', 'border-gray-200', 'dark:border-white/10', 'py-4');
             navbar.classList.remove('border-transparent', 'py-6');
@@ -126,11 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
             navbar.classList.add('border-transparent', 'py-6');
         }
 
-        // OTIMIZAÇÃO: Timeline do Universo sem usar getBoundingClientRect no loop
         if (window.innerWidth >= 768 && cards.length > 0 && universoTop > 0) {
-            // Progresso da seção: se o scrollY estiver antes da secção é negativo, depois é > 1
             const progress = Math.max(0, Math.min(1, (scrollY - universoTop) / (universoHeight - winHeight)));
-
             const totalPhases = 3;
             const phase = progress * totalPhases;
             const currentIndex = Math.floor(phase);
@@ -202,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 6. Controlo de Vídeo Interativo
+    // 6. Vídeo
     const videoContainer = document.getElementById('video-container');
     const video = document.getElementById('gameplay-video');
     const playBtn = document.getElementById('play-button');
@@ -210,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (videoContainer && video) {
         videoContainer.addEventListener('click', () => {
             if (video.paused) {
-                video.play(); // O navegador descarregará o vídeo agora devido ao preload="none"
+                video.play();
                 playBtn.style.opacity = '0';
             } else {
                 video.pause();
@@ -219,8 +210,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 7. Animações de Revelação (Intersection Observer super eficiente)
-    const revealElements = document.querySelectorAll('.reveal');
+    // 7. Novas Animações de Revelação Estilo Lando Norris
+    // Procura por todas as variações de reveal (left, right)
+    const revealElements = document.querySelectorAll('.reveal-left, .reveal-right');
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -232,7 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     revealElements.forEach(el => revealObserver.observe(el));
 
-    // 9. Lógica do Modal Pop-up para Jogos
+    // 8. Modal Jogos
     const gameModal = document.getElementById('game-modal');
     const modalContent = document.getElementById('modal-content');
     const modalTitle = document.getElementById('modal-title');

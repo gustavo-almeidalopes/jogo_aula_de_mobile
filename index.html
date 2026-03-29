@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IPSUM. | Experiência Digital Premium</title>
-    
+
     <!-- Dica de performance: Pré-conectar aos domínios de imagens e fontes -->
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,120 +19,153 @@
         }
     </script>
 
-    <!-- Tailwind CSS --> 
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- CSS --> 
+    <!-- Importar CSS -->
     <link rel="stylesheet" href="styles.css">
 
+    <!-- Importar JS -->
+    <script src="script.js"></script>
+
+    <!-- Tailwild Config JS -->
+    <script src="tailwind_config.js"></script>
+
+
+    <!-- Tailwind CSS e Configuração -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <!-- Google Fonts Premium -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Bibliotecas Externas (Carregamento diferido onde possível) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Bibliotecas Externas -->
     <script src="https://unpkg.com/lucide@latest" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" defer></script>
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
-    
-    <!-- JS --> 
-    <script src="script.js"></script>
-
-    <!-- Tawlwind config JS --> 
-    <script src="tailwind_config.js"></script>
 
 </head>
-<body class="antialiased text-gray-900 bg-gray-50 dark:bg-game-dark dark:text-gray-100 transition-colors duration-700 bg-gradient-mesh">
+<body
+    class="antialiased text-gray-900 bg-gray-50 dark:bg-game-dark dark:text-gray-100 transition-colors duration-700 bg-gradient-mesh">
 
-    <!-- Cursor Customizado HTML -->
+    <!-- Cursor Customizado -->
     <div id="custom-cursor"></div>
     <div id="custom-cursor-follower"></div>
 
-    <!-- Navegação Super Premium -->
-    <nav id="navbar" class="fixed top-0 left-0 w-full z-[1000] transition-all duration-700 py-6 px-6 md:px-12 flex justify-between items-center border-b border-transparent hardware-accelerated">
-        <a href="#inicio" class="magnetic-btn font-heading font-bold text-2xl tracking-tight uppercase flex items-center gap-3 group transition-colors" aria-label="Home">
-            <div class="relative w-8 h-8 rounded-lg bg-game-primary text-white flex items-center justify-center overflow-hidden">
-                <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+    <!-- Navegação -->
+    <nav id="navbar"
+        class="fixed top-0 left-0 w-full z-[1000] transition-all duration-700 py-6 px-6 md:px-12 flex justify-between items-center border-b border-transparent hardware-accelerated">
+        <a href="#inicio"
+            class="magnetic-btn font-heading font-bold text-2xl tracking-tight uppercase flex items-center gap-3 group transition-colors"
+            aria-label="Home">
+            <div
+                class="relative w-8 h-8 rounded-lg bg-game-primary text-white flex items-center justify-center overflow-hidden">
+                <div
+                    class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                </div>
                 <i data-lucide="zap" class="w-4 h-4 relative z-10 fill-current"></i>
             </div>
             <span class="tracking-widest">IPSUM<span class="text-game-primary">.</span></span>
         </a>
-        
-        <!-- Menu Central -->
+
         <div class="hidden md:flex items-center gap-2 p-1.5 rounded-full glass-panel transition-colors">
-            <a href="#inicio" class="magnetic-btn px-6 py-2 rounded-full text-xs font-semibold tracking-widest uppercase text-gray-800 dark:text-gray-300 hover:text-game-primary dark:hover:text-game-primary transition-colors">Início</a>
-            <a href="#sobre" class="magnetic-btn px-6 py-2 rounded-full text-xs font-semibold tracking-widest uppercase text-gray-800 dark:text-gray-300 hover:text-game-primary dark:hover:text-game-primary transition-colors">Projetos</a>
-            <a href="#universo" class="magnetic-btn px-6 py-2 rounded-full text-xs font-semibold tracking-widest uppercase text-gray-800 dark:text-gray-300 hover:text-game-primary dark:hover:text-game-primary transition-colors">Universo</a>
-            <a href="#gameplay" class="magnetic-btn px-6 py-2 rounded-full text-xs font-semibold tracking-widest uppercase text-gray-800 dark:text-gray-300 hover:text-game-primary dark:hover:text-game-primary transition-colors">Showcase</a>
+            <a href="#inicio"
+                class="magnetic-btn px-6 py-2 rounded-full text-xs font-semibold tracking-widest uppercase text-gray-800 dark:text-gray-300 hover:text-game-primary transition-colors">Início</a>
+            <a href="#sobre"
+                class="magnetic-btn px-6 py-2 rounded-full text-xs font-semibold tracking-widest uppercase text-gray-800 dark:text-gray-300 hover:text-game-primary transition-colors">Projetos</a>
+            <a href="#universo"
+                class="magnetic-btn px-6 py-2 rounded-full text-xs font-semibold tracking-widest uppercase text-gray-800 dark:text-gray-300 hover:text-game-primary transition-colors">Universo</a>
+            <a href="#gameplay"
+                class="magnetic-btn px-6 py-2 rounded-full text-xs font-semibold tracking-widest uppercase text-gray-800 dark:text-gray-300 hover:text-game-primary transition-colors">Showcase</a>
         </div>
 
         <div class="flex items-center gap-4">
-            <button id="theme-toggle" class="magnetic-btn text-gray-800 dark:text-gray-300 hover:text-game-primary dark:hover:text-game-primary transition-colors w-10 h-10 flex items-center justify-center rounded-full glass-panel" aria-label="Alternar Tema">
+            <button id="theme-toggle"
+                class="magnetic-btn text-gray-800 dark:text-gray-300 hover:text-game-primary w-10 h-10 flex items-center justify-center rounded-full glass-panel"
+                aria-label="Alternar Tema">
                 <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
                 <i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i>
             </button>
-            
-            <button id="mobile-btn" class="md:hidden magnetic-btn w-10 h-10 flex flex-col justify-center items-center gap-1.5 rounded-full glass-panel" aria-label="Menu">
-                <span class="w-4 h-[2px] bg-current rounded-full transition-all duration-300 origin-center" id="bar1"></span>
-                <span class="w-4 h-[2px] bg-current rounded-full transition-all duration-300 origin-center" id="bar2"></span>
+            <button id="mobile-btn"
+                class="md:hidden magnetic-btn w-10 h-10 flex flex-col justify-center items-center gap-1.5 rounded-full glass-panel"
+                aria-label="Menu">
+                <span class="w-4 h-[2px] bg-current rounded-full transition-all duration-300 origin-center"
+                    id="bar1"></span>
+                <span class="w-4 h-[2px] bg-current rounded-full transition-all duration-300 origin-center"
+                    id="bar2"></span>
             </button>
         </div>
     </nav>
 
     <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu" class="fixed inset-0 z-[999] bg-white/95 dark:bg-[#050505]/95 backdrop-blur-3xl flex flex-col items-center justify-center gap-10 md:hidden transition-all duration-500 opacity-0 invisible translate-y-8 hardware-accelerated">
-        <a href="#inicio" class="mobile-link font-heading text-5xl uppercase font-bold text-gray-900 dark:text-white hover:text-game-primary transition-colors">Início</a>
-        <a href="#sobre" class="mobile-link font-heading text-5xl uppercase font-bold text-gray-900 dark:text-white hover:text-game-primary transition-colors">A Visão</a>
-        <a href="#universo" class="mobile-link font-heading text-5xl uppercase font-bold text-gray-900 dark:text-white hover:text-game-primary transition-colors">Universo</a>
-        <a href="#gameplay" class="mobile-link font-heading text-5xl uppercase font-bold text-gray-900 dark:text-white hover:text-game-primary transition-colors">Showcase</a>
+    <div id="mobile-menu"
+        class="fixed inset-0 z-[999] bg-white/95 dark:bg-[#050505]/95 backdrop-blur-3xl flex flex-col items-center justify-center gap-10 md:hidden transition-all duration-500 opacity-0 invisible translate-y-8 hardware-accelerated">
+        <a href="#inicio"
+            class="mobile-link font-heading text-5xl uppercase font-bold text-gray-900 dark:text-white hover:text-game-primary transition-colors">Início</a>
+        <a href="#sobre"
+            class="mobile-link font-heading text-5xl uppercase font-bold text-gray-900 dark:text-white hover:text-game-primary transition-colors">A
+            Visão</a>
+        <a href="#universo"
+            class="mobile-link font-heading text-5xl uppercase font-bold text-gray-900 dark:text-white hover:text-game-primary transition-colors">Universo</a>
+        <a href="#gameplay"
+            class="mobile-link font-heading text-5xl uppercase font-bold text-gray-900 dark:text-white hover:text-game-primary transition-colors">Showcase</a>
     </div>
 
     <!-- Hero Section -->
-    <section id="inicio" class="relative min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20 z-0">
-        
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center z-0 pointer-events-none select-none overflow-hidden hardware-accelerated">
-            <h1 class="font-heading font-bold text-[20vw] leading-none text-stroke whitespace-nowrap opacity-50 dark:opacity-30">
+    <section id="inicio"
+        class="relative min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20 z-0">
+        <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center z-0 pointer-events-none select-none overflow-hidden hardware-accelerated">
+            <h1
+                class="font-heading font-bold text-[20vw] leading-none text-stroke whitespace-nowrap opacity-50 dark:opacity-30">
                 IPSUM IPSUM
             </h1>
         </div>
 
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] md:w-[40vw] md:h-[40vw] z-0 pointer-events-none">
-            <!-- Blobs otimizados: Sem animação pesada e blur reduzido -->
-            <div class="absolute inset-0 bg-game-primary/20 dark:bg-game-primary/20 rounded-full blur-3xl opacity-60 hardware-accelerated"></div>
-            <div class="absolute top-1/4 right-1/4 w-[60%] h-[60%] bg-game-accent/20 dark:bg-game-accent/10 rounded-full blur-3xl opacity-60 hardware-accelerated"></div>
+        <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] md:w-[40vw] md:h-[40vw] z-0 pointer-events-none">
+            <div class="absolute inset-0 bg-game-primary/20 rounded-full blur-3xl opacity-60 hardware-accelerated">
+            </div>
+            <div
+                class="absolute top-1/4 right-1/4 w-[60%] h-[60%] bg-game-accent/20 rounded-full blur-3xl opacity-60 hardware-accelerated">
+            </div>
         </div>
 
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[100vw] md:w-[55vw] md:h-[55vw] z-0 pointer-events-none flex items-center justify-center">
-            <!-- Imagem Otimizada: Sem mix-blend-mode pesado -->
-            <img 
-                id="hero-scroll-image" 
-                src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=60&w=1200&fm=webp&auto=format" 
-                alt="Forma 3D Abstrata" 
-                fetchpriority="high"
-                decoding="sync"
-                class="hero-rotating-img w-full h-full object-contain opacity-20 dark:opacity-30 drop-shadow-xl hardware-accelerated"
-            >
+        <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[100vw] md:w-[55vw] md:h-[55vw] z-0 pointer-events-none flex items-center justify-center">
+            <img id="hero-scroll-image"
+                src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=60&w=1200&fm=webp&auto=format"
+                alt="[Imagem de Forma 3D Abstrata]" fetchpriority="high" decoding="sync"
+                class="hero-rotating-img w-full h-full object-contain opacity-20 dark:opacity-30 drop-shadow-xl hardware-accelerated">
         </div>
-        
+
         <div class="relative z-10 w-full max-w-6xl mx-auto flex flex-col items-center">
-            <div class="reveal opacity-0 translate-y-8 flex items-center gap-3 px-5 py-2 rounded-full glass-panel border border-game-primary/20 text-game-primary text-xs font-bold tracking-[0.2em] uppercase mb-8 shadow-[0_0_20px_rgba(225,29,72,0.15)] backdrop-blur-md">
+            <div
+                class="reveal-left flex items-center gap-3 px-5 py-2 rounded-full glass-panel border border-game-primary/20 text-game-primary text-xs font-bold tracking-[0.2em] uppercase mb-8 shadow-[0_0_20px_rgba(225,29,72,0.15)] backdrop-blur-md">
                 <span class="relative flex h-2 w-2">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-game-primary opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-2 w-2 bg-game-primary"></span>
+                    <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-game-primary opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-game-primary"></span>
                 </span>
                 Experiência Digital 2026
             </div>
-            
-            <h2 class="reveal opacity-0 translate-y-8 font-heading font-bold text-6xl md:text-[7rem] lg:text-[9rem] uppercase leading-[0.85] tracking-tighter text-gray-900 dark:text-white mb-8 drop-shadow-2xl">
+
+            <h2 class="reveal-left font-heading font-bold text-6xl md:text-[7rem] lg:text-[9rem] uppercase leading-[0.85] tracking-tighter text-gray-900 dark:text-white mb-8 drop-shadow-2xl"
+                style="transition-delay: 100ms;">
                 LOREM <br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-game-primary to-orange-400">IPSUM</span>
+                <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-game-primary to-orange-400">IPSUM</span>
             </h2>
-            
-            <p class="reveal opacity-0 translate-y-8 text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light leading-relaxed mb-12">
-                Redefinindo os limites da interação web. Mergulhe num ecossistema onde a estética minimalista encontra tecnologia de vanguarda.
+
+            <p class="reveal-left text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light leading-relaxed mb-12"
+                style="transition-delay: 200ms;">
+                Redefinindo os limites da interação web. Mergulhe num ecossistema onde a estética minimalista encontra
+                tecnologia de vanguarda.
             </p>
-            
-            <div class="reveal opacity-0 translate-y-8 flex flex-col sm:flex-row gap-6 justify-center">
-                <a href="#gameplay" class="magnetic-btn group relative px-10 py-4 bg-gray-900 dark:bg-white text-white dark:text-game-darker rounded-full font-heading text-lg font-bold uppercase tracking-widest overflow-hidden transition-transform hover:scale-105">
-                    <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
+
+            <div class="reveal-left flex flex-col sm:flex-row gap-6 justify-center" style="transition-delay: 300ms;">
+                <a href="#gameplay"
+                    class="magnetic-btn group relative px-10 py-4 bg-gray-900 dark:bg-white text-white dark:text-game-darker rounded-full font-heading text-lg font-bold uppercase tracking-widest overflow-hidden transition-transform hover:scale-105">
+                    <span
+                        class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
                     <span class="relative flex items-center gap-3">
                         <i data-lucide="play-circle" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
                         Iniciar Jornada
@@ -140,142 +173,191 @@
                 </a>
             </div>
         </div>
-        
-        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-50">
-            <div class="w-[1px] h-12 bg-gradient-to-b from-transparent via-gray-900 dark:via-white to-transparent"></div>
-            <span class="text-[9px] uppercase tracking-[0.4em] font-semibold font-heading rotate-90 translate-y-8">Scroll</span>
-        </div>
     </section>
 
-    <!-- OTIMIZAÇÃO: render-optimized esconde o conteúdo do browser se não estiver no ecrã -->
+    <!-- Section Sobre -->
     <section id="sobre" class="py-32 relative z-10 render-optimized">
         <div class="container mx-auto px-6 lg:px-12">
-            
-            <div class="mb-16 reveal">
-                <h3 class="font-heading text-4xl md:text-5xl font-bold uppercase tracking-tight text-gray-900 dark:text-white">
-                    A <span class="text-transparent bg-clip-text bg-gradient-to-r from-game-primary to-purple-500">Visão</span>
+
+            <div class="mb-16 reveal-left">
+                <h3
+                    class="font-heading text-4xl md:text-5xl font-bold uppercase tracking-tight text-gray-900 dark:text-white">
+                    A <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-game-primary to-purple-500">Visão</span>
                 </h3>
-                <p class="mt-4 text-gray-500 dark:text-gray-400 font-light max-w-md">Uma abordagem arquitetónica para o design de interfaces fluidas.</p>
+                <p class="mt-4 text-gray-500 dark:text-gray-400 font-light max-w-md">Uma abordagem arquitetónica para o
+                    design de interfaces fluidas e dinâmicas.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[250px] md:auto-rows-[300px]">
-                <!-- Imagens com loading lazy e formatação WebP leve (sem mix-blend) -->
-                <div class="magnetic-btn open-modal-btn cursor-pointer col-span-1 md:col-span-2 row-span-2 glass-panel rounded-[2rem] p-8 md:p-12 flex flex-col justify-end relative overflow-hidden group reveal"
-                     data-title="Project Nexus" 
-                     data-image="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=60&w=800&fm=webp&auto=format"
-                     data-desc="Um RPG de ação num mundo ciberpunk distópico. Explore cidades verticais neon, melhore os seus implantes cibernéticos e desvende uma conspiração global que ameaça o que resta da humanidade. Possui combates fluidos e uma narrativa não linear em que as suas escolhas alteram permanentemente a cidade.">
-                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105 opacity-20 dark:opacity-30 hardware-accelerated" style="background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=60&w=800&fm=webp&auto=format');"></div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-gray-50/90 dark:from-game-surface/90 via-transparent to-transparent"></div>
-                    
+                <div class="magnetic-btn open-modal-btn cursor-pointer col-span-1 md:col-span-2 row-span-2 glass-panel rounded-[2rem] p-8 md:p-12 flex flex-col justify-end relative overflow-hidden group reveal-left"
+                    data-title="Project Nexus"
+                    data-image="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=60&w=800&fm=webp&auto=format"
+                    data-desc="Um RPG de ação num mundo ciberpunk distópico. Explore cidades verticais neon, melhore os seus implantes cibernéticos e desvende uma conspiração global que ameaça o que resta da humanidade.">
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105 opacity-20 dark:opacity-30 hardware-accelerated"
+                        style="background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=60&w=800&fm=webp&auto=format');">
+                    </div>
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-gray-50/90 dark:from-game-surface/90 via-transparent to-transparent">
+                    </div>
+
                     <div class="relative z-10">
-                        <div class="w-12 h-12 rounded-full bg-game-primary/10 flex items-center justify-center mb-6 backdrop-blur-md border border-game-primary/20 group-hover:bg-game-primary transition-colors duration-500">
-                            <i data-lucide="gamepad-2" class="w-6 h-6 text-game-primary group-hover:text-white transition-colors duration-500"></i>
+                        <div
+                            class="w-12 h-12 rounded-full bg-game-primary/10 flex items-center justify-center mb-6 backdrop-blur-md border border-game-primary/20 group-hover:bg-game-primary transition-colors duration-500">
+                            <i data-lucide="gamepad-2"
+                                class="w-6 h-6 text-game-primary group-hover:text-white transition-colors duration-500"></i>
                         </div>
-                        <h4 class="font-heading text-3xl md:text-4xl font-bold uppercase text-gray-900 dark:text-white mb-4">Project Nexus</h4>
+                        <h4
+                            class="font-heading text-3xl md:text-4xl font-bold uppercase text-gray-900 dark:text-white mb-4">
+                            Project Nexus</h4>
                         <p class="text-gray-700 dark:text-gray-300 font-light max-w-lg leading-relaxed">
-                            O nosso título principal. Um RPG de ação ciberpunk focado na liberdade do jogador. Clique para ver os detalhes.
+                            O nosso título principal. Um RPG de ação ciberpunk focado na liberdade do jogador. Clique
+                            para ver os detalhes.
                         </p>
                     </div>
                 </div>
 
-                <div class="magnetic-btn open-modal-btn cursor-pointer col-span-1 row-span-1 glass-panel rounded-[2rem] p-8 flex flex-col justify-center relative overflow-hidden group reveal" style="transition-delay: 100ms;"
-                     data-title="Speed Render 99" 
-                     data-image="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=60&w=800&fm=webp&auto=format"
-                     data-desc="O nosso novo motor de jogo proprietário. Otimizado para renderizar mundos abertos vastos a mais de 120 frames por segundo em hardware de gama média. Suporta Ray Tracing em tempo real, simulação avançada de fluidos e destruição processual do cenário.">
-                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-purple-500/10 rounded-full blur-[40px] group-hover:bg-purple-500/20 transition-colors duration-500 hardware-accelerated"></div>
-                    <h5 class="font-heading text-6xl md:text-7xl font-bold text-gray-900 dark:text-white tracking-tighter mb-2">99<span class="text-game-primary">%</span></h5>
-                    <p class="text-sm uppercase tracking-widest font-semibold text-gray-600 dark:text-gray-500">Aceleração de Motor</p>
+                <div class="magnetic-btn open-modal-btn cursor-pointer col-span-1 row-span-1 glass-panel rounded-[2rem] p-8 flex flex-col justify-center relative overflow-hidden group reveal-left"
+                    style="transition-delay: 150ms;" data-title="Speed Render 99"
+                    data-image="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=60&w=800&fm=webp&auto=format"
+                    data-desc="O nosso novo motor de jogo proprietário. Otimizado para renderizar mundos abertos vastos a mais de 120 frames por segundo em hardware de gama média.">
+                    <div
+                        class="absolute -right-10 -top-10 w-40 h-40 bg-purple-500/10 rounded-full blur-[40px] group-hover:bg-purple-500/20 transition-colors duration-500 hardware-accelerated">
+                    </div>
+                    <h5
+                        class="font-heading text-6xl md:text-7xl font-bold text-gray-900 dark:text-white tracking-tighter mb-2">
+                        99<span class="text-game-primary">%</span></h5>
+                    <p class="text-sm uppercase tracking-widest font-semibold text-gray-600 dark:text-gray-500">
+                        Aceleração de Motor</p>
                 </div>
 
-                <div class="magnetic-btn open-modal-btn cursor-pointer col-span-1 row-span-1 glass-panel rounded-[2rem] p-8 flex flex-col justify-between group reveal" style="transition-delay: 200ms;"
-                     data-title="Void Architecture" 
-                     data-image="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=60&w=800&fm=webp&auto=format"
-                     data-desc="Um jogo de puzzles desafiante onde a gravidade e o tempo são variáveis que o jogador pode controlar diretamente. Navegue através de arquiteturas impossíveis inspiradas em M.C. Escher para escapar do vazio dimensional.">
+                <div class="magnetic-btn open-modal-btn cursor-pointer col-span-1 row-span-1 glass-panel rounded-[2rem] p-8 flex flex-col justify-between group reveal-left"
+                    style="transition-delay: 300ms;" data-title="Void Architecture"
+                    data-image="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=60&w=800&fm=webp&auto=format"
+                    data-desc="Um jogo de puzzles desafiante onde a gravidade e o tempo são variáveis que o jogador pode controlar diretamente.">
                     <div class="flex justify-between items-start">
-                        <i data-lucide="box" class="w-8 h-8 text-gray-500 dark:text-gray-500 group-hover:text-game-primary transition-colors duration-500"></i>
-                        <span class="px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full bg-gray-200 dark:bg-white/10 text-gray-600 dark:text-gray-300">Em Breve</span>
+                        <i data-lucide="box"
+                            class="w-8 h-8 text-gray-500 group-hover:text-game-primary transition-colors duration-500"></i>
+                        <span
+                            class="px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full bg-gray-200 dark:bg-white/10 text-gray-600 dark:text-gray-300">Em
+                            Breve</span>
                     </div>
                     <div>
-                        <h4 class="font-heading text-xl font-bold uppercase text-gray-900 dark:text-white mb-2">Void Architecture</h4>
-                        <p class="text-gray-500 dark:text-gray-400 text-sm font-light">Puzzles dimensionais e manipulação de tempo contínua.</p>
+                        <h4 class="font-heading text-xl font-bold uppercase text-gray-900 dark:text-white mb-2">Void
+                            Architecture</h4>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm font-light">Puzzles dimensionais e
+                            manipulação de tempo contínua.</p>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
 
-    <!-- OTIMIZAÇÃO: render-optimized esconde da GPU até lá chegar -->
-    <section id="universo" class="relative h-[400vh] bg-gray-100 dark:bg-game-darker transition-colors duration-700 render-optimized">
+    <!-- Universo Section -->
+    <section id="universo"
+        class="relative h-[400vh] bg-gray-100 dark:bg-game-darker transition-colors duration-700 render-optimized">
         <div class="absolute inset-0 cyber-grid opacity-50 dark:opacity-20 pointer-events-none"></div>
 
         <div class="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
-            
-            <div class="absolute right-8 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-center gap-4 p-4 glass-panel rounded-full backdrop-blur-xl">
-                <div class="timeline-dot w-2 h-2 rounded-full bg-gray-300 dark:bg-white/20 transition-all duration-300 hardware-accelerated"></div>
+            <div
+                class="absolute right-8 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-center gap-4 p-4 glass-panel rounded-full backdrop-blur-xl">
+                <div
+                    class="timeline-dot w-2 h-2 rounded-full bg-gray-300 dark:bg-white/20 transition-all duration-300 hardware-accelerated">
+                </div>
                 <div class="w-[1px] h-10 bg-gradient-to-b from-gray-300 dark:from-white/20 to-transparent"></div>
-                <div class="timeline-dot w-2 h-2 rounded-full bg-gray-300 dark:bg-white/20 transition-all duration-300 hardware-accelerated"></div>
+                <div
+                    class="timeline-dot w-2 h-2 rounded-full bg-gray-300 dark:bg-white/20 transition-all duration-300 hardware-accelerated">
+                </div>
                 <div class="w-[1px] h-10 bg-gradient-to-b from-gray-300 dark:from-white/20 to-transparent"></div>
-                <div class="timeline-dot w-2 h-2 rounded-full bg-gray-300 dark:bg-white/20 transition-all duration-300 hardware-accelerated"></div>
+                <div
+                    class="timeline-dot w-2 h-2 rounded-full bg-gray-300 dark:bg-white/20 transition-all duration-300 hardware-accelerated">
+                </div>
             </div>
 
-            <div class="absolute z-10 w-[80vw] h-[80vw] md:w-[40vw] md:h-[40vw] rounded-full border border-gray-200 dark:border-white/5 flex items-center justify-center animate-spin-slow pointer-events-none hardware-accelerated">
-                <div class="w-[90%] h-[90%] rounded-full border border-dashed border-gray-300 dark:border-white/10"></div>
+            <div
+                class="absolute z-10 w-[80vw] h-[80vw] md:w-[40vw] md:h-[40vw] rounded-full border border-gray-200 dark:border-white/5 flex items-center justify-center animate-spin-slow pointer-events-none hardware-accelerated">
+                <div class="w-[90%] h-[90%] rounded-full border border-dashed border-gray-300 dark:border-white/10">
+                </div>
             </div>
 
-            <div class="relative z-30 w-full max-w-4xl mx-auto px-6 h-full flex items-center justify-center perspective-1000">
-                
-                <!-- OTIMIZAÇÃO: Imagens Lazy, formatadas para WebP leve, sem mix-blend -->
-                <article class="lore-card open-modal-btn cursor-pointer absolute w-full flex flex-col md:flex-row glass-panel rounded-[2rem] overflow-hidden shadow-2xl origin-center hardware-accelerated"
-                         style="opacity: 0; transform: translateY(150px) scale(0.95);"
-                         data-title="Starfall: Génese"
-                         data-image="https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?q=60&w=800&fm=webp&auto=format"
-                         data-desc="O nosso primeiro projeto de exploração espacial multiplayer. Entre numa galáxia gerada processualmente com milhares de planetas. Negocie com fações alienígenas, colonize mundos virgens e participe em batalhas de frotas de grande escala. A galáxia reage à economia e ações dos jogadores.">
-                    <div class="md:w-5/12 aspect-video md:aspect-auto bg-gray-200 dark:bg-gray-800 relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?q=60&w=800&fm=webp&auto=format" loading="lazy" decoding="async" class="absolute w-full h-full object-cover opacity-60" alt="Space">
-                        <div class="absolute inset-0 bg-gradient-to-t from-gray-100/90 dark:from-game-darker/80 to-transparent"></div>
+            <div
+                class="relative z-30 w-full max-w-4xl mx-auto px-6 h-full flex items-center justify-center perspective-1000">
+                <article
+                    class="lore-card open-modal-btn cursor-pointer absolute w-full flex flex-col md:flex-row glass-panel rounded-[2rem] overflow-hidden shadow-2xl origin-center hardware-accelerated"
+                    style="opacity: 0; transform: translateY(150px) scale(0.95);" data-title="Starfall: Génese"
+                    data-image="https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?q=60&w=800&fm=webp&auto=format"
+                    data-desc="O nosso primeiro projeto de exploração espacial multiplayer. Entre numa galáxia gerada processualmente com milhares de planetas.">
+                    <div
+                        class="md:w-5/12 aspect-video md:aspect-auto bg-gray-200 dark:bg-gray-800 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?q=60&w=800&fm=webp&auto=format"
+                            loading="lazy" decoding="async" class="absolute w-full h-full object-cover opacity-60"
+                            alt="[Imagem de Espaço]">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-gray-100/90 dark:from-game-darker/80 to-transparent">
+                        </div>
                     </div>
                     <div class="p-8 md:p-12 flex-1 flex flex-col justify-center bg-transparent">
-                        <div class="text-game-primary font-bold tracking-[0.2em] text-[10px] uppercase mb-4 border border-game-primary/20 inline-block px-3 py-1 rounded-full w-max">Jogo 01</div>
-                        <h3 class="font-heading text-4xl font-bold uppercase text-gray-900 dark:text-white mb-4">Starfall: Génese</h3>
+                        <div
+                            class="text-game-primary font-bold tracking-[0.2em] text-[10px] uppercase mb-4 border border-game-primary/20 inline-block px-3 py-1 rounded-full w-max">
+                            Jogo 01</div>
+                        <h3 class="font-heading text-4xl font-bold uppercase text-gray-900 dark:text-white mb-4">
+                            Starfall: Génese</h3>
                         <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base leading-relaxed font-light">
                             Exploração espacial em mundo aberto intergaláctico. Colonize e lute pelo domínio da galáxia.
                         </p>
                     </div>
                 </article>
 
-                <article class="lore-card open-modal-btn cursor-pointer absolute w-full flex flex-col md:flex-row glass-panel rounded-[2rem] overflow-hidden shadow-2xl origin-center hardware-accelerated" 
-                         style="opacity: 0; transform: translateX(400px) scale(0.95);"
-                         data-title="Neon Morph"
-                         data-image="https://images.unsplash.com/photo-1635830625698-3b9bd74671ca?q=60&w=800&fm=webp&auto=format"
-                         data-desc="Um jogo de terror e sobrevivência assimétrico onde um jogador assume o papel de uma criatura monstruosa que pode tomar a forma de qualquer objeto do cenário, enquanto uma equipa de sobreviventes tenta consertar geradores e escapar de uma instalação biológica isolada.">
-                    <div class="md:w-5/12 aspect-video md:aspect-auto bg-gray-200 dark:bg-gray-800 relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1635830625698-3b9bd74671ca?q=60&w=800&fm=webp&auto=format" loading="lazy" decoding="async" class="absolute w-full h-full object-cover opacity-60" alt="Structure">
-                        <div class="absolute inset-0 bg-gradient-to-t from-gray-100/90 dark:from-game-darker/80 to-transparent"></div>
+                <article
+                    class="lore-card open-modal-btn cursor-pointer absolute w-full flex flex-col md:flex-row glass-panel rounded-[2rem] overflow-hidden shadow-2xl origin-center hardware-accelerated"
+                    style="opacity: 0; transform: translateX(400px) scale(0.95);" data-title="Neon Morph"
+                    data-image="https://images.unsplash.com/photo-1635830625698-3b9bd74671ca?q=60&w=800&fm=webp&auto=format"
+                    data-desc="Um jogo de terror e sobrevivência assimétrico onde um jogador assume o papel de uma criatura monstruosa.">
+                    <div
+                        class="md:w-5/12 aspect-video md:aspect-auto bg-gray-200 dark:bg-gray-800 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1635830625698-3b9bd74671ca?q=60&w=800&fm=webp&auto=format"
+                            loading="lazy" decoding="async" class="absolute w-full h-full object-cover opacity-60"
+                            alt="[Imagem de Estrutura]">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-gray-100/90 dark:from-game-darker/80 to-transparent">
+                        </div>
                     </div>
                     <div class="p-8 md:p-12 flex-1 flex flex-col justify-center bg-transparent">
-                        <div class="text-game-accent font-bold tracking-[0.2em] text-[10px] uppercase mb-4 border border-game-accent/20 inline-block px-3 py-1 rounded-full w-max">Jogo 02</div>
-                        <h3 class="font-heading text-4xl font-bold uppercase text-gray-900 dark:text-white mb-4">Neon Morph</h3>
+                        <div
+                            class="text-game-accent font-bold tracking-[0.2em] text-[10px] uppercase mb-4 border border-game-accent/20 inline-block px-3 py-1 rounded-full w-max">
+                            Jogo 02</div>
+                        <h3 class="font-heading text-4xl font-bold uppercase text-gray-900 dark:text-white mb-4">Neon
+                            Morph</h3>
                         <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base leading-relaxed font-light">
-                            Terror assimétrico brutal. Pode a sua equipa escapar de um predador que consegue ser qualquer coisa na sala?
+                            Terror assimétrico brutal. Pode a sua equipa escapar de um predador que consegue ser
+                            qualquer coisa na sala?
                         </p>
                     </div>
                 </article>
 
-                <article class="lore-card open-modal-btn cursor-pointer absolute w-full flex flex-col md:flex-row glass-panel rounded-[2rem] overflow-hidden shadow-2xl origin-center hardware-accelerated" 
-                         style="opacity: 0; transform: translateX(-400px) scale(0.95);"
-                         data-title="Symbiosis"
-                         data-image="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=60&w=800&fm=webp&auto=format"
-                         data-desc="Aventura narrativa puramente cooperativa. Dois jogadores devem partilhar a mesma perceção de um mundo fragmentado para resolver quebra-cabeças impossíveis sozinhos. Descubram em conjunto a verdade trágica sobre a queda do vosso planeta agonizante.">
-                    <div class="md:w-5/12 aspect-video md:aspect-auto bg-gray-200 dark:bg-gray-800 relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=60&w=800&fm=webp&auto=format" loading="lazy" decoding="async" class="absolute w-full h-full object-cover opacity-60" alt="Digital">
-                        <div class="absolute inset-0 bg-gradient-to-t from-gray-100/90 dark:from-game-darker/80 to-transparent"></div>
+                <article
+                    class="lore-card open-modal-btn cursor-pointer absolute w-full flex flex-col md:flex-row glass-panel rounded-[2rem] overflow-hidden shadow-2xl origin-center hardware-accelerated"
+                    style="opacity: 0; transform: translateX(-400px) scale(0.95);" data-title="Symbiosis"
+                    data-image="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=60&w=800&fm=webp&auto=format"
+                    data-desc="Aventura narrativa puramente cooperativa. Dois jogadores devem partilhar a mesma perceção de um mundo fragmentado.">
+                    <div
+                        class="md:w-5/12 aspect-video md:aspect-auto bg-gray-200 dark:bg-gray-800 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=60&w=800&fm=webp&auto=format"
+                            loading="lazy" decoding="async" class="absolute w-full h-full object-cover opacity-60"
+                            alt="[Imagem Digital]">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-gray-100/90 dark:from-game-darker/80 to-transparent">
+                        </div>
                     </div>
                     <div class="p-8 md:p-12 flex-1 flex flex-col justify-center bg-transparent">
-                        <div class="text-purple-500 font-bold tracking-[0.2em] text-[10px] uppercase mb-4 border border-purple-500/20 inline-block px-3 py-1 rounded-full w-max">Jogo 03</div>
-                        <h3 class="font-heading text-4xl font-bold uppercase text-gray-900 dark:text-white mb-4">Symbiosis</h3>
+                        <div
+                            class="text-purple-500 font-bold tracking-[0.2em] text-[10px] uppercase mb-4 border border-purple-500/20 inline-block px-3 py-1 rounded-full w-max">
+                            Jogo 03</div>
+                        <h3 class="font-heading text-4xl font-bold uppercase text-gray-900 dark:text-white mb-4">
+                            Symbiosis</h3>
                         <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base leading-relaxed font-light">
-                            Co-op focado na narrativa profunda. Trabalhem em equipa perfeita ou caiam para sempre no esquecimento.
+                            Co-op focado na narrativa profunda. Trabalhem em equipa perfeita ou caiam para sempre no
+                            esquecimento.
                         </p>
                     </div>
                 </article>
@@ -283,42 +365,54 @@
         </div>
     </section>
 
-    <section id="gameplay" class="py-32 bg-white dark:bg-[#030303] relative z-10 transition-colors duration-700 render-optimized">
+    <!-- Gameplay Section -->
+    <section id="gameplay"
+        class="py-32 bg-white dark:bg-[#030303] relative z-10 transition-colors duration-700 render-optimized">
         <div class="container mx-auto px-6 lg:px-12">
-            
-            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8 reveal">
-                <div>
-                    <div class="inline-block px-4 py-1.5 mb-4 rounded-full border border-gray-200 dark:border-white/10 text-xs font-bold uppercase tracking-widest text-gray-500">
+
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+                <div class="reveal-left">
+                    <div
+                        class="inline-block px-4 py-1.5 mb-4 rounded-full border border-gray-200 dark:border-white/10 text-xs font-bold uppercase tracking-widest text-gray-500">
                         Showcase Reel
                     </div>
-                    <h2 class="font-heading text-5xl md:text-7xl font-bold uppercase text-gray-900 dark:text-white tracking-tighter">Visual em <br><span class="text-game-primary">Movimento</span></h2>
+                    <h2
+                        class="font-heading text-5xl md:text-7xl font-bold uppercase text-gray-900 dark:text-white tracking-tighter">
+                        Visual em <br><span class="text-game-primary">Movimento</span></h2>
                 </div>
-                <p class="text-gray-500 font-light max-w-sm">Assista à renderização em tempo real das nossas texturas e shaders num ambiente simulado.</p>
+                <p class="reveal-right text-gray-500 font-light max-w-sm">Assista à renderização em tempo real das
+                    nossas texturas e shaders num ambiente simulado.</p>
             </div>
 
-            <div class="relative w-full aspect-video rounded-[2rem] overflow-hidden glass-panel p-2 reveal">
-                <div class="relative w-full h-full rounded-[1.5rem] overflow-hidden bg-black group cursor-pointer" id="video-container">
-                    
-                    <!-- OTIMIZAÇÃO: preload="none" poupa megabytes de banda até o utilizador decidir dar play -->
-                    <video id="gameplay-video" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700 scale-105 group-hover:scale-100 hardware-accelerated" loop playsinline muted preload="none" poster="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=60&w=800&fm=webp&auto=format">
-                        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" type="video/mp4">
+            <div class="relative w-full aspect-video rounded-[2rem] overflow-hidden glass-panel p-2 reveal-left">
+                <div class="relative w-full h-full rounded-[1.5rem] overflow-hidden bg-black group cursor-pointer"
+                    id="video-container">
+                    <video id="gameplay-video"
+                        class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700 scale-105 group-hover:scale-100 hardware-accelerated"
+                        loop playsinline muted preload="none"
+                        poster="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=60&w=800&fm=webp&auto=format">
+                        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"
+                            type="video/mp4">
                     </video>
-                    
-                    <button id="play-button" class="absolute inset-0 flex items-center justify-center z-20 transition-opacity duration-300 pointer-events-none">
-                        <div class="w-24 h-24 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform duration-500 shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+
+                    <button id="play-button"
+                        class="absolute inset-0 flex items-center justify-center z-20 transition-opacity duration-300 pointer-events-none">
+                        <div
+                            class="w-24 h-24 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform duration-500 shadow-[0_0_40px_rgba(0,0,0,0.5)]">
                             <i data-lucide="play" class="w-10 h-10 text-white fill-white ml-2"></i>
                         </div>
                     </button>
-                    
+
                     <div class="absolute top-8 left-8 flex gap-2">
                         <div class="w-12 h-1 bg-white/50 rounded-full"></div>
                         <div class="w-4 h-1 bg-white/20 rounded-full"></div>
                     </div>
-                    
+
                     <div class="absolute bottom-8 left-8 right-8 flex justify-between items-end pointer-events-none">
                         <div class="glass-panel px-5 py-3 rounded-full flex items-center gap-3 backdrop-blur-md">
                             <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_10px_red]"></div>
-                            <span class="text-[10px] uppercase font-bold tracking-[0.2em] text-white">Live Render 4K</span>
+                            <span class="text-[10px] uppercase font-bold tracking-[0.2em] text-white">Live Render
+                                4K</span>
                         </div>
                         <div class="text-white/50 text-[10px] tracking-widest uppercase font-mono hidden md:block">
                             REC // 00:00:00:00
@@ -330,32 +424,43 @@
     </section>
 
     <!-- Modal Pop-up para Jogos -->
-    <div id="game-modal" class="fixed inset-0 z-[10000] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="absolute inset-0 bg-gray-900/60 dark:bg-black/80 backdrop-blur-md close-modal cursor-pointer hardware-accelerated"></div>
-        
-        <div id="modal-content" class="relative w-[90%] max-w-3xl glass-panel bg-white/95 dark:bg-[#111111]/95 rounded-[2rem] overflow-hidden shadow-2xl transform scale-95 transition-transform duration-300 hardware-accelerated">
-            <button class="absolute top-4 right-4 z-50 p-2 bg-black/10 dark:bg-white/10 hover:bg-game-primary dark:hover:bg-game-primary hover:text-white rounded-full backdrop-blur-md transition-colors close-modal">
+    <div id="game-modal"
+        class="fixed inset-0 z-[10000] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+        <div
+            class="absolute inset-0 bg-gray-900/60 dark:bg-black/80 backdrop-blur-md close-modal cursor-pointer hardware-accelerated">
+        </div>
+
+        <div id="modal-content"
+            class="relative w-[90%] max-w-3xl glass-panel bg-white/95 dark:bg-[#111111]/95 rounded-[2rem] overflow-hidden shadow-2xl transform scale-95 transition-transform duration-300 hardware-accelerated">
+            <button
+                class="absolute top-4 right-4 z-50 p-2 bg-black/10 dark:bg-white/10 hover:bg-game-primary dark:hover:bg-game-primary hover:text-white rounded-full backdrop-blur-md transition-colors close-modal">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
-            
+
             <div class="w-full h-64 md:h-80 relative overflow-hidden">
                 <img id="modal-img" src="" alt="Capa do Jogo" class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-gradient-to-t from-white dark:from-[#111111] to-transparent"></div>
             </div>
-            
+
             <div class="p-8 md:px-12 md:pb-12 md:-mt-12 relative z-10">
-                <div class="inline-block px-3 py-1 mb-4 rounded-full border border-game-primary/30 text-[10px] font-bold uppercase tracking-widest text-game-primary bg-game-primary/10 backdrop-blur-md">
+                <div
+                    class="inline-block px-3 py-1 mb-4 rounded-full border border-game-primary/30 text-[10px] font-bold uppercase tracking-widest text-game-primary bg-game-primary/10 backdrop-blur-md">
                     Detalhes do Projeto
                 </div>
-                <h3 id="modal-title" class="font-heading text-4xl md:text-5xl font-bold uppercase text-gray-900 dark:text-white mb-6">Título</h3>
-                <p id="modal-desc" class="text-gray-700 dark:text-gray-300 font-light text-base md:text-lg leading-relaxed mb-8">
+                <h3 id="modal-title"
+                    class="font-heading text-4xl md:text-5xl font-bold uppercase text-gray-900 dark:text-white mb-6">
+                    Título</h3>
+                <p id="modal-desc"
+                    class="text-gray-700 dark:text-gray-300 font-light text-base md:text-lg leading-relaxed mb-8">
                     Descrição do jogo...
                 </p>
                 <div class="flex flex-wrap gap-4">
-                    <button class="px-8 py-3 bg-game-primary text-white rounded-full font-bold uppercase tracking-widest text-sm hover:scale-105 transition-transform shadow-[0_0_20px_rgba(225,29,72,0.4)]">
+                    <button
+                        class="px-8 py-3 bg-game-primary text-white rounded-full font-bold uppercase tracking-widest text-sm hover:scale-105 transition-transform shadow-[0_0_20px_rgba(225,29,72,0.4)]">
                         Ver Mais
                     </button>
-                    <button class="px-8 py-3 border border-gray-300 dark:border-white/20 rounded-full font-bold uppercase tracking-widest text-sm text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-colors close-modal">
+                    <button
+                        class="px-8 py-3 border border-gray-300 dark:border-white/20 rounded-full font-bold uppercase tracking-widest text-sm text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-colors close-modal">
                         Voltar
                     </button>
                 </div>
@@ -363,43 +468,59 @@
         </div>
     </div>
 
-    <!-- Rodapé Minimalista -->
-    <footer class="bg-gray-50 dark:bg-game-darker pt-24 pb-8 border-t border-gray-200 dark:border-white/5 transition-colors duration-700 z-10 relative render-optimized">
+    <!-- Rodapé -->
+    <footer
+        class="bg-gray-50 dark:bg-game-darker pt-24 pb-8 border-t border-gray-200 dark:border-white/5 transition-colors duration-700 z-10 relative render-optimized">
         <div class="container mx-auto px-6 lg:px-12">
-            
             <div class="flex flex-col md:flex-row justify-between items-start gap-12 mb-20">
-                <div class="max-w-md">
-                    <h2 class="font-heading font-bold text-4xl md:text-5xl uppercase tracking-tighter text-gray-900 dark:text-white mb-6">IPSUM<span class="text-game-primary">.</span></h2>
+                <div class="max-w-md reveal-left">
+                    <h2
+                        class="font-heading font-bold text-4xl md:text-5xl uppercase tracking-tighter text-gray-900 dark:text-white mb-6">
+                        IPSUM<span class="text-game-primary">.</span></h2>
                     <p class="text-gray-500 dark:text-gray-400 font-light leading-relaxed mb-8">
-                        Não construímos apenas sites. Projetamos ecossistemas digitais que unem estética brutalista e engenharia de precisão para a web moderna.
+                        Não construímos apenas sites. Projetamos ecossistemas digitais que unem estética brutalista e
+                        engenharia de precisão para a web moderna.
                     </p>
-                    <a href="mailto:hello@ipsum.com" class="magnetic-btn inline-flex items-center gap-2 text-game-primary font-bold uppercase tracking-widest text-sm hover:text-gray-900 dark:hover:text-white transition-colors">
+                    <a href="mailto:hello@ipsum.com"
+                        class="magnetic-btn inline-flex items-center gap-2 text-game-primary font-bold uppercase tracking-widest text-sm hover:text-gray-900 dark:hover:text-white transition-colors">
                         Fale Connosco <i data-lucide="arrow-right" class="w-4 h-4"></i>
                     </a>
                 </div>
-                
-                <div class="grid grid-cols-2 gap-12 md:gap-24">
+
+                <div class="grid grid-cols-2 gap-12 md:gap-24 reveal-right">
                     <div>
-                        <h4 class="font-heading text-gray-900 dark:text-white font-bold uppercase mb-6 tracking-widest text-sm">Explorar</h4>
+                        <h4
+                            class="font-heading text-gray-900 dark:text-white font-bold uppercase mb-6 tracking-widest text-sm">
+                            Explorar</h4>
                         <ul class="space-y-4 text-gray-500 dark:text-gray-400 font-light text-sm">
                             <li><a href="#inicio" class="hover:text-game-primary transition-colors">Início</a></li>
                             <li><a href="#sobre" class="hover:text-game-primary transition-colors">Visão Bento</a></li>
-                            <li><a href="#universo" class="hover:text-game-primary transition-colors">Universo 3D</a></li>
-                            <li><a href="#gameplay" class="hover:text-game-primary transition-colors">Showcase Reel</a></li>
+                            <li><a href="#universo" class="hover:text-game-primary transition-colors">Universo 3D</a>
+                            </li>
+                            <li><a href="#gameplay" class="hover:text-game-primary transition-colors">Showcase Reel</a>
+                            </li>
                         </ul>
                     </div>
                     <div>
-                        <h4 class="font-heading text-gray-900 dark:text-white font-bold uppercase mb-6 tracking-widest text-sm">Social</h4>
+                        <h4
+                            class="font-heading text-gray-900 dark:text-white font-bold uppercase mb-6 tracking-widest text-sm">
+                            Social</h4>
                         <ul class="space-y-4 text-gray-500 dark:text-gray-400 font-light text-sm">
-                            <li><a href="#" class="hover:text-game-primary transition-colors flex items-center gap-2">X (Twitter) <i data-lucide="external-link" class="w-3 h-3"></i></a></li>
-                            <li><a href="#" class="hover:text-game-primary transition-colors flex items-center gap-2">Instagram <i data-lucide="external-link" class="w-3 h-3"></i></a></li>
-                            <li><a href="#" class="hover:text-game-primary transition-colors flex items-center gap-2">Awwwards <i data-lucide="external-link" class="w-3 h-3"></i></a></li>
+                            <li><a href="#" class="hover:text-game-primary transition-colors flex items-center gap-2">X
+                                    (Twitter) <i data-lucide="external-link" class="w-3 h-3"></i></a></li>
+                            <li><a href="#"
+                                    class="hover:text-game-primary transition-colors flex items-center gap-2">Instagram
+                                    <i data-lucide="external-link" class="w-3 h-3"></i></a></li>
+                            <li><a href="#"
+                                    class="hover:text-game-primary transition-colors flex items-center gap-2">Awwwards
+                                    <i data-lucide="external-link" class="w-3 h-3"></i></a></li>
                         </ul>
                     </div>
                 </div>
             </div>
-            
-            <div class="pt-8 border-t border-gray-200 dark:border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-light">
+
+            <div
+                class="pt-8 border-t border-gray-200 dark:border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-light">
                 <p>© 2026 IPSUM STUDIO DIGITAL. All rights reserved.</p>
                 <div class="flex gap-6">
                     <a href="#" class="hover:text-gray-900 dark:hover:text-white transition-colors">Privacidade</a>
