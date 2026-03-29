@@ -31,12 +31,14 @@ document.addEventListener('DOMContentLoaded', () => {
         winHeight = window.innerHeight;
         if (document.getElementById('sobre')) sobreOffset = document.getElementById('sobre').offsetTop;
         if (universoSection) {
-            universoTop = universoSection.offsetTop;
-            universoHeight = universoSection.offsetHeight;
+            setTimeout(() => { // Aguardar possível recálculo do layout (Ex: Mobile para Desktop)
+                universoTop = universoSection.offsetTop;
+                universoHeight = universoSection.offsetHeight;
+            }, 100);
         }
     });
 
-    // 2. Cursor Customizado
+    // 2. Cursor Customizado (Apenas em Desktop)
     if (window.innerWidth >= 768) {
         const cursor = document.getElementById('custom-cursor');
         const cursorFollower = document.getElementById('custom-cursor-follower');
@@ -67,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. Controlo de Tema
+    // 3. Controlo de Tema (Completamente Reparado!)
     document.getElementById('theme-toggle')?.addEventListener('click', () => {
         document.documentElement.classList.toggle('dark');
         localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
@@ -95,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     mobileBtn?.addEventListener('click', toggleMenu);
     document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', toggleMenu));
 
-    // 5. Parallax
+    // 5. Parallax e Scroll Horizontal (Agora também para Mobile!)
     const heroScrollImage = document.getElementById('hero-scroll-image');
     const navbar = document.getElementById('navbar');
     const cards = document.querySelectorAll('.lore-card');
@@ -120,76 +122,34 @@ document.addEventListener('DOMContentLoaded', () => {
             navbar.classList.add('border-transparent', 'py-6');
         }
 
-        if (window.innerWidth >= 768 && cards.length > 0 && universoTop > 0) {
+        // Removido o bloqueio do window.innerWidth daqui para funcionar no mobile!
+        if (cards.length > 0 && universoTop > 0) {
             const progress = Math.max(0, Math.min(1, (scrollY - universoTop) / (universoHeight - winHeight)));
-            const totalPhases = 3;
-            const phase = progress * totalPhases;
-            const currentIndex = Math.floor(phase);
-            const phaseProgress = phase % 1;
+            const totalCards = cards.length;
+            
+            // Lógica de "Horizontal Track" (Scroll Horizontal Puro estilo Lando Norris)
+            const cardWidth = window.innerWidth;
+            const maxTranslate = cardWidth * (totalCards - 1);
 
             cards.forEach((card, index) => {
-                dots[index].style.backgroundColor = '';
-                dots[index].style.transform = 'translateZ(0) scale(1)';
-
-                let x = 0; let y = 0; let scale = 1; let opacity = 0; let zIndex = 1;
-
-                if (currentIndex === 0) {
-                    if (index === 0) {
-                        y = 150 - (phaseProgress * 150);
-                        opacity = phaseProgress;
-                        scale = 0.95 + (phaseProgress * 0.05);
-                        zIndex = 10;
-                        dots[0].style.backgroundColor = '#ff3366';
-                        dots[0].style.transform = `translateZ(0) scale(${1 + (phaseProgress * 0.5)})`;
-                    }
-                } else if (currentIndex === 1) {
-                    if (index === 0) {
-                        y = -(phaseProgress * 100);
-                        opacity = 1 - (phaseProgress * 1.5);
-                        scale = 1 - (phaseProgress * 0.05);
-                        zIndex = 5;
-                    } else if (index === 1) {
-                        x = 400 - (phaseProgress * 400);
-                        opacity = phaseProgress;
-                        scale = 0.95 + (phaseProgress * 0.05);
-                        zIndex = 10;
-                        dots[1].style.backgroundColor = '#ff3366';
-                        dots[1].style.transform = `translateZ(0) scale(${1 + (phaseProgress * 0.5)})`;
-                    }
-                } else if (currentIndex === 2) {
-                    if (index === 1) {
-                        y = -(phaseProgress * 100);
-                        opacity = 1 - (phaseProgress * 1.5);
-                        scale = 1 - (phaseProgress * 0.05);
-                        zIndex = 5;
-                    } else if (index === 2) {
-                        x = -400 + (phaseProgress * 400);
-                        opacity = phaseProgress;
-                        scale = 0.95 + (phaseProgress * 0.05);
-                        zIndex = 10;
-                        dots[2].style.backgroundColor = '#ff3366';
-                        dots[2].style.transform = `translateZ(0) scale(${1 + (phaseProgress * 0.5)})`;
-                    }
-                }
-
-                card.style.opacity = Math.max(0, opacity);
-                card.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
-                card.style.zIndex = zIndex;
+                const initialX = index * cardWidth;
+                let x = initialX - (progress * maxTranslate);
+                card.style.opacity = 1;
+                card.style.transform = `translate3d(${x}px, 0px, 0)`;
+                card.style.zIndex = 10;
             });
 
-            if (progress >= 1) {
-                cards.forEach((c, i) => {
-                    if (i === 2) {
-                        c.style.opacity = 1;
-                        c.style.transform = 'translate3d(0px, 0px, 0) scale(1)';
-                        c.style.zIndex = 10;
-                        dots[i].style.backgroundColor = '#ff3366';
-                        dots[i].style.transform = 'translateZ(0) scale(1.5)';
-                    } else {
-                        c.style.opacity = 0;
-                    }
-                });
-            }
+            // Sincronizar os pontos do timeline com o card focado
+            const activeIndex = Math.min(totalCards - 1, Math.max(0, Math.round(progress * (totalCards - 1))));
+            dots.forEach((dot, index) => {
+                if (index === activeIndex) {
+                    dot.style.backgroundColor = '#ff3366';
+                    dot.style.transform = `translateZ(0) scale(1.5)`;
+                } else {
+                    dot.style.backgroundColor = '';
+                    dot.style.transform = `translateZ(0) scale(1)`;
+                }
+            });
         }
     });
 
@@ -211,7 +171,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 7. Novas Animações de Revelação Estilo Lando Norris
-    // Procura por todas as variações de reveal (left, right)
     const revealElements = document.querySelectorAll('.reveal-left, .reveal-right');
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
