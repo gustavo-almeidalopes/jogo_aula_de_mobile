@@ -31,14 +31,14 @@ document.addEventListener('DOMContentLoaded', () => {
         winHeight = window.innerHeight;
         if (document.getElementById('sobre')) sobreOffset = document.getElementById('sobre').offsetTop;
         if (universoSection) {
-            setTimeout(() => { // Aguardar possível recálculo do layout (Ex: Mobile para Desktop)
+            setTimeout(() => { // Aguardar recálculo do layout após redimensionar
                 universoTop = universoSection.offsetTop;
                 universoHeight = universoSection.offsetHeight;
             }, 100);
         }
     });
 
-    // 2. Cursor Customizado (Apenas em Desktop)
+    // 2. Cursor Customizado (Apenas Desktop)
     if (window.innerWidth >= 768) {
         const cursor = document.getElementById('custom-cursor');
         const cursorFollower = document.getElementById('custom-cursor-follower');
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. Controlo de Tema (Completamente Reparado!)
+    // 3. Controlo de Tema
     document.getElementById('theme-toggle')?.addEventListener('click', () => {
         document.documentElement.classList.toggle('dark');
         localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     mobileBtn?.addEventListener('click', toggleMenu);
     document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', toggleMenu));
 
-    // 5. Parallax e Scroll Horizontal (Agora também para Mobile!)
+    // 5. Parallax e Scroll Horizontal (Agora também a funcionar perfeitamente em Mobile)
     const heroScrollImage = document.getElementById('hero-scroll-image');
     const navbar = document.getElementById('navbar');
     const cards = document.querySelectorAll('.lore-card');
@@ -122,12 +122,12 @@ document.addEventListener('DOMContentLoaded', () => {
             navbar.classList.add('border-transparent', 'py-6');
         }
 
-        // Removido o bloqueio do window.innerWidth daqui para funcionar no mobile!
-        if (cards.length > 0 && universoTop > 0) {
+        // Se a secção do universo existir e estiver visível, fazer o scroll horizontal
+        if (cards.length > 0 && universoSection) {
             const progress = Math.max(0, Math.min(1, (scrollY - universoTop) / (universoHeight - winHeight)));
             const totalCards = cards.length;
             
-            // Lógica de "Horizontal Track" (Scroll Horizontal Puro estilo Lando Norris)
+            // Lógica de "Horizontal Track" Estilo Lando Norris
             const cardWidth = window.innerWidth;
             const maxTranslate = cardWidth * (totalCards - 1);
 
