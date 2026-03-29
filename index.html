@@ -1,642 +1,412 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="scroll-smooth">
+<html lang="pt-PT" class="bg-gray-50 dark:bg-[#050505]">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>[Inserir Nome do Jogo] - Ação 2D</title>
-    <!-- Tailwind CSS --> 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Anime.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <title>IPSUM. | Experiência Digital Premium</title>
     
+    <!-- Dica de performance: Pré-conectar aos domínios de imagens e fontes -->
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Prevenção de Flash Branco no Dark Mode -->
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        heading: ['Oswald', 'sans-serif'],
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        game: {
-                            dark: '#0a0a0c',
-                            darker: '#050506',
-                            primary: '#e11d48', // Red/Crimson for action vibe
-                            accent: '#fb7185'
-                        }
-                    }
-                }
-            }
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
         }
     </script>
-    <style>
-        body {
-            background-color: #0a0a0c;
-            color: #f8fafc;
-            overflow-x: hidden;
-        }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #050506;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #e11d48;
-            border-radius: 4px;
-        }
+    <!-- Tailwind CSS --> 
+    <script src="https://cdn.tailwindcss.com"></script>
 
-        /* Scroll Animations (Preparadas para AnimeJS) */
-        .reveal {
-            opacity: 0;
-        }
+    <!-- CSS --> 
+    <link rel="stylesheet" href="styles.css">
 
-        /* Glitch Effect for main title */
-        .glitch-wrapper {
-            position: relative;
-        }
-        .glitch-wrapper::before,
-        .glitch-wrapper::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: transparent;
-        }
-        .glitch-wrapper::before {
-            left: 2px;
-            text-shadow: -2px 0 #fb7185;
-            clip: rect(24px, 550px, 90px, 0);
-            animation: glitch-anim 3s infinite linear alternate-reverse;
-        }
-        .glitch-wrapper::after {
-            left: -2px;
-            text-shadow: -2px 0 #0ea5e9;
-            clip: rect(85px, 550px, 140px, 0);
-            animation: glitch-anim 2.5s infinite linear alternate-reverse;
-        }
-        @keyframes glitch-anim {
-            0% { clip: rect(31px, 9999px, 94px, 0); }
-            20% { clip: rect(62px, 9999px, 42px, 0); }
-            40% { clip: rect(16px, 9999px, 78px, 0); }
-            60% { clip: rect(89px, 9999px, 13px, 0); }
-            80% { clip: rect(45px, 9999px, 56px, 0); }
-            100% { clip: rect(98px, 9999px, 24px, 0); }
-        }
+    <!-- Google Fonts Premium -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bibliotecas Externas (Carregamento diferido onde possível) -->
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" defer></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
+    
+    <!-- JS --> 
+    <script src="script.js"></script>
 
-        /* Hero Background Overlay */
-        .hero-bg {
-            background: radial-gradient(circle at center, rgba(225, 29, 72, 0.15) 0%, rgba(10, 10, 12, 1) 70%),
-                        url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop') center/cover;
-            background-attachment: fixed;
-        }
+    <!-- Tawlwind config JS --> 
+    <script src="tailwind_config.js"></script>
 
-        /* Grid Background Animado para a Seção Universo */
-        .cyber-grid {
-            background-size: 50px 50px;
-            background-image: 
-                linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-            mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
-            -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
-        }
-    </style>
 </head>
-<body class="antialiased selection:bg-game-primary selection:text-white">
+<body class="antialiased text-gray-900 bg-gray-50 dark:bg-game-dark dark:text-gray-100 transition-colors duration-700 bg-gradient-mesh">
 
-    <!-- Navigation -->
-    <nav id="navbar" class="fixed top-0 left-0 w-full z-[999] transition-all duration-300 py-4 px-6 md:px-12 flex justify-between items-center bg-transparent border-b border-transparent">
-        <div class="font-heading font-bold text-2xl tracking-wider text-white uppercase flex items-center gap-3 relative z-50">
-            <i data-lucide="gamepad-2" class="text-game-primary w-8 h-8"></i>
-            [LOGO DO JOGO]
+    <!-- Cursor Customizado HTML -->
+    <div id="custom-cursor"></div>
+    <div id="custom-cursor-follower"></div>
+
+    <!-- Navegação Super Premium -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-[1000] transition-all duration-700 py-6 px-6 md:px-12 flex justify-between items-center border-b border-transparent hardware-accelerated">
+        <a href="#inicio" class="magnetic-btn font-heading font-bold text-2xl tracking-tight uppercase flex items-center gap-3 group transition-colors" aria-label="Home">
+            <div class="relative w-8 h-8 rounded-lg bg-game-primary text-white flex items-center justify-center overflow-hidden">
+                <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                <i data-lucide="zap" class="w-4 h-4 relative z-10 fill-current"></i>
+            </div>
+            <span class="tracking-widest">IPSUM<span class="text-game-primary">.</span></span>
+        </a>
+        
+        <!-- Menu Central -->
+        <div class="hidden md:flex items-center gap-2 p-1.5 rounded-full glass-panel transition-colors">
+            <a href="#inicio" class="magnetic-btn px-6 py-2 rounded-full text-xs font-semibold tracking-widest uppercase text-gray-800 dark:text-gray-300 hover:text-game-primary dark:hover:text-game-primary transition-colors">Início</a>
+            <a href="#sobre" class="magnetic-btn px-6 py-2 rounded-full text-xs font-semibold tracking-widest uppercase text-gray-800 dark:text-gray-300 hover:text-game-primary dark:hover:text-game-primary transition-colors">Projetos</a>
+            <a href="#universo" class="magnetic-btn px-6 py-2 rounded-full text-xs font-semibold tracking-widest uppercase text-gray-800 dark:text-gray-300 hover:text-game-primary dark:hover:text-game-primary transition-colors">Universo</a>
+            <a href="#gameplay" class="magnetic-btn px-6 py-2 rounded-full text-xs font-semibold tracking-widest uppercase text-gray-800 dark:text-gray-300 hover:text-game-primary dark:hover:text-game-primary transition-colors">Showcase</a>
         </div>
-        <div class="hidden md:flex gap-8 font-sans text-sm font-semibold tracking-wide uppercase relative z-50">
-            <a href="#inicio" class="text-gray-300 hover:text-game-primary transition-colors drop-shadow-md">Início</a>
-            <a href="#sobre" class="text-gray-300 hover:text-game-primary transition-colors drop-shadow-md">Sobre o Jogo</a>
-            <a href="#universo" class="text-gray-300 hover:text-game-primary transition-colors drop-shadow-md">Universo</a>
-            <a href="#gameplay" class="text-gray-300 hover:text-game-primary transition-colors drop-shadow-md">Gameplay</a>
-        </div>
-        <div class="flex items-center gap-4 relative z-50">
-            <a href="#newsletter" class="hidden md:block border border-game-primary text-game-primary hover:bg-game-primary hover:text-white px-6 py-2.5 rounded uppercase font-bold text-sm transition-all duration-300 shadow-[0_0_15px_rgba(225,29,72,0.3)] hover:shadow-[0_0_25px_rgba(225,29,72,0.6)]">
-                Acesso Antecipado
-            </a>
-            <button id="mobile-btn" class="md:hidden text-white hover:text-game-primary transition-colors relative z-50">
-                <i data-lucide="menu" class="w-8 h-8"></i>
+
+        <div class="flex items-center gap-4">
+            <button id="theme-toggle" class="magnetic-btn text-gray-800 dark:text-gray-300 hover:text-game-primary dark:hover:text-game-primary transition-colors w-10 h-10 flex items-center justify-center rounded-full glass-panel" aria-label="Alternar Tema">
+                <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
+                <i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i>
+            </button>
+            
+            <button id="mobile-btn" class="md:hidden magnetic-btn w-10 h-10 flex flex-col justify-center items-center gap-1.5 rounded-full glass-panel" aria-label="Menu">
+                <span class="w-4 h-[2px] bg-current rounded-full transition-all duration-300 origin-center" id="bar1"></span>
+                <span class="w-4 h-[2px] bg-current rounded-full transition-all duration-300 origin-center" id="bar2"></span>
             </button>
         </div>
     </nav>
 
-    <!-- Menu Mobile Overlay (Movido para fora da Nav para corrigir conflito de scroll/blur) -->
-    <div id="mobile-menu" class="fixed inset-0 z-[998] bg-game-darker flex flex-col items-center justify-start pt-32 pb-12 gap-8 md:hidden transition-opacity duration-300 opacity-0 pointer-events-none overflow-y-auto">
-        <a href="#inicio" class="mobile-link font-heading text-3xl uppercase text-gray-300 hover:text-game-primary transition-colors shrink-0">Início</a>
-        <a href="#sobre" class="mobile-link font-heading text-3xl uppercase text-gray-300 hover:text-game-primary transition-colors shrink-0">Sobre o Jogo</a>
-        <a href="#universo" class="mobile-link font-heading text-3xl uppercase text-gray-300 hover:text-game-primary transition-colors shrink-0">Universo</a>
-        <a href="#gameplay" class="mobile-link font-heading text-3xl uppercase text-gray-300 hover:text-game-primary transition-colors shrink-0">Gameplay</a>
-        <a href="#newsletter" class="mobile-link mt-4 border border-game-primary text-game-primary hover:bg-game-primary hover:text-white px-8 py-4 rounded uppercase font-bold text-xl transition-all shadow-[0_0_15px_rgba(225,29,72,0.3)] shrink-0">
-            Acesso Antecipado
-        </a>
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 z-[999] bg-white/95 dark:bg-[#050505]/95 backdrop-blur-3xl flex flex-col items-center justify-center gap-10 md:hidden transition-all duration-500 opacity-0 invisible translate-y-8 hardware-accelerated">
+        <a href="#inicio" class="mobile-link font-heading text-5xl uppercase font-bold text-gray-900 dark:text-white hover:text-game-primary transition-colors">Início</a>
+        <a href="#sobre" class="mobile-link font-heading text-5xl uppercase font-bold text-gray-900 dark:text-white hover:text-game-primary transition-colors">A Visão</a>
+        <a href="#universo" class="mobile-link font-heading text-5xl uppercase font-bold text-gray-900 dark:text-white hover:text-game-primary transition-colors">Universo</a>
+        <a href="#gameplay" class="mobile-link font-heading text-5xl uppercase font-bold text-gray-900 dark:text-white hover:text-game-primary transition-colors">Showcase</a>
     </div>
 
     <!-- Hero Section -->
-    <section id="inicio" class="hero-bg relative h-screen flex flex-col items-center justify-center text-center px-4">
-        <!-- Overlay escuro para garantir leitura -->
-        <div class="absolute inset-0 bg-black/50 z-0"></div>
+    <section id="inicio" class="relative min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20 z-0">
         
-        <div class="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
-            <span class="text-game-primary font-bold tracking-[0.2em] uppercase mb-4 reveal">O novo patamar da ação 2D</span>
-            <h1 class="font-heading font-bold text-6xl md:text-8xl lg:text-9xl uppercase tracking-tighter text-white mb-6 glitch-wrapper reveal" data-text="[INSERIR NOME DO JOGO]">
-                [INSERIR NOME DO JOGO]
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center z-0 pointer-events-none select-none overflow-hidden hardware-accelerated">
+            <h1 class="font-heading font-bold text-[20vw] leading-none text-stroke whitespace-nowrap opacity-50 dark:opacity-30">
+                IPSUM IPSUM
             </h1>
-            <p class="text-lg md:text-xl text-gray-300 max-w-2xl font-light mb-10 reveal" style="transition-delay: 200ms;">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Entre em um mundo implacável onde cada corte conta.
+        </div>
+
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] md:w-[40vw] md:h-[40vw] z-0 pointer-events-none">
+            <!-- Blobs otimizados: Sem animação pesada e blur reduzido -->
+            <div class="absolute inset-0 bg-game-primary/20 dark:bg-game-primary/20 rounded-full blur-3xl opacity-60 hardware-accelerated"></div>
+            <div class="absolute top-1/4 right-1/4 w-[60%] h-[60%] bg-game-accent/20 dark:bg-game-accent/10 rounded-full blur-3xl opacity-60 hardware-accelerated"></div>
+        </div>
+
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[100vw] md:w-[55vw] md:h-[55vw] z-0 pointer-events-none flex items-center justify-center">
+            <!-- Imagem Otimizada: Sem mix-blend-mode pesado -->
+            <img 
+                id="hero-scroll-image" 
+                src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=60&w=1200&fm=webp&auto=format" 
+                alt="Forma 3D Abstrata" 
+                fetchpriority="high"
+                decoding="sync"
+                class="hero-rotating-img w-full h-full object-contain opacity-20 dark:opacity-30 drop-shadow-xl hardware-accelerated"
+            >
+        </div>
+        
+        <div class="relative z-10 w-full max-w-6xl mx-auto flex flex-col items-center">
+            <div class="reveal opacity-0 translate-y-8 flex items-center gap-3 px-5 py-2 rounded-full glass-panel border border-game-primary/20 text-game-primary text-xs font-bold tracking-[0.2em] uppercase mb-8 shadow-[0_0_20px_rgba(225,29,72,0.15)] backdrop-blur-md">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-game-primary opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-game-primary"></span>
+                </span>
+                Experiência Digital 2026
+            </div>
+            
+            <h2 class="reveal opacity-0 translate-y-8 font-heading font-bold text-6xl md:text-[7rem] lg:text-[9rem] uppercase leading-[0.85] tracking-tighter text-gray-900 dark:text-white mb-8 drop-shadow-2xl">
+                LOREM <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-game-primary to-orange-400">IPSUM</span>
+            </h2>
+            
+            <p class="reveal opacity-0 translate-y-8 text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light leading-relaxed mb-12">
+                Redefinindo os limites da interação web. Mergulhe num ecossistema onde a estética minimalista encontra tecnologia de vanguarda.
             </p>
-            <div class="flex flex-col sm:flex-row gap-4 reveal" style="transition-delay: 400ms;">
-                <a href="#gameplay" class="bg-game-primary text-white px-8 py-4 rounded font-heading text-xl uppercase tracking-wider hover:bg-game-accent transition-colors flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(225,29,72,0.4)]">
-                    <i data-lucide="play" class="w-5 h-5 fill-current"></i> Ver Trailer
-                </a>
-                <a href="#sobre" class="bg-white/10 backdrop-blur-sm text-white border border-white/20 px-8 py-4 rounded font-heading text-xl uppercase tracking-wider hover:bg-white/20 transition-colors">
-                    Descobrir Mais
+            
+            <div class="reveal opacity-0 translate-y-8 flex flex-col sm:flex-row gap-6 justify-center">
+                <a href="#gameplay" class="magnetic-btn group relative px-10 py-4 bg-gray-900 dark:bg-white text-white dark:text-game-darker rounded-full font-heading text-lg font-bold uppercase tracking-widest overflow-hidden transition-transform hover:scale-105">
+                    <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
+                    <span class="relative flex items-center gap-3">
+                        <i data-lucide="play-circle" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        Iniciar Jornada
+                    </span>
                 </a>
             </div>
         </div>
         
-        <!-- Scroll indicator -->
-        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50">
-            <i data-lucide="chevron-down" class="w-8 h-8"></i>
+        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-50">
+            <div class="w-[1px] h-12 bg-gradient-to-b from-transparent via-gray-900 dark:via-white to-transparent"></div>
+            <span class="text-[9px] uppercase tracking-[0.4em] font-semibold font-heading rotate-90 translate-y-8">Scroll</span>
         </div>
     </section>
 
-    <!-- Sobre o Jogo -->
-    <section id="sobre" class="py-24 bg-game-darker relative overflow-hidden">
-        <div class="container mx-auto px-6 md:px-12 relative z-10">
-            <div class="flex flex-col md:flex-row items-center gap-16">
-                <div class="md:w-1/2 reveal">
-                    <h2 class="font-heading text-4xl md:text-6xl font-bold uppercase mb-6"><span class="text-game-primary">Sobre</span> o Jogo</h2>
-                    <p class="text-gray-400 mb-6 text-lg leading-relaxed">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim.
-                    </p>
-                    <p class="text-gray-400 mb-8 text-lg leading-relaxed">
-                        Phasellus pellentesque id justo vitae congue. Donec magna magna, auctor quis est at, cursus tempor dui. Suspendisse sagittis a diam ut scelerisque. 
-                    </p>
-                    <ul class="space-y-4">
-                        <li class="flex items-center gap-3">
-                            <i data-lucide="sword" class="text-game-primary w-6 h-6"></i>
-                            <span class="font-semibold text-xl">Combate visceral e preciso</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <i data-lucide="skull" class="text-game-primary w-6 h-6"></i>
-                            <span class="font-semibold text-xl">Chefões que testarão seus limites</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <i data-lucide="map" class="text-game-primary w-6 h-6"></i>
-                            <span class="font-semibold text-xl">Mundo interconectado vasto</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="md:w-1/2 relative reveal" style="transition-delay: 200ms;">
-                    <!-- Placeholder visual 2D Art -->
-                    <div class="aspect-square bg-gradient-to-tr from-game-primary/20 to-game-dark rounded-2xl border border-game-primary/30 relative flex items-center justify-center overflow-hidden shadow-2xl shadow-game-primary/10">
-                        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20"></div>
-                        <div class="text-center p-8">
-                            <i data-lucide="image" class="w-16 h-16 text-game-primary/50 mx-auto mb-4"></i>
-                            <p class="font-heading text-2xl text-gray-500 uppercase">Arte do Jogo Aqui</p>
-                            <p class="text-sm text-gray-600">Screenshot ou Key Art</p>
+    <!-- OTIMIZAÇÃO: render-optimized esconde o conteúdo do browser se não estiver no ecrã -->
+    <section id="sobre" class="py-32 relative z-10 render-optimized">
+        <div class="container mx-auto px-6 lg:px-12">
+            
+            <div class="mb-16 reveal">
+                <h3 class="font-heading text-4xl md:text-5xl font-bold uppercase tracking-tight text-gray-900 dark:text-white">
+                    A <span class="text-transparent bg-clip-text bg-gradient-to-r from-game-primary to-purple-500">Visão</span>
+                </h3>
+                <p class="mt-4 text-gray-500 dark:text-gray-400 font-light max-w-md">Uma abordagem arquitetónica para o design de interfaces fluidas.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[250px] md:auto-rows-[300px]">
+                <!-- Imagens com loading lazy e formatação WebP leve (sem mix-blend) -->
+                <div class="magnetic-btn open-modal-btn cursor-pointer col-span-1 md:col-span-2 row-span-2 glass-panel rounded-[2rem] p-8 md:p-12 flex flex-col justify-end relative overflow-hidden group reveal"
+                     data-title="Project Nexus" 
+                     data-image="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=60&w=800&fm=webp&auto=format"
+                     data-desc="Um RPG de ação num mundo ciberpunk distópico. Explore cidades verticais neon, melhore os seus implantes cibernéticos e desvende uma conspiração global que ameaça o que resta da humanidade. Possui combates fluidos e uma narrativa não linear em que as suas escolhas alteram permanentemente a cidade.">
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105 opacity-20 dark:opacity-30 hardware-accelerated" style="background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=60&w=800&fm=webp&auto=format');"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-50/90 dark:from-game-surface/90 via-transparent to-transparent"></div>
+                    
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 rounded-full bg-game-primary/10 flex items-center justify-center mb-6 backdrop-blur-md border border-game-primary/20 group-hover:bg-game-primary transition-colors duration-500">
+                            <i data-lucide="gamepad-2" class="w-6 h-6 text-game-primary group-hover:text-white transition-colors duration-500"></i>
                         </div>
+                        <h4 class="font-heading text-3xl md:text-4xl font-bold uppercase text-gray-900 dark:text-white mb-4">Project Nexus</h4>
+                        <p class="text-gray-700 dark:text-gray-300 font-light max-w-lg leading-relaxed">
+                            O nosso título principal. Um RPG de ação ciberpunk focado na liberdade do jogador. Clique para ver os detalhes.
+                        </p>
                     </div>
                 </div>
+
+                <div class="magnetic-btn open-modal-btn cursor-pointer col-span-1 row-span-1 glass-panel rounded-[2rem] p-8 flex flex-col justify-center relative overflow-hidden group reveal" style="transition-delay: 100ms;"
+                     data-title="Speed Render 99" 
+                     data-image="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=60&w=800&fm=webp&auto=format"
+                     data-desc="O nosso novo motor de jogo proprietário. Otimizado para renderizar mundos abertos vastos a mais de 120 frames por segundo em hardware de gama média. Suporta Ray Tracing em tempo real, simulação avançada de fluidos e destruição processual do cenário.">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-purple-500/10 rounded-full blur-[40px] group-hover:bg-purple-500/20 transition-colors duration-500 hardware-accelerated"></div>
+                    <h5 class="font-heading text-6xl md:text-7xl font-bold text-gray-900 dark:text-white tracking-tighter mb-2">99<span class="text-game-primary">%</span></h5>
+                    <p class="text-sm uppercase tracking-widest font-semibold text-gray-600 dark:text-gray-500">Aceleração de Motor</p>
+                </div>
+
+                <div class="magnetic-btn open-modal-btn cursor-pointer col-span-1 row-span-1 glass-panel rounded-[2rem] p-8 flex flex-col justify-between group reveal" style="transition-delay: 200ms;"
+                     data-title="Void Architecture" 
+                     data-image="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=60&w=800&fm=webp&auto=format"
+                     data-desc="Um jogo de puzzles desafiante onde a gravidade e o tempo são variáveis que o jogador pode controlar diretamente. Navegue através de arquiteturas impossíveis inspiradas em M.C. Escher para escapar do vazio dimensional.">
+                    <div class="flex justify-between items-start">
+                        <i data-lucide="box" class="w-8 h-8 text-gray-500 dark:text-gray-500 group-hover:text-game-primary transition-colors duration-500"></i>
+                        <span class="px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full bg-gray-200 dark:bg-white/10 text-gray-600 dark:text-gray-300">Em Breve</span>
+                    </div>
+                    <div>
+                        <h4 class="font-heading text-xl font-bold uppercase text-gray-900 dark:text-white mb-2">Void Architecture</h4>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm font-light">Puzzles dimensionais e manipulação de tempo contínua.</p>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
 
-    <!-- UNIVERSO / LORE (Rolagem Dinâmica Cinemática com AnimeJS) -->
-    <section id="universo" class="relative h-[400vh] bg-game-dark">
-        <!-- O container "sticky" prende a visualização na tela enquanto a seção real de 400vh é rolada -->
+    <!-- OTIMIZAÇÃO: render-optimized esconde da GPU até lá chegar -->
+    <section id="universo" class="relative h-[400vh] bg-gray-100 dark:bg-game-darker transition-colors duration-700 render-optimized">
+        <div class="absolute inset-0 cyber-grid opacity-50 dark:opacity-20 pointer-events-none"></div>
+
         <div class="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
             
-            <!-- Background Animado em Grid -->
-            <div class="absolute inset-0 cyber-grid opacity-30"></div>
-
-            <!-- Indicador de Timeline (Lateral Direita) -->
-            <div class="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-center gap-2">
-                <div class="timeline-dot w-3 h-3 rounded-full bg-gray-800 border border-gray-600 transition-all shadow-[0_0_0px_transparent]"></div>
-                <div class="w-[1px] h-16 bg-gradient-to-b from-gray-800 to-gray-800/20"></div>
-                <div class="timeline-dot w-3 h-3 rounded-full bg-gray-800 border border-gray-600 transition-all shadow-[0_0_0px_transparent]"></div>
-                <div class="w-[1px] h-16 bg-gradient-to-b from-gray-800 to-gray-800/20"></div>
-                <div class="timeline-dot w-3 h-3 rounded-full bg-gray-800 border border-gray-600 transition-all shadow-[0_0_0px_transparent]"></div>
-                <div class="w-[1px] h-16 bg-gradient-to-b from-gray-800 to-gray-800/20"></div>
-                <div class="timeline-dot w-3 h-3 rounded-full bg-gray-800 border border-gray-600 transition-all shadow-[0_0_0px_transparent]"></div>
+            <div class="absolute right-8 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-center gap-4 p-4 glass-panel rounded-full backdrop-blur-xl">
+                <div class="timeline-dot w-2 h-2 rounded-full bg-gray-300 dark:bg-white/20 transition-all duration-300 hardware-accelerated"></div>
+                <div class="w-[1px] h-10 bg-gradient-to-b from-gray-300 dark:from-white/20 to-transparent"></div>
+                <div class="timeline-dot w-2 h-2 rounded-full bg-gray-300 dark:bg-white/20 transition-all duration-300 hardware-accelerated"></div>
+                <div class="w-[1px] h-10 bg-gradient-to-b from-gray-300 dark:from-white/20 to-transparent"></div>
+                <div class="timeline-dot w-2 h-2 rounded-full bg-gray-300 dark:bg-white/20 transition-all duration-300 hardware-accelerated"></div>
             </div>
 
-            <!-- Background giratório (Mapa/Anel Cibernético central) -->
-            <div class="lore-ring absolute w-[150vw] h-[150vw] md:w-[70vw] md:h-[70vw] rounded-full border-[0.5px] border-game-primary/20 flex items-center justify-center opacity-40">
-                <div class="absolute w-[90%] h-[90%] rounded-full border-2 border-dashed border-game-accent/20"></div>
-                <div class="absolute w-[60%] h-[60%] rounded-full border border-gray-800 flex items-center justify-center bg-game-primary/5 blur-3xl"></div>
-                <div class="absolute w-[70%] h-[70%] rounded-full border-[0.5px] border-gray-800 flex items-center justify-center">
-                    <div class="w-full h-[1px] bg-gradient-to-r from-transparent via-game-primary/30 to-transparent absolute top-1/2 left-0"></div>
-                    <div class="w-[1px] h-full bg-gradient-to-b from-transparent via-game-primary/30 to-transparent absolute top-0 left-1/2"></div>
-                </div>
+            <div class="absolute z-10 w-[80vw] h-[80vw] md:w-[40vw] md:h-[40vw] rounded-full border border-gray-200 dark:border-white/5 flex items-center justify-center animate-spin-slow pointer-events-none hardware-accelerated">
+                <div class="w-[90%] h-[90%] rounded-full border border-dashed border-gray-300 dark:border-white/10"></div>
             </div>
 
-            <!-- Central Hub (Bússola estática no centro - fica por trás dos cards) -->
-            <div class="absolute z-10 w-24 h-24 md:w-32 md:h-32 rounded-full border-2 border-game-primary bg-game-dark flex items-center justify-center shadow-[0_0_30px_rgba(225,29,72,0.3)] animate-pulse">
-                <i data-lucide="crosshair" class="w-10 h-10 md:w-12 md:h-12 text-game-primary"></i>
-            </div>
-
-            <!-- Cards de Informação (Controlados pelo Scroll) -->
-            <!-- O translateX(-50%) no Tailwind foi mantido e será respeitado pelo AnimeJS agora -->
-            <div class="relative z-30 w-full max-w-5xl mx-auto px-4 h-full perspective-[1000px]">
+            <div class="relative z-30 w-full max-w-4xl mx-auto px-6 h-full flex items-center justify-center perspective-1000">
                 
-                <!-- Card 1: Personagem -->
-                <div class="lore-card absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] md:w-full max-h-[85vh] flex flex-col md:flex-row bg-game-darker/80 backdrop-blur-2xl border border-game-primary/40 rounded-2xl opacity-0 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden">
-                    <div class="md:w-2/5 h-40 sm:h-48 md:h-auto md:min-h-[350px] shrink-0 bg-gray-900 relative flex items-center justify-center border-b md:border-b-0 md:border-r border-gray-800">
-                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1535295972055-1c762f4483e5?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center opacity-40 mix-blend-luminosity"></div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-game-darker to-transparent"></div>
-                        <i data-lucide="user" class="w-14 h-14 md:w-20 md:h-20 text-game-primary relative z-10 drop-shadow-[0_0_15px_rgba(225,29,72,1)]"></i>
+                <!-- OTIMIZAÇÃO: Imagens Lazy, formatadas para WebP leve, sem mix-blend -->
+                <article class="lore-card open-modal-btn cursor-pointer absolute w-full flex flex-col md:flex-row glass-panel rounded-[2rem] overflow-hidden shadow-2xl origin-center hardware-accelerated"
+                         style="opacity: 0; transform: translateY(150px) scale(0.95);"
+                         data-title="Starfall: Génese"
+                         data-image="https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?q=60&w=800&fm=webp&auto=format"
+                         data-desc="O nosso primeiro projeto de exploração espacial multiplayer. Entre numa galáxia gerada processualmente com milhares de planetas. Negocie com fações alienígenas, colonize mundos virgens e participe em batalhas de frotas de grande escala. A galáxia reage à economia e ações dos jogadores.">
+                    <div class="md:w-5/12 aspect-video md:aspect-auto bg-gray-200 dark:bg-gray-800 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?q=60&w=800&fm=webp&auto=format" loading="lazy" decoding="async" class="absolute w-full h-full object-cover opacity-60" alt="Space">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-100/90 dark:from-game-darker/80 to-transparent"></div>
                     </div>
-                    <div class="md:w-3/5 p-6 sm:p-8 md:p-12 text-left flex flex-col justify-center overflow-y-auto">
-                        <span class="text-game-accent font-mono text-xs md:text-sm tracking-widest uppercase mb-2">Arquivo #001</span>
-                        <h3 class="font-heading text-2xl sm:text-3xl md:text-5xl font-bold uppercase text-white mb-3 md:mb-4">O Protagonista</h3>
-                        <p class="text-gray-400 text-sm sm:text-base md:text-lg leading-relaxed">
-                            Um mercenário forjado nas sombras de Neon-City. Equipado com lâminas de plasma e reflexos aprimorados, ele é a última linha de defesa entre a humanidade e o colapso sintético.
+                    <div class="p-8 md:p-12 flex-1 flex flex-col justify-center bg-transparent">
+                        <div class="text-game-primary font-bold tracking-[0.2em] text-[10px] uppercase mb-4 border border-game-primary/20 inline-block px-3 py-1 rounded-full w-max">Jogo 01</div>
+                        <h3 class="font-heading text-4xl font-bold uppercase text-gray-900 dark:text-white mb-4">Starfall: Génese</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base leading-relaxed font-light">
+                            Exploração espacial em mundo aberto intergaláctico. Colonize e lute pelo domínio da galáxia.
                         </p>
                     </div>
-                </div>
+                </article>
 
-                <!-- Card 2: Mapa -->
-                <div class="lore-card absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] md:w-full max-h-[85vh] flex flex-col md:flex-row bg-game-darker/80 backdrop-blur-2xl border border-game-primary/40 rounded-2xl opacity-0 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden">
-                    <div class="md:w-2/5 h-40 sm:h-48 md:h-auto md:min-h-[350px] shrink-0 bg-gray-900 relative flex items-center justify-center border-b md:border-b-0 md:border-r border-gray-800">
-                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center opacity-40 mix-blend-luminosity"></div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-game-darker to-transparent"></div>
-                        <i data-lucide="map" class="w-14 h-14 md:w-20 md:h-20 text-game-primary relative z-10 drop-shadow-[0_0_15px_rgba(225,29,72,1)]"></i>
+                <article class="lore-card open-modal-btn cursor-pointer absolute w-full flex flex-col md:flex-row glass-panel rounded-[2rem] overflow-hidden shadow-2xl origin-center hardware-accelerated" 
+                         style="opacity: 0; transform: translateX(400px) scale(0.95);"
+                         data-title="Neon Morph"
+                         data-image="https://images.unsplash.com/photo-1635830625698-3b9bd74671ca?q=60&w=800&fm=webp&auto=format"
+                         data-desc="Um jogo de terror e sobrevivência assimétrico onde um jogador assume o papel de uma criatura monstruosa que pode tomar a forma de qualquer objeto do cenário, enquanto uma equipa de sobreviventes tenta consertar geradores e escapar de uma instalação biológica isolada.">
+                    <div class="md:w-5/12 aspect-video md:aspect-auto bg-gray-200 dark:bg-gray-800 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1635830625698-3b9bd74671ca?q=60&w=800&fm=webp&auto=format" loading="lazy" decoding="async" class="absolute w-full h-full object-cover opacity-60" alt="Structure">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-100/90 dark:from-game-darker/80 to-transparent"></div>
                     </div>
-                    <div class="md:w-3/5 p-6 sm:p-8 md:p-12 text-left flex flex-col justify-center overflow-y-auto">
-                        <span class="text-game-accent font-mono text-xs md:text-sm tracking-widest uppercase mb-2">Setor Comprometido</span>
-                        <h3 class="font-heading text-2xl sm:text-3xl md:text-5xl font-bold uppercase text-white mb-3 md:mb-4">Distrito Zero</h3>
-                        <p class="text-gray-400 text-sm sm:text-base md:text-lg leading-relaxed">
-                            Um labirinto interconectado de arranha-céus em ruínas e esgotos tóxicos. Descubra atalhos escondidos, áreas secretas inexploradas e o submundo corporativo esquecido.
+                    <div class="p-8 md:p-12 flex-1 flex flex-col justify-center bg-transparent">
+                        <div class="text-game-accent font-bold tracking-[0.2em] text-[10px] uppercase mb-4 border border-game-accent/20 inline-block px-3 py-1 rounded-full w-max">Jogo 02</div>
+                        <h3 class="font-heading text-4xl font-bold uppercase text-gray-900 dark:text-white mb-4">Neon Morph</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base leading-relaxed font-light">
+                            Terror assimétrico brutal. Pode a sua equipa escapar de um predador que consegue ser qualquer coisa na sala?
                         </p>
                     </div>
-                </div>
+                </article>
 
-                <!-- Card 3: Itens -->
-                <div class="lore-card absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] md:w-full max-h-[85vh] flex flex-col md:flex-row bg-game-darker/80 backdrop-blur-2xl border border-game-primary/40 rounded-2xl opacity-0 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden">
-                    <div class="md:w-2/5 h-40 sm:h-48 md:h-auto md:min-h-[350px] shrink-0 bg-gray-900 relative flex items-center justify-center border-b md:border-b-0 md:border-r border-gray-800">
-                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1635830625698-3b9bd74671ca?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center opacity-40 mix-blend-luminosity"></div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-game-darker to-transparent"></div>
-                        <i data-lucide="cpu" class="w-14 h-14 md:w-20 md:h-20 text-game-primary relative z-10 drop-shadow-[0_0_15px_rgba(225,29,72,1)]"></i>
+                <article class="lore-card open-modal-btn cursor-pointer absolute w-full flex flex-col md:flex-row glass-panel rounded-[2rem] overflow-hidden shadow-2xl origin-center hardware-accelerated" 
+                         style="opacity: 0; transform: translateX(-400px) scale(0.95);"
+                         data-title="Symbiosis"
+                         data-image="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=60&w=800&fm=webp&auto=format"
+                         data-desc="Aventura narrativa puramente cooperativa. Dois jogadores devem partilhar a mesma perceção de um mundo fragmentado para resolver quebra-cabeças impossíveis sozinhos. Descubram em conjunto a verdade trágica sobre a queda do vosso planeta agonizante.">
+                    <div class="md:w-5/12 aspect-video md:aspect-auto bg-gray-200 dark:bg-gray-800 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=60&w=800&fm=webp&auto=format" loading="lazy" decoding="async" class="absolute w-full h-full object-cover opacity-60" alt="Digital">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-100/90 dark:from-game-darker/80 to-transparent"></div>
                     </div>
-                    <div class="md:w-3/5 p-6 sm:p-8 md:p-12 text-left flex flex-col justify-center overflow-y-auto">
-                        <span class="text-game-accent font-mono text-xs md:text-sm tracking-widest uppercase mb-2">Aprimoramentos</span>
-                        <h3 class="font-heading text-2xl sm:text-3xl md:text-5xl font-bold uppercase text-white mb-3 md:mb-4">Relíquias Neurais</h3>
-                        <p class="text-gray-400 text-sm sm:text-base md:text-lg leading-relaxed">
-                            Encontre módulos de memória ancestrais que alteram seu estilo de jogo, concedendo habilidades como dash aéreo contínuo, reflexão de projéteis e distorção de tempo.
+                    <div class="p-8 md:p-12 flex-1 flex flex-col justify-center bg-transparent">
+                        <div class="text-purple-500 font-bold tracking-[0.2em] text-[10px] uppercase mb-4 border border-purple-500/20 inline-block px-3 py-1 rounded-full w-max">Jogo 03</div>
+                        <h3 class="font-heading text-4xl font-bold uppercase text-gray-900 dark:text-white mb-4">Symbiosis</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base leading-relaxed font-light">
+                            Co-op focado na narrativa profunda. Trabalhem em equipa perfeita ou caiam para sempre no esquecimento.
                         </p>
                     </div>
-                </div>
+                </article>
+            </div>
+        </div>
+    </section>
 
-                <!-- Card 4: Boss -->
-                <div class="lore-card absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] md:w-full max-h-[85vh] flex flex-col md:flex-row bg-game-darker/80 backdrop-blur-2xl border border-game-primary/40 rounded-2xl opacity-0 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden">
-                    <div class="md:w-2/5 h-40 sm:h-48 md:h-auto md:min-h-[350px] shrink-0 bg-gray-900 relative flex items-center justify-center border-b md:border-b-0 md:border-r border-gray-800">
-                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1620503374956-c942862f0372?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center opacity-40 mix-blend-luminosity"></div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-game-darker to-transparent"></div>
-                        <i data-lucide="skull" class="w-14 h-14 md:w-20 md:h-20 text-game-primary relative z-10 drop-shadow-[0_0_15px_rgba(225,29,72,1)]"></i>
+    <section id="gameplay" class="py-32 bg-white dark:bg-[#030303] relative z-10 transition-colors duration-700 render-optimized">
+        <div class="container mx-auto px-6 lg:px-12">
+            
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8 reveal">
+                <div>
+                    <div class="inline-block px-4 py-1.5 mb-4 rounded-full border border-gray-200 dark:border-white/10 text-xs font-bold uppercase tracking-widest text-gray-500">
+                        Showcase Reel
                     </div>
-                    <div class="md:w-3/5 p-6 sm:p-8 md:p-12 text-left flex flex-col justify-center overflow-y-auto">
-                        <span class="text-game-accent font-mono text-xs md:text-sm tracking-widest uppercase mb-2">Ameaça Classe S</span>
-                        <h3 class="font-heading text-2xl sm:text-3xl md:text-5xl font-bold uppercase text-white mb-3 md:mb-4">Senhores de Aço</h3>
-                        <p class="text-gray-400 text-sm sm:text-base md:text-lg leading-relaxed">
-                            Enfrente titãs mecânicos que dominam diferentes setores. Cada batalha exigirá precisão cirúrgica e a combinação perfeita de suas habilidades letais.
-                        </p>
+                    <h2 class="font-heading text-5xl md:text-7xl font-bold uppercase text-gray-900 dark:text-white tracking-tighter">Visual em <br><span class="text-game-primary">Movimento</span></h2>
+                </div>
+                <p class="text-gray-500 font-light max-w-sm">Assista à renderização em tempo real das nossas texturas e shaders num ambiente simulado.</p>
+            </div>
+
+            <div class="relative w-full aspect-video rounded-[2rem] overflow-hidden glass-panel p-2 reveal">
+                <div class="relative w-full h-full rounded-[1.5rem] overflow-hidden bg-black group cursor-pointer" id="video-container">
+                    
+                    <!-- OTIMIZAÇÃO: preload="none" poupa megabytes de banda até o utilizador decidir dar play -->
+                    <video id="gameplay-video" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700 scale-105 group-hover:scale-100 hardware-accelerated" loop playsinline muted preload="none" poster="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=60&w=800&fm=webp&auto=format">
+                        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" type="video/mp4">
+                    </video>
+                    
+                    <button id="play-button" class="absolute inset-0 flex items-center justify-center z-20 transition-opacity duration-300 pointer-events-none">
+                        <div class="w-24 h-24 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform duration-500 shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+                            <i data-lucide="play" class="w-10 h-10 text-white fill-white ml-2"></i>
+                        </div>
+                    </button>
+                    
+                    <div class="absolute top-8 left-8 flex gap-2">
+                        <div class="w-12 h-1 bg-white/50 rounded-full"></div>
+                        <div class="w-4 h-1 bg-white/20 rounded-full"></div>
+                    </div>
+                    
+                    <div class="absolute bottom-8 left-8 right-8 flex justify-between items-end pointer-events-none">
+                        <div class="glass-panel px-5 py-3 rounded-full flex items-center gap-3 backdrop-blur-md">
+                            <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_10px_red]"></div>
+                            <span class="text-[10px] uppercase font-bold tracking-[0.2em] text-white">Live Render 4K</span>
+                        </div>
+                        <div class="text-white/50 text-[10px] tracking-widest uppercase font-mono hidden md:block">
+                            REC // 00:00:00:00
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- DYNAMIC SCROLLING VIDEO SECTION -->
-    <!-- Esta é a seção onde o vídeo fica preso na tela enquanto o texto rola -->
-    <section id="gameplay" class="py-24 bg-game-dark relative">
-        <div class="container mx-auto px-6 md:px-12">
-            <div class="text-center mb-16 reveal">
-                <h2 class="font-heading text-4xl md:text-6xl font-bold uppercase"><span class="text-game-primary">Gameplay</span> Dinâmico</h2>
-                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Role para descobrir as principais mecânicas que definem a experiência de [INSERIR NOME DO JOGO].</p>
+    <!-- Modal Pop-up para Jogos -->
+    <div id="game-modal" class="fixed inset-0 z-[10000] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="absolute inset-0 bg-gray-900/60 dark:bg-black/80 backdrop-blur-md close-modal cursor-pointer hardware-accelerated"></div>
+        
+        <div id="modal-content" class="relative w-[90%] max-w-3xl glass-panel bg-white/95 dark:bg-[#111111]/95 rounded-[2rem] overflow-hidden shadow-2xl transform scale-95 transition-transform duration-300 hardware-accelerated">
+            <button class="absolute top-4 right-4 z-50 p-2 bg-black/10 dark:bg-white/10 hover:bg-game-primary dark:hover:bg-game-primary hover:text-white rounded-full backdrop-blur-md transition-colors close-modal">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            
+            <div class="w-full h-64 md:h-80 relative overflow-hidden">
+                <img id="modal-img" src="" alt="Capa do Jogo" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-white dark:from-[#111111] to-transparent"></div>
             </div>
-
-            <!-- O container flexível. No desktop, lado a lado. -->
-            <div class="flex flex-col lg:flex-row gap-12 relative items-start">
-                
-                <!-- Coluna do VÍDEO (Sticky / Preso) -->
-                <!-- No desktop, ele gruda no topo (top-24) e fica parado enquanto rola -->
-                <div class="w-full lg:w-1/2 lg:sticky top-24 z-20 reveal">
-                    <div class="rounded-xl overflow-hidden border border-gray-800 shadow-2xl shadow-black relative bg-black aspect-video group">
-                        <!-- Vídeo Placeholder Dinâmico -->
-                        <video 
-                            autoplay 
-                            loop 
-                            muted 
-                            playsinline
-                            class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500">
-                            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" type="video/mp4">
-                            Seu navegador não suporta vídeos HTML5.
-                        </video>
-                        <!-- Sobreposição de "Scanning" estilo HUD de jogo -->
-                        <div class="absolute inset-0 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30 mix-blend-overlay"></div>
-                        <div class="absolute inset-0 pointer-events-none border-2 border-game-primary/30 rounded-xl"></div>
-                        
-                        <!-- Etiqueta no canto -->
-                        <div class="absolute top-4 left-4 bg-game-primary text-white text-xs font-bold uppercase px-2 py-1 rounded">
-                            Imagens Pré-Alpha
-                        </div>
-                    </div>
+            
+            <div class="p-8 md:px-12 md:pb-12 md:-mt-12 relative z-10">
+                <div class="inline-block px-3 py-1 mb-4 rounded-full border border-game-primary/30 text-[10px] font-bold uppercase tracking-widest text-game-primary bg-game-primary/10 backdrop-blur-md">
+                    Detalhes do Projeto
                 </div>
+                <h3 id="modal-title" class="font-heading text-4xl md:text-5xl font-bold uppercase text-gray-900 dark:text-white mb-6">Título</h3>
+                <p id="modal-desc" class="text-gray-700 dark:text-gray-300 font-light text-base md:text-lg leading-relaxed mb-8">
+                    Descrição do jogo...
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <button class="px-8 py-3 bg-game-primary text-white rounded-full font-bold uppercase tracking-widest text-sm hover:scale-105 transition-transform shadow-[0_0_20px_rgba(225,29,72,0.4)]">
+                        Ver Mais
+                    </button>
+                    <button class="px-8 py-3 border border-gray-300 dark:border-white/20 rounded-full font-bold uppercase tracking-widest text-sm text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-colors close-modal">
+                        Voltar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                <!-- Coluna do TEXTO (Rola normalmente) -->
-                <div class="w-full lg:w-1/2 flex flex-col space-y-32 py-10 lg:py-32">
-                    
-                    <!-- Bloco de Texto 1 -->
-                    <div class="reveal">
-                        <div class="w-12 h-12 bg-game-primary/20 rounded flex items-center justify-center mb-6 border border-game-primary/50">
-                            <span class="font-heading text-2xl font-bold text-game-primary">01</span>
-                        </div>
-                        <h3 class="font-heading text-3xl md:text-4xl font-bold uppercase mb-4 text-white">Mobilidade Acrobática</h3>
-                        <p class="text-gray-400 text-lg leading-relaxed mb-4">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </p>
-                        <p class="text-gray-500 text-base leading-relaxed">
-                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                        </p>
-                    </div>
-
-                    <!-- Bloco de Texto 2 -->
-                    <div class="reveal">
-                        <div class="w-12 h-12 bg-game-primary/20 rounded flex items-center justify-center mb-6 border border-game-primary/50">
-                            <span class="font-heading text-2xl font-bold text-game-primary">02</span>
-                        </div>
-                        <h3 class="font-heading text-3xl md:text-4xl font-bold uppercase mb-4 text-white">Sistema de Combos</h3>
-                        <p class="text-gray-400 text-lg leading-relaxed mb-4">
-                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper.
-                        </p>
-                        <ul class="space-y-2 text-gray-400 mt-4">
-                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-game-primary"></i> Ataques leves e pesados</li>
-                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-game-primary"></i> Cancelamento de animação (Dash)</li>
-                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-game-primary"></i> Habilidades definitivas (Ultimates)</li>
+    <!-- Rodapé Minimalista -->
+    <footer class="bg-gray-50 dark:bg-game-darker pt-24 pb-8 border-t border-gray-200 dark:border-white/5 transition-colors duration-700 z-10 relative render-optimized">
+        <div class="container mx-auto px-6 lg:px-12">
+            
+            <div class="flex flex-col md:flex-row justify-between items-start gap-12 mb-20">
+                <div class="max-w-md">
+                    <h2 class="font-heading font-bold text-4xl md:text-5xl uppercase tracking-tighter text-gray-900 dark:text-white mb-6">IPSUM<span class="text-game-primary">.</span></h2>
+                    <p class="text-gray-500 dark:text-gray-400 font-light leading-relaxed mb-8">
+                        Não construímos apenas sites. Projetamos ecossistemas digitais que unem estética brutalista e engenharia de precisão para a web moderna.
+                    </p>
+                    <a href="mailto:hello@ipsum.com" class="magnetic-btn inline-flex items-center gap-2 text-game-primary font-bold uppercase tracking-widest text-sm hover:text-gray-900 dark:hover:text-white transition-colors">
+                        Fale Connosco <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-12 md:gap-24">
+                    <div>
+                        <h4 class="font-heading text-gray-900 dark:text-white font-bold uppercase mb-6 tracking-widest text-sm">Explorar</h4>
+                        <ul class="space-y-4 text-gray-500 dark:text-gray-400 font-light text-sm">
+                            <li><a href="#inicio" class="hover:text-game-primary transition-colors">Início</a></li>
+                            <li><a href="#sobre" class="hover:text-game-primary transition-colors">Visão Bento</a></li>
+                            <li><a href="#universo" class="hover:text-game-primary transition-colors">Universo 3D</a></li>
+                            <li><a href="#gameplay" class="hover:text-game-primary transition-colors">Showcase Reel</a></li>
                         </ul>
                     </div>
-
-                    <!-- Bloco de Texto 3 -->
-                    <div class="reveal">
-                        <div class="w-12 h-12 bg-game-primary/20 rounded flex items-center justify-center mb-6 border border-game-primary/50">
-                            <span class="font-heading text-2xl font-bold text-game-primary">03</span>
-                        </div>
-                        <h3 class="font-heading text-3xl md:text-4xl font-bold uppercase mb-4 text-white">Inimigos Adaptativos</h3>
-                        <p class="text-gray-400 text-lg leading-relaxed">
-                            Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est.
-                        </p>
+                    <div>
+                        <h4 class="font-heading text-gray-900 dark:text-white font-bold uppercase mb-6 tracking-widest text-sm">Social</h4>
+                        <ul class="space-y-4 text-gray-500 dark:text-gray-400 font-light text-sm">
+                            <li><a href="#" class="hover:text-game-primary transition-colors flex items-center gap-2">X (Twitter) <i data-lucide="external-link" class="w-3 h-3"></i></a></li>
+                            <li><a href="#" class="hover:text-game-primary transition-colors flex items-center gap-2">Instagram <i data-lucide="external-link" class="w-3 h-3"></i></a></li>
+                            <li><a href="#" class="hover:text-game-primary transition-colors flex items-center gap-2">Awwwards <i data-lucide="external-link" class="w-3 h-3"></i></a></li>
+                        </ul>
                     </div>
-
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Call to Action / Newsletter -->
-    <section id="newsletter" class="py-24 bg-game-darker border-t border-gray-900 relative">
-        <div class="absolute inset-0 bg-game-primary/5 opacity-50"></div>
-        <div class="container mx-auto px-6 md:px-12 relative z-10 text-center max-w-3xl reveal">
-            <i data-lucide="mail" class="w-16 h-16 text-game-primary mx-auto mb-6"></i>
-            <h2 class="font-heading text-4xl md:text-5xl font-bold uppercase mb-4">Junte-se à Resistência</h2>
-            <p class="text-gray-400 mb-10 text-lg">
-                Inscreva-se na nossa newsletter para receber atualizações do desenvolvimento, acesso antecipado a betas e recompensas exclusivas no lançamento.
-            </p>
             
-            <form class="flex flex-col sm:flex-row gap-4 justify-center" onsubmit="event.preventDefault(); alert('Obrigado por se inscrever! (Placeholder)');">
-                <input type="email" placeholder="Seu melhor e-mail" required class="bg-game-dark border border-gray-700 text-white px-6 py-4 rounded focus:outline-none focus:border-game-primary flex-grow max-w-md w-full transition-colors">
-                <button type="submit" class="bg-game-primary text-white px-8 py-4 rounded font-heading text-lg uppercase tracking-wider hover:bg-game-accent transition-colors shadow-[0_0_15px_rgba(225,29,72,0.4)] whitespace-nowrap">
-                    Inscrever-se
-                </button>
-            </form>
-            <p class="text-xs text-gray-600 mt-4 uppercase tracking-widest">Zero spam. Cancele quando quiser.</p>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-black py-12 border-t border-gray-900">
-        <div class="container mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="font-heading font-bold text-2xl tracking-wider text-gray-500 uppercase">
-                [LOGO DO JOGO]
-            </div>
-            
-            <div class="flex gap-6">
-                <a href="#" class="text-gray-500 hover:text-game-primary transition-colors"><i data-lucide="twitter"></i></a>
-                <a href="#" class="text-gray-500 hover:text-game-primary transition-colors"><i data-lucide="youtube"></i></a>
-                <a href="#" class="text-gray-500 hover:text-game-primary transition-colors"><i data-lucide="message-square"></i></a> <!-- Discord icon placeholder -->
-            </div>
-            
-            <div class="text-gray-600 text-sm">
-                &copy; 2026 [Inserir Estúdio]. Todos os direitos reservados.
+            <div class="pt-8 border-t border-gray-200 dark:border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-light">
+                <p>© 2026 IPSUM STUDIO DIGITAL. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-gray-900 dark:hover:text-white transition-colors">Privacidade</a>
+                    <a href="#" class="hover:text-gray-900 dark:hover:text-white transition-colors">Termos de Uso</a>
+                </div>
             </div>
         </div>
     </footer>
-
-    <!-- Scripts -->
-    <script>
-        // Inicializa os ícones do Lucide
-        lucide.createIcons();
-
-        // Navbar muda de cor ao rolar a página
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('bg-game-darker/95', 'backdrop-blur-xl', 'border-game-primary/30', 'shadow-[0_10px_30px_rgba(0,0,0,0.8)]');
-                navbar.classList.remove('bg-transparent', 'border-transparent', 'py-4');
-                navbar.classList.add('py-3');
-            } else {
-                navbar.classList.remove('bg-game-darker/95', 'backdrop-blur-xl', 'border-game-primary/30', 'shadow-[0_10px_30px_rgba(0,0,0,0.8)]', 'py-3');
-                navbar.classList.add('bg-transparent', 'border-transparent', 'py-4');
-            }
-        });
-
-        // --- FUNCIONALIDADE MENU MOBILE ---
-        const mobileBtn = document.getElementById('mobile-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const mobileLinks = document.querySelectorAll('.mobile-link');
-        let isMenuOpen = false;
-
-        function toggleMenu() {
-            isMenuOpen = !isMenuOpen;
-            if (isMenuOpen) {
-                // Abre o menu
-                mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
-                mobileMenu.classList.add('opacity-100', 'pointer-events-auto');
-                mobileBtn.innerHTML = '<i data-lucide="x" class="w-8 h-8"></i>';
-                document.body.style.overflow = 'hidden'; // Impede a página de rolar ao fundo
-            } else {
-                // Fecha o menu
-                mobileMenu.classList.add('opacity-0', 'pointer-events-none');
-                mobileMenu.classList.remove('opacity-100', 'pointer-events-auto');
-                mobileBtn.innerHTML = '<i data-lucide="menu" class="w-8 h-8"></i>';
-                document.body.style.overflow = ''; // Libera a rolagem
-            }
-            lucide.createIcons(); // Recarrega os ícones pós-troca
-        }
-
-        mobileBtn.addEventListener('click', toggleMenu);
-
-        // Fechar menu se clicar num dos links do telemóvel
-        mobileLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (isMenuOpen) toggleMenu();
-            });
-        });
-
-        // --- 1. REVELAÇÃO PADRÃO COM ANIME.JS (Intersection Observer) ---
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.15
-        };
-
-        const revealObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Substitui a classe CSS antiga pela animação do Anime.js
-                    anime({
-                        targets: entry.target,
-                        translateY: [40, 0],
-                        opacity: [0, 1],
-                        duration: 800,
-                        easing: 'easeOutQuart',
-                        delay: entry.target.style.transitionDelay ? parseInt(entry.target.style.transitionDelay) : 0
-                    });
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.reveal').forEach(el => {
-            revealObserver.observe(el);
-        });
-
-
-        // --- 2. ROLAGEM DINÂMICA (SCRUB) COM ANIME.JS NA SEÇÃO UNIVERSO ---
-        // Criamos uma timeline pausada. O scroll da página vai avançar ou retroceder esta timeline
-        const loreTimeline = anime.timeline({
-            autoplay: false,
-            duration: 4000, // Representa 100% da rolagem da seção
-            easing: 'linear' // Importante ser linear para mapear perfeitamente no movimento do mouse
-        });
-
-        // O Anel Cibernético no fundo gira continuamente do início ao fim e faz um leve zoom
-        loreTimeline.add({
-            targets: '.lore-ring',
-            rotate: [0, 90],
-            scale: [1, 1.2],
-            duration: 4000
-        }, 0);
-
-        // Animação sequencial dos Cards e dos Dots da Timeline
-        const cards = document.querySelectorAll('.lore-card');
-        const dots = document.querySelectorAll('.timeline-dot');
-        const cardDuration = 1000;
-
-        cards.forEach((card, index) => {
-            const startTime = index * cardDuration;
-            
-            // Entrada: Fade In, surge com blur de baixo e cresce
-            // MUDANÇA CRUCIAL: translateX: ['-50%', '-50%'] trava a horizontal para manter no centro!
-            loreTimeline.add({
-                targets: card,
-                opacity: [0, 1],
-                translateY: ['-20%', '-50%'], 
-                translateX: ['-50%', '-50%'], 
-                scale: [0.85, 1],
-                filter: ['blur(15px)', 'blur(0px)'], // Efeito cinemático de foco
-                duration: 350,
-                easing: 'easeOutSine'
-            }, startTime);
-
-            // Acender o pontinho na Timeline correspondente a este card
-            if(dots[index]) {
-                loreTimeline.add({
-                    targets: dots[index],
-                    backgroundColor: ['#1f2937', '#e11d48'], // gray-800 to game-primary
-                    borderColor: ['#4b5563', '#fb7185'], // gray-600 to game-accent
-                    scale: [1, 1.5],
-                    boxShadow: ['0 0 0px transparent', '0 0 15px rgba(225,29,72,0.8)'],
-                    duration: 300,
-                    easing: 'easeOutExpo'
-                }, startTime);
-            }
-
-            // Período de "Pausa/Hold" onde o card fica totalmente visível e estático no meio da tela
-            loreTimeline.add({
-                targets: card,
-                opacity: 1, 
-                translateY: '-50%',
-                translateX: '-50%',
-                filter: 'blur(0px)',
-                duration: 300
-            }, startTime + 350);
-
-            // Saída: Fade Out, sobe e perde foco. (O último card não sai para a transição ficar suave pro próximo bloco)
-            if (index < cards.length - 1) {
-                loreTimeline.add({
-                    targets: card,
-                    opacity: [1, 0],
-                    translateY: ['-50%', '-80%'],
-                    translateX: '-50%',
-                    scale: [1, 1.1],
-                    filter: ['blur(0px)', 'blur(10px)'],
-                    duration: 350,
-                    easing: 'easeInSine'
-                }, startTime + 650);
-
-                // Apagar o pontinho na Timeline quando o card for embora
-                if(dots[index]) {
-                    loreTimeline.add({
-                        targets: dots[index],
-                        backgroundColor: '#1f2937',
-                        borderColor: '#4b5563',
-                        scale: 1,
-                        boxShadow: '0 0 0px transparent',
-                        duration: 300,
-                        easing: 'easeInExpo'
-                    }, startTime + 650);
-                }
-            }
-        });
-
-        // Mapear a posição do Scroll na tela com o Timeline do AnimeJS
-        const universoSection = document.getElementById('universo');
-        
-        window.addEventListener('scroll', () => {
-            const rect = universoSection.getBoundingClientRect();
-            const windowHeight = window.innerHeight;
-            
-            // maxScroll é a distância total que o usuário precisa rolar DENTRO da seção (total menos o tamanho da janela)
-            const maxScroll = rect.height - windowHeight;
-            // currentScroll é o quanto a seção subiu no navegador
-            const currentScroll = -rect.top; 
-            
-            // Progresso de 0.0 a 1.0
-            let scrollProgress = currentScroll / maxScroll;
-            
-            // Travar as bordas
-            if (scrollProgress < 0) scrollProgress = 0;
-            if (scrollProgress > 1) scrollProgress = 1;
-
-            // Fazer o "Scrub": Ir para o momento exato da animação com base na rolagem
-            loreTimeline.seek(loreTimeline.duration * scrollProgress);
-        });
-
-    </script>
 </body>
 </html>
