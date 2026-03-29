@@ -48,17 +48,20 @@
             --r-green: #39FF14;
         }
 
+        /* CURSOR PADRÃO */
         html, body {
             cursor: default;
             overflow-x: hidden;
             width: 100%;
             background-color: #050505;
+            -webkit-font-smoothing: antialiased;
         }
         
         a, button, .btn-8bit, .cursor-pointer, .mobile-link {
             cursor: pointer;
         }
 
+        /* CRT Overlay Adaptativo */
         .crt-overlay {
             position: fixed; inset: 0; z-index: 9999; pointer-events: none;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%);
@@ -74,6 +77,7 @@
             background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noise)" opacity="0.05"/%3E%3C/svg%3E');
         }
 
+        /* Grid de Fundo */
         .vector-grid {
             position: fixed; bottom: -200px; left: -50%; width: 200%; height: 100vh;
             background-image: 
@@ -85,10 +89,11 @@
             mask-image: linear-gradient(to top, rgba(0,0,0,1) 5%, transparent 80%);
         }
 
+        /* Janelas Retro */
         .window-panel {
             background-color: #0B1015;
             border: 3px solid #F4F5F0;
-            box-shadow: 8px 8px 0px rgba(255, 0, 60, 0.2);
+            box-shadow: 6px 6px 0px rgba(255, 0, 60, 0.2);
             position: relative;
         }
         @media (min-width: 768px) {
@@ -128,9 +133,6 @@
             transform-style: preserve-3d;
             display: flex; align-items: center; justify-content: center;
         }
-        @media (min-width: 768px) {
-            .core-viewport { width: 550px; height: 550px; }
-        }
 
         .neural-orbit {
             position: absolute; border: 1.5px solid var(--r-cyan);
@@ -144,24 +146,23 @@
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: #050505;
         }
-        .glitch-text:hover::before { animation: glitch-1 0.3s infinite linear; text-shadow: 2px 0 var(--r-red); }
-        .glitch-text:hover::after { animation: glitch-2 0.3s infinite linear; text-shadow: -2px 0 var(--r-cyan); }
-
-        @keyframes glitch-1 { 0% { clip-path: inset(15% 0 35% 0); } 100% { clip-path: inset(55% 0 5% 0); } }
-        @keyframes glitch-2 { 0% { clip-path: inset(35% 0 5% 0); } 100% { clip-path: inset(5% 0 65% 0); } }
 
         ::-webkit-scrollbar { display: none; }
 
-        /* SCROLL HORIZONTAL MOBILE - REPARAÇÃO FINAL */
+        /* ============================================================
+           FIX DO SCROLL HORIZONTAL (CROSS-BROWSER / SAFARI)
+           ============================================================ */
         .horizontal-track-container {
-            height: 400vh; /* Aumentado para garantir o tempo de scroll */
+            height: 400vh; 
             position: relative;
             background-color: #050505;
         }
         @media (min-width: 768px) {
             .horizontal-track-container { height: 500vh; }
         }
+        
         .sticky-wrapper {
+            position: -webkit-sticky; /* Suporte Safari */
             position: sticky;
             top: 0;
             height: 100vh;
@@ -171,22 +172,25 @@
             flex-direction: column;
             justify-content: center;
         }
+        
         .horizontal-cards-track {
             display: flex;
             flex-direction: row;
             flex-wrap: nowrap;
+            width: max-content; /* Crítico para o Safari não quebrar a linha */
             gap: 2rem;
             padding-left: 10vw;
             padding-right: 50vw; 
             will-change: transform;
-            width: max-content; /* Garante que a largura seja calculada pelo conteúdo */
         }
         @media (min-width: 768px) {
-            .horizontal-cards-track { gap: 6rem; padding-left: 15vw; padding-right: 60vw; }
+            .horizontal-cards-track { gap: 6rem; padding-left: 15vw; }
         }
+        
         .horizontal-card {
-            flex: 0 0 320px;
+            flex: 0 0 320px; /* Garante que o cartão não encolha no Safari */
             max-width: 85vw;
+            flex-shrink: 0;
         }
         @media (min-width: 768px) {
             .horizontal-card { flex: 0 0 550px; }
@@ -209,7 +213,7 @@
     <nav id="navbar" class="fixed top-0 left-0 w-full z-[1000] p-4 md:p-8 flex justify-between items-center bg-retro-black/90 border-b-4 border-retro-gray opacity-0">
         <div class="flex flex-col">
             <div class="font-arcade text-retro-red text-[7px] md:text-[10px] uppercase tracking-tighter">Kernel_Core</div>
-            <div class="font-arcade text-retro-white text-[9px] md:text-sm uppercase">v3.8.5_FIXED</div>
+            <div class="font-arcade text-retro-white text-[9px] md:text-sm uppercase">v3.8.6_CROSS</div>
         </div>
         <div class="hidden lg:flex items-center gap-12 font-arcade text-[10px] text-retro-white">
             <a href="#inicio" class="hover:text-retro-cyan transition-colors uppercase tracking-widest">Início</a>
@@ -293,7 +297,7 @@
         </div>
     </section>
 
-    <!-- 3. GAMEPLAY (SCROLL HORIZONTAL REPARADO) -->
+    <!-- 3. GAMEPLAY (SCROLL HORIZONTAL COMPATÍVEL) -->
     <section id="gameplay" class="horizontal-track-container relative z-10 bg-retro-black">
         <div class="sticky-wrapper">
             <div class="container mx-auto px-6 md:px-24 mb-10 md:mb-24">
@@ -327,7 +331,7 @@
         </div>
     </section>
 
-    <!-- 4. GABINETE ARCADE -->
+    <!-- Resto do conteúdo... (Gabinete, Personagens, Social) -->
     <section class="py-24 md:py-64 relative z-10 bg-retro-black border-t-4 md:border-t-8 border-retro-gray">
         <div class="container mx-auto px-6">
             <h2 class="font-arcade text-center text-xl md:text-5xl text-retro-white mb-16 md:mb-24 uppercase">Execução_Visual</h2>
@@ -356,51 +360,39 @@
         </div>
     </section>
 
-    <!-- 5. PERSONAGENS -->
+    <!-- PERSONAGENS -->
     <section id="personagens" class="py-24 md:py-64 relative z-10 bg-[#080B0F]">
         <div class="container mx-auto px-6 text-center">
             <h2 class="font-arcade text-2xl md:text-8xl text-retro-white mb-20 md:mb-32 uppercase tracking-tighter">Roster_de_Dados</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-24 max-w-[90rem] mx-auto text-left">
                 <div class="window-panel p-3 md:p-4 group reveal-up">
                     <div class="relative aspect-square border-2 md:border-4 border-retro-white overflow-hidden bg-black mb-6 md:mb-8">
-                        <img src="https://images.unsplash.com/photo-1535295972055-1c762f4483e5?q=80&w=600" class="w-full h-full object-cover grayscale contrast-150 group-hover:grayscale-0 transition-all duration-1000">
+                        <img src="https://images.unsplash.com/photo-1535295972055-1c762f4483e5?q=80&w=600" class="w-full h-full object-cover grayscale contrast-150 group-hover:grayscale-0 transition-all duration-1000" alt="Kai">
                         <div class="image-scanline"></div>
                     </div>
                     <div class="p-4 md:p-8">
                         <h3 class="font-arcade text-lg md:text-3xl mb-6 md:mb-8 text-retro-cyan uppercase">Kai_94</h3>
                         <p class="font-terminal text-xl md:text-3xl text-retro-gray mb-8 leading-snug">Protagonista. Uma rotina de segurança antiga no setor corrompido.</p>
-                        <div class="font-arcade text-[7px] md:text-[10px] space-y-4 text-retro-white uppercase">
-                            <div class="flex justify-between"><span>Speed</span> <span class="text-retro-cyan">██████████</span></div>
-                            <div class="flex justify-between"><span>Luck</span> <span class="text-retro-red">██████░░░░</span></div>
-                        </div>
                     </div>
                 </div>
                 <div class="window-panel p-3 md:p-4 group reveal-up" style="transition-delay: 100ms;">
                     <div class="relative aspect-square border-2 md:border-4 border-retro-white overflow-hidden bg-black mb-6 md:mb-8">
-                        <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=600" class="w-full h-full object-cover grayscale contrast-150 group-hover:grayscale-0 transition-all duration-1000">
+                        <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=600" class="w-full h-full object-cover grayscale contrast-150 group-hover:grayscale-0 transition-all duration-1000" alt="Luna">
                         <div class="image-scanline"></div>
                     </div>
                     <div class="p-4 md:p-8">
                         <h3 class="font-arcade text-lg md:text-3xl mb-6 md:mb-8 text-retro-red uppercase">Luna_V</h3>
                         <p class="font-terminal text-xl md:text-3xl text-retro-gray mb-10 leading-snug">Antagonista. A IA central que governa o vácuo digital.</p>
-                        <div class="font-arcade text-[7px] md:text-[10px] space-y-4 text-retro-white uppercase">
-                            <div class="flex justify-between"><span>Intel</span> <span class="text-retro-cyan">██████████</span></div>
-                            <div class="flex justify-between"><span>Power</span> <span class="text-retro-red">██████████</span></div>
-                        </div>
                     </div>
                 </div>
                 <div class="window-panel p-3 md:p-4 group reveal-up" style="transition-delay: 200ms;">
                     <div class="relative aspect-square border-2 md:border-4 border-retro-white overflow-hidden bg-black mb-6 md:mb-8">
-                        <img src="https://images.unsplash.com/photo-1618331835717-801e976710b2?q=80&w=600" class="w-full h-full object-cover grayscale contrast-150 group-hover:grayscale-0 transition-all duration-1000">
+                        <img src="https://images.unsplash.com/photo-1618331835717-801e976710b2?q=80&w=600" class="w-full h-full object-cover grayscale contrast-150 group-hover:grayscale-0 transition-all duration-1000" alt="Zed">
                         <div class="image-scanline"></div>
                     </div>
                     <div class="p-4 md:p-8">
                         <h3 class="font-arcade text-lg md:text-3xl mb-6 md:mb-8 text-retro-yellow uppercase">Zed_Boot</h3>
                         <p class="font-terminal text-xl md:text-3xl text-retro-gray mb-10 leading-snug">NPC. Um bot de manutenção que preserva o código fonte original.</p>
-                        <div class="font-arcade text-[7px] md:text-[10px] space-y-4 text-retro-white uppercase">
-                            <div class="flex justify-between"><span>Armor</span> <span class="text-retro-cyan">██████████</span></div>
-                            <div class="flex justify-between"><span>Lore</span> <span class="text-retro-red">██████████</span></div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -433,10 +425,9 @@
             // BIOS BOOT LOGIC
             const bootLog = document.getElementById('boot-log');
             const bootLines = [
-                "IPSUM BOOT LOADER v3.8.5_FIXED",
+                "IPSUM BOOT LOADER v3.8.6_CROSS",
                 "MEMORY TEST: 16384 KB OK",
-                "MAPPING GAMEPLAY_TRACK... [PASS]",
-                "OPTIMIZING_RESPONSIVE_ENGINES... [OK]",
+                "OPTIMIZING_HORIZONTAL_SCROLL... [OK]",
                 "ACCESS GRANTED. ENJOY THE VOID."
             ];
 
@@ -501,7 +492,13 @@
             }
 
             function initScroll() {
-                const lenis = new Lenis({ duration: isMobile ? 1.0 : 1.4, smooth: true, lerp: 0.1 });
+                const lenis = new Lenis({ 
+                    duration: isMobile ? 1.0 : 1.4, 
+                    smooth: true, 
+                    lerp: 0.1,
+                    direction: 'vertical'
+                });
+                
                 function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
                 requestAnimationFrame(raf);
 
@@ -522,65 +519,72 @@
                     const counter = document.getElementById('score-counter');
                     if (counter) counter.innerText = Math.floor(scroll).toString().padStart(6, '0');
 
-                    // LÓGICA DE WARP ROBUSTA
-                    const warpTarget = isMobile ? window.innerHeight * 1.8 : (sobreSection ? sobreSection.offsetTop : 1200);
+                    // WARP LOGIC
+                    const warpTarget = isMobile ? window.innerHeight * 1.5 : (sobreSection ? sobreSection.offsetTop : 1200);
                     const warpProgress = Math.min(1, scroll / warpTarget);
 
                     if (heroWrapper) {
                         const warpFactor = isMobile ? 25 : 45;
                         const warpScale = 1 + (Math.pow(warpProgress, 3) * warpFactor);
                         
-                        // Fade mais lento no mobile para não sumir rápido
-                        const fadeStart = isMobile ? 0.85 : 0.94;
-                        const opacity = warpProgress > fadeStart ? 1 - ((warpProgress - fadeStart) / (1 - fadeStart)) : 1;
+                        // Fade progressivo para evitar quebras em navegadores WebKit
+                        const opacity = warpProgress > 0.9 ? 1 - ((warpProgress - 0.9) * 10) : 1;
 
-                        anime.set(heroWrapper, { scale: warpScale, opacity: Math.max(0, opacity) });
+                        anime.set(heroWrapper, { 
+                            scale: warpScale, 
+                            opacity: Math.max(0, opacity) 
+                        });
                         anime.set(heroCore, { rotateZ: 45 + (warpProgress * 2160), backgroundColor: `rgba(0, 240, 255, ${0.1 + warpProgress * 0.9})` });
                         
                         cubes.forEach((cube, i) => {
-                            const zDist = isMobile ? 120 : 350;
+                            const zDist = isMobile ? 100 : 350;
                             anime.set(cube, { translateZ: warpProgress * (i + 1) * zDist + 'px', opacity: 1 - (warpProgress * 1.1) });
                         });
 
                         anime.set(heroTitle, { 
                             opacity: 1 - (warpProgress * 5), 
-                            translateY: warpProgress * (isMobile ? -120 : -300)
+                            translateY: warpProgress * (isMobile ? -100 : -300)
                         });
                         
                         anime.set(heroGlow, { scale: 1 + (warpProgress * 12) });
                         
                         rays.forEach((ray) => {
                             const p = Math.max(0, (warpProgress - 0.05) * 1.8);
-                            anime.set(ray, { opacity: p * 0.7, translateY: p * (isMobile ? 1000 : 1500), scaleY: 1 + p * 20 });
+                            anime.set(ray, { opacity: p * 0.7, translateY: p * (isMobile ? 800 : 1500), scaleY: 1 + p * 20 });
                         });
                         
                         if (bgGrid) anime.set(bgGrid, { translateZ: warpProgress * 500 + 'px', opacity: 0.1 + (warpProgress * 0.6) });
                     }
 
-                    // LÓGICA DE SCROLL HORIZONTAL (REPARADA PARA TODOS OS DISPOSITIVOS)
+                    // ============================================================
+                    // FIX HORIZONTAL SCROLL (REBUILT FOR SAFARI)
+                    // ============================================================
                     if (gameplaySection && horizontalTrack) {
-                        const rect = gameplaySection.getBoundingClientRect();
                         const sectionTop = gameplaySection.offsetTop;
                         const sectionHeight = gameplaySection.offsetHeight;
                         const windowHeight = window.innerHeight;
                         const windowWidth = window.innerWidth;
 
-                        // Verifica se a secção está ativa no viewport
                         if (scroll >= sectionTop && scroll <= (sectionTop + sectionHeight - windowHeight)) {
                             const currentProgress = (scroll - sectionTop) / (sectionHeight - windowHeight);
-                            const maxTranslate = horizontalTrack.scrollWidth - windowWidth;
                             
-                            // Força a translação baseada no progresso exato do scroll vertical
-                            anime.set(horizontalTrack, { translateX: -(currentProgress * maxTranslate) });
+                            // Medição dinâmica em tempo real para compensar o Safari
+                            const trackWidth = horizontalTrack.scrollWidth;
+                            const maxTranslate = trackWidth - windowWidth;
+                            
+                            anime.set(horizontalTrack, { 
+                                translateX: -(currentProgress * maxTranslate)
+                            });
                         } else if (scroll < sectionTop) {
                             anime.set(horizontalTrack, { translateX: 0 });
                         } else {
-                            anime.set(horizontalTrack, { translateX: -(horizontalTrack.scrollWidth - windowWidth) });
+                            const trackWidth = horizontalTrack.scrollWidth;
+                            anime.set(horizontalTrack, { translateX: -(trackWidth - windowWidth) });
                         }
                     }
 
                     // REVELAÇÃO DO PAINEL
-                    const revealPoint = isMobile ? 0.15 : 0.35;
+                    const revealPoint = isMobile ? 0.2 : 0.35;
                     if (sobrePanel && scroll > (warpTarget * revealPoint)) {
                         anime({ targets: sobrePanel, opacity: 1, translateY: 0, duration: 1000, easing: 'easeOutQuad' });
                     }
@@ -597,7 +601,7 @@
                 document.querySelectorAll('.reveal-up').forEach(el => revealObserver.observe(el));
             }
 
-            // MENU MOBILE LOGIC (TOGGLE)
+            // MENU MOBILE
             const mobileBtn = document.getElementById('mobile-btn');
             const closeBtn = document.getElementById('close-menu-btn');
             const closeHeaderBtn = document.getElementById('close-menu-header');
@@ -614,7 +618,7 @@
             if (closeHeaderBtn) closeHeaderBtn.addEventListener('click', closeMenu);
             mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
 
-            // VÍDEO LOGIC
+            // VÍDEO
             const arcade = document.querySelector('.arcade-cabinet');
             const video = document.getElementById('game-video');
             if (arcade && video) {
