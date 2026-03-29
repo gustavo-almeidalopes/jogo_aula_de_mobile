@@ -48,7 +48,6 @@
             --r-green: #39FF14;
         }
 
-        /* CURSOR PADRÃO */
         html, body {
             cursor: default;
             overflow-x: hidden;
@@ -60,7 +59,6 @@
             cursor: pointer;
         }
 
-        /* Overlay CRT Adaptativo */
         .crt-overlay {
             position: fixed; inset: 0; z-index: 9999; pointer-events: none;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%);
@@ -86,14 +84,11 @@
             z-index: -1;
             mask-image: linear-gradient(to top, rgba(0,0,0,1) 5%, transparent 80%);
         }
-        @media (min-width: 768px) {
-            .vector-grid { background-size: 80px 80px; }
-        }
 
         .window-panel {
             background-color: #0B1015;
             border: 3px solid #F4F5F0;
-            box-shadow: 6px 6px 0px rgba(255, 0, 60, 0.2);
+            box-shadow: 8px 8px 0px rgba(255, 0, 60, 0.2);
             position: relative;
         }
         @media (min-width: 768px) {
@@ -110,9 +105,6 @@
             justify-content: space-between;
             align-items: center;
         }
-        @media (min-width: 768px) {
-            .window-header { font-size: 11px; padding: 10px 16px; }
-        }
 
         .btn-8bit {
             display: inline-block;
@@ -124,15 +116,14 @@
             padding: 0.8rem 1.2rem;
             transition: all 0.2s;
             white-space: nowrap;
-            font-size: 9px;
+            font-size: 10px;
         }
         @media (min-width: 768px) {
             .btn-8bit { padding: 1.5rem 3rem; border: 4px solid #F4F5F0; box-shadow: 8px 8px 0px var(--r-red); font-size: 14px; }
         }
-        .btn-8bit:active { transform: translate(3px, 3px); box-shadow: 0px 0px 0px transparent; }
 
         .core-viewport {
-            width: 240px; height: 240px;
+            width: 260px; height: 260px;
             position: relative;
             transform-style: preserve-3d;
             display: flex; align-items: center; justify-content: center;
@@ -143,11 +134,8 @@
 
         .neural-orbit {
             position: absolute; border: 1.5px solid var(--r-cyan);
-            box-shadow: 0 0 10px var(--r-cyan);
+            box-shadow: 0 0 15px var(--r-cyan);
             transform-style: preserve-3d;
-        }
-        @media (min-width: 768px) {
-            .neural-orbit { border-width: 2px; box-shadow: 0 0 25px var(--r-cyan); }
         }
 
         .glitch-text { position: relative; display: inline-block; white-space: nowrap; }
@@ -164,9 +152,9 @@
 
         ::-webkit-scrollbar { display: none; }
 
-        /* SCROLL HORIZONTAL MOBILE REPARADO */
+        /* SCROLL HORIZONTAL MOBILE - REPARAÇÃO FINAL */
         .horizontal-track-container {
-            height: 350vh; /* Altura suficiente para rolar no mobile */
+            height: 400vh; /* Aumentado para garantir o tempo de scroll */
             position: relative;
             background-color: #050505;
         }
@@ -187,18 +175,18 @@
             display: flex;
             flex-direction: row;
             flex-wrap: nowrap;
-            gap: 1.5rem;
-            padding-left: 5vw;
-            padding-right: 20vw; 
+            gap: 2rem;
+            padding-left: 10vw;
+            padding-right: 50vw; 
             will-change: transform;
-            width: fit-content;
+            width: max-content; /* Garante que a largura seja calculada pelo conteúdo */
         }
         @media (min-width: 768px) {
             .horizontal-cards-track { gap: 6rem; padding-left: 15vw; padding-right: 60vw; }
         }
         .horizontal-card {
-            flex: 0 0 280px;
-            max-width: 80vw;
+            flex: 0 0 320px;
+            max-width: 85vw;
         }
         @media (min-width: 768px) {
             .horizontal-card { flex: 0 0 550px; }
@@ -221,7 +209,7 @@
     <nav id="navbar" class="fixed top-0 left-0 w-full z-[1000] p-4 md:p-8 flex justify-between items-center bg-retro-black/90 border-b-4 border-retro-gray opacity-0">
         <div class="flex flex-col">
             <div class="font-arcade text-retro-red text-[7px] md:text-[10px] uppercase tracking-tighter">Kernel_Core</div>
-            <div class="font-arcade text-retro-white text-[9px] md:text-sm uppercase">v3.8.4_STABLE</div>
+            <div class="font-arcade text-retro-white text-[9px] md:text-sm uppercase">v3.8.5_FIXED</div>
         </div>
         <div class="hidden lg:flex items-center gap-12 font-arcade text-[10px] text-retro-white">
             <a href="#inicio" class="hover:text-retro-cyan transition-colors uppercase tracking-widest">Início</a>
@@ -241,7 +229,7 @@
         <div class="window-panel w-full max-w-[320px] p-1" id="mobile-menu-window">
             <div class="window-header">
                 <span>C:\SYSTEM\NAV</span>
-                <span id="close-menu-header" class="hover:text-retro-red px-2 font-bold">[X]</span>
+                <span id="close-menu-header" class="hover:text-retro-red px-2 font-bold cursor-pointer">[X]</span>
             </div>
             <div class="p-8 flex flex-col gap-6 font-arcade text-[10px] text-center">
                 <a href="#inicio" class="mobile-link py-3 border-b-2 border-retro-gray uppercase">> Home_Dir</a>
@@ -260,13 +248,13 @@
             <div class="neural-orbit w-20 h-20 md:w-40 md:h-40" id="cube-inner"></div>
             <div class="neural-orbit w-40 h-40 md:w-72 md:h-72 border-dashed opacity-60" id="cube-mid"></div>
             <div class="neural-orbit w-60 h-60 md:w-[500px] md:h-[500px] opacity-30" id="cube-outer"></div>
-            <div id="geometric-core" class="w-12 h-12 md:w-32 md:h-32 rotate-45 border-2 md:border-4 border-retro-white bg-retro-cyan/10 shadow-[0_0_50px_#00F0FF]"></div>
+            <div id="geometric-core" class="w-14 h-14 md:w-32 md:h-32 rotate-45 border-2 md:border-4 border-retro-white bg-retro-cyan/10 shadow-[0_0_50px_#00F0FF]"></div>
             <div id="shards-container" class="absolute inset-0"></div>
             <div id="warp-lines" class="absolute inset-0"></div>
         </div>
     </div>
 
-    <!-- 1. HERO (Responsivo) -->
+    <!-- 1. HERO -->
     <section id="inicio" class="relative min-h-[110vh] md:min-h-[140vh] flex flex-col items-center justify-center text-center px-6 z-10 pt-32 pb-24 md:pb-48">
         <div id="hero-badge" class="font-arcade text-[7px] md:text-xs mb-8 md:mb-12 bg-retro-green/10 px-4 py-2 md:px-6 md:py-3 border-2 border-retro-green opacity-0 uppercase tracking-widest">
             System_Boot_Successful_OK
@@ -284,7 +272,7 @@
     </section>
 
     <!-- 2. SOBRE O JOGO -->
-    <section id="sobre" class="py-24 md:py-60 relative z-10 bg-gradient-to-b from-transparent to-retro-black">
+    <section id="sobre" class="py-32 md:py-72 relative z-10 bg-gradient-to-b from-transparent to-retro-black mt-20 md:mt-0">
         <div class="container mx-auto px-6 md:px-24">
             <div class="window-panel max-w-6xl mx-auto opacity-0 translate-y-12" id="sobre-panel">
                 <div class="window-header"><span>C:\IPSUM\MANIFEST.EXE</span><span>[ _ ] [ X ]</span></div>
@@ -315,21 +303,21 @@
 
             <div class="horizontal-cards-track" id="horizontal-track">
                 <div class="horizontal-card">
-                    <div class="window-panel p-6 md:p-16 border-retro-red h-full flex flex-col justify-center">
+                    <div class="window-panel p-8 md:p-16 border-retro-red h-full flex flex-col justify-center">
                         <div class="font-arcade text-retro-red mb-6 md:mb-10 text-lg md:text-3xl uppercase">01_Hacking</div>
-                        <p class="font-terminal text-lg md:text-4xl leading-tight">Invade o buffer de memória dos inimigos para causar erros críticos através de injeção de código.</p>
+                        <p class="font-terminal text-xl md:text-4xl leading-tight">Invade o buffer de memória dos inimigos para causar erros críticos através de injeção de código.</p>
                         <div class="mt-8 md:mt-16 font-arcade text-retro-red text-[7px] md:text-xs animate-pulse tracking-widest">ESTADO: OPERACIONAL</div>
                     </div>
                 </div>
                 <div class="horizontal-card">
-                    <div class="window-panel p-6 md:p-16 border-retro-cyan h-full flex flex-col justify-center">
+                    <div class="window-panel p-8 md:p-16 border-retro-cyan h-full flex flex-col justify-center">
                         <div class="font-arcade text-retro-cyan mb-6 md:mb-10 text-lg md:text-3xl uppercase">02_Overclock</div>
-                        <p class="font-terminal text-lg md:text-4xl leading-tight">Força o processador ao limite para dobrar o dano, mas tem cuidado com o crash térmico iminente.</p>
+                        <p class="font-terminal text-xl md:text-4xl leading-tight">Força o processador ao limite para dobrar o dano, mas tem cuidado com o crash térmico iminente.</p>
                         <div class="mt-8 md:mt-16 font-arcade text-retro-cyan text-[7px] md:text-xs animate-pulse tracking-widest">ESTADO: ALTA_VOLTAGEM</div>
                     </div>
                 </div>
                 <div class="horizontal-card">
-                    <div class="window-panel p-6 md:p-16 border-retro-yellow h-full flex flex-col justify-center">
+                    <div class="window-panel p-8 md:p-16 border-retro-yellow h-full flex flex-col justify-center">
                         <div class="font-arcade text-retro-yellow mb-6 md:mb-10 text-lg md:text-3xl uppercase">03_Uplink</div>
                         <p class="font-terminal text-lg md:text-4xl leading-tight">Conecta-te a terminais centrais para reprogramar bots hostis e transformá-los em aliados.</p>
                         <div class="mt-8 md:mt-16 font-arcade text-retro-yellow text-[7px] md:text-xs animate-pulse tracking-widest">ESTADO: CONECTADO</div>
@@ -343,7 +331,7 @@
     <section class="py-24 md:py-64 relative z-10 bg-retro-black border-t-4 md:border-t-8 border-retro-gray">
         <div class="container mx-auto px-6">
             <h2 class="font-arcade text-center text-xl md:text-5xl text-retro-white mb-16 md:mb-24 uppercase">Execução_Visual</h2>
-            <div id="gameplay-target" class="arcade-cabinet relative p-3 md:p-10 bg-[#111] border-4 md:border-8 border-retro-gray rounded-t-[2rem] md:rounded-t-[4rem] shadow-[0_0_100px_rgba(0,240,255,0.1)] w-full max-w-6xl mx-auto">
+            <div id="gameplay-target" class="arcade-cabinet relative p-4 md:p-10 bg-[#111] border-4 md:border-8 border-retro-gray rounded-t-[2rem] md:rounded-t-[4rem] shadow-[0_0_100px_rgba(0,240,255,0.1)] w-full max-w-6xl mx-auto">
                 <div class="bg-black aspect-video relative overflow-hidden border-2 md:border-4 border-retro-white rounded-xl md:rounded-3xl">
                     <video id="game-video" class="w-full h-full object-cover opacity-60 filter contrast-125" loop muted playsinline>
                         <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
@@ -445,7 +433,7 @@
             // BIOS BOOT LOGIC
             const bootLog = document.getElementById('boot-log');
             const bootLines = [
-                "IPSUM BOOT LOADER v3.8.4_STABLE",
+                "IPSUM BOOT LOADER v3.8.5_FIXED",
                 "MEMORY TEST: 16384 KB OK",
                 "MAPPING GAMEPLAY_TRACK... [PASS]",
                 "OPTIMIZING_RESPONSIVE_ENGINES... [OK]",
@@ -513,7 +501,7 @@
             }
 
             function initScroll() {
-                const lenis = new Lenis({ duration: isMobile ? 0.8 : 1.4 });
+                const lenis = new Lenis({ duration: isMobile ? 1.0 : 1.4, smooth: true, lerp: 0.1 });
                 function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
                 requestAnimationFrame(raf);
 
@@ -528,74 +516,72 @@
                 const gameplaySection = document.getElementById('gameplay');
                 const horizontalTrack = document.getElementById('horizontal-track');
                 const sobrePanel = document.getElementById('sobre-panel');
+                const sobreSection = document.getElementById('sobre');
 
                 lenis.on('scroll', ({ scroll }) => {
                     const counter = document.getElementById('score-counter');
                     if (counter) counter.innerText = Math.floor(scroll).toString().padStart(6, '0');
 
-                    // LÓGICA DE WARP MELHORADA PARA MOBILE
-                    // Usamos uma distância fixa em mobile para garantir que a geometria não suma rápido demais
-                    const warpDistance = isMobile ? window.innerHeight * 1.5 : (sobrePanel ? sobrePanel.offsetTop : 1200);
-                    const warpProgress = Math.min(1, scroll / warpDistance);
+                    // LÓGICA DE WARP ROBUSTA
+                    const warpTarget = isMobile ? window.innerHeight * 1.8 : (sobreSection ? sobreSection.offsetTop : 1200);
+                    const warpProgress = Math.min(1, scroll / warpTarget);
 
                     if (heroWrapper) {
-                        const warpFactor = isMobile ? 18 : 45;
+                        const warpFactor = isMobile ? 25 : 45;
                         const warpScale = 1 + (Math.pow(warpProgress, 3) * warpFactor);
                         
-                        // Garante que no mobile ele persista mais tempo antes de sumir
-                        const fadeStart = isMobile ? 0.9 : 0.95;
-                        const fadeDuration = 1 - fadeStart;
-                        const opacity = warpProgress > fadeStart ? 1 - ((warpProgress - fadeStart) / fadeDuration) : 1;
+                        // Fade mais lento no mobile para não sumir rápido
+                        const fadeStart = isMobile ? 0.85 : 0.94;
+                        const opacity = warpProgress > fadeStart ? 1 - ((warpProgress - fadeStart) / (1 - fadeStart)) : 1;
 
-                        anime.set(heroWrapper, { scale: warpScale, opacity: opacity });
+                        anime.set(heroWrapper, { scale: warpScale, opacity: Math.max(0, opacity) });
                         anime.set(heroCore, { rotateZ: 45 + (warpProgress * 2160), backgroundColor: `rgba(0, 240, 255, ${0.1 + warpProgress * 0.9})` });
                         
                         cubes.forEach((cube, i) => {
-                            const zDist = isMobile ? 80 : 350;
+                            const zDist = isMobile ? 120 : 350;
                             anime.set(cube, { translateZ: warpProgress * (i + 1) * zDist + 'px', opacity: 1 - (warpProgress * 1.1) });
                         });
 
                         anime.set(heroTitle, { 
                             opacity: 1 - (warpProgress * 5), 
-                            translateY: warpProgress * (isMobile ? -100 : -300),
-                            scale: 1 + (warpProgress * 0.2)
+                            translateY: warpProgress * (isMobile ? -120 : -300)
                         });
                         
                         anime.set(heroGlow, { scale: 1 + (warpProgress * 12) });
                         
                         rays.forEach((ray) => {
                             const p = Math.max(0, (warpProgress - 0.05) * 1.8);
-                            anime.set(ray, { opacity: p * 0.7, translateY: p * (isMobile ? 600 : 1500), scaleY: 1 + p * 20 });
+                            anime.set(ray, { opacity: p * 0.7, translateY: p * (isMobile ? 1000 : 1500), scaleY: 1 + p * 20 });
                         });
                         
                         if (bgGrid) anime.set(bgGrid, { translateZ: warpProgress * 500 + 'px', opacity: 0.1 + (warpProgress * 0.6) });
                     }
 
-                    // LÓGICA DE SCROLL HORIZONTAL (GAMEPLAY) - REPARADA
+                    // LÓGICA DE SCROLL HORIZONTAL (REPARADA PARA TODOS OS DISPOSITIVOS)
                     if (gameplaySection && horizontalTrack) {
+                        const rect = gameplaySection.getBoundingClientRect();
                         const sectionTop = gameplaySection.offsetTop;
                         const sectionHeight = gameplaySection.offsetHeight;
                         const windowHeight = window.innerHeight;
                         const windowWidth = window.innerWidth;
 
-                        // Se o scroll está dentro da área da secção
+                        // Verifica se a secção está ativa no viewport
                         if (scroll >= sectionTop && scroll <= (sectionTop + sectionHeight - windowHeight)) {
-                            const horizontalProgress = (scroll - sectionTop) / (sectionHeight - windowHeight);
-                            const trackWidth = horizontalTrack.scrollWidth;
-                            const maxTranslate = trackWidth - windowWidth;
+                            const currentProgress = (scroll - sectionTop) / (sectionHeight - windowHeight);
+                            const maxTranslate = horizontalTrack.scrollWidth - windowWidth;
                             
-                            // Movemos a trilha
-                            anime.set(horizontalTrack, { translateX: -(horizontalProgress * maxTranslate) });
+                            // Força a translação baseada no progresso exato do scroll vertical
+                            anime.set(horizontalTrack, { translateX: -(currentProgress * maxTranslate) });
                         } else if (scroll < sectionTop) {
                             anime.set(horizontalTrack, { translateX: 0 });
                         } else {
-                            const maxTranslate = horizontalTrack.scrollWidth - windowWidth;
-                            anime.set(horizontalTrack, { translateX: -maxTranslate });
+                            anime.set(horizontalTrack, { translateX: -(horizontalTrack.scrollWidth - windowWidth) });
                         }
                     }
 
-                    const revealPoint = isMobile ? 0.15 : 0.4;
-                    if (sobrePanel && scroll > (isMobile ? 200 : warpDistance * revealPoint)) {
+                    // REVELAÇÃO DO PAINEL
+                    const revealPoint = isMobile ? 0.15 : 0.35;
+                    if (sobrePanel && scroll > (warpTarget * revealPoint)) {
                         anime({ targets: sobrePanel, opacity: 1, translateY: 0, duration: 1000, easing: 'easeOutQuad' });
                     }
                 });
@@ -611,7 +597,7 @@
                 document.querySelectorAll('.reveal-up').forEach(el => revealObserver.observe(el));
             }
 
-            // MENU MOBILE LOGIC
+            // MENU MOBILE LOGIC (TOGGLE)
             const mobileBtn = document.getElementById('mobile-btn');
             const closeBtn = document.getElementById('close-menu-btn');
             const closeHeaderBtn = document.getElementById('close-menu-header');
@@ -628,12 +614,12 @@
             if (closeHeaderBtn) closeHeaderBtn.addEventListener('click', closeMenu);
             mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
 
+            // VÍDEO LOGIC
             const arcade = document.querySelector('.arcade-cabinet');
             const video = document.getElementById('game-video');
             if (arcade && video) {
                 const triggerPlay = () => { video.play(); anime({ targets: video, opacity: 1, duration: 400 }); const hint = document.getElementById('play-hint'); if (hint) hint.style.display = 'none'; };
                 const triggerPause = () => { video.pause(); anime({ targets: video, opacity: 0.6, duration: 400 }); const hint = document.getElementById('play-hint'); if (hint) hint.style.display = 'block'; };
-                
                 arcade.addEventListener('mouseenter', triggerPlay);
                 arcade.addEventListener('mouseleave', triggerPause);
                 arcade.addEventListener('click', () => { if(video.paused) triggerPlay(); else triggerPause(); });
