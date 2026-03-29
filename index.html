@@ -1,303 +1,388 @@
 <!DOCTYPE html>
-<html lang="pt-PT" class="bg-gray-50 dark:bg-[#050505]">
+<html lang="pt-PT" class="bg-[#050505] scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPSUM. | Experiência Digital Premium</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IPSUM | Cyber Quest RPG</title>
 
-    <!-- Dica de performance: Pré-conectar aos domínios de imagens e fontes -->
-    <link rel="preconnect" href="[https://images.unsplash.com](https://images.unsplash.com)" crossorigin>
-    <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
-    <link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <!-- Prevenção de Flash Branco no Dark Mode -->
+    <script>document.documentElement.classList.add('dark');</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+
     <script>
-        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        arcade: ['"Press Start 2P"', 'cursive'], 
+                        terminal: ['"VT323"', 'monospace'],          
+                    },
+                    colors: {
+                        retro: {
+                            black: '#050505',
+                            dark: '#0B1015',
+                            red: '#FF003C',
+                            orange: '#FF671F',
+                            yellow: '#FEE715',
+                            green: '#39FF14',
+                            cyan: '#00F0FF',
+                            white: '#F4F5F0',
+                            gray: '#2A2E33',
+                        }
+                    }
+                }
+            }
         }
     </script>
 
-    <!-- Tailwind CSS -->
-    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 
-    <!-- Configuração do Tailwind (DEVE VIR LOGO APÓS O SCRIPT DO TAILWIND) -->
-    <script src="tailwind_config.js"></script>
+    <style>
+        :root {
+            --r-red: #FF003C;
+            --r-cyan: #00F0FF;
+            --r-green: #39FF14;
+        }
 
-    <!-- Importar CSS Externo -->
-    <link rel="stylesheet" href="styles.css">
+        /* CURSOR PADRÃO DO SISTEMA */
+        html, body {
+            cursor: default;
+        }
+        
+        a, button, .btn-8bit, .cursor-pointer, .mobile-link, #close-menu-header {
+            cursor: pointer;
+        }
 
-    <!-- Google Fonts Premium -->
-    <link href="[https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap](https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap)" rel="stylesheet">
+        .crt-overlay {
+            position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%);
+            background-size: 100% 4px;
+            box-shadow: inset 0 0 120px rgba(0,0,0,0.9);
+        }
+        
+        .noise-overlay {
+            position: fixed; inset: 0; z-index: 9998; pointer-events: none;
+            background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noise)" opacity="0.1"/%3E%3C/svg%3E');
+        }
 
-    <!-- Bibliotecas Externas -->
-    <script src="[https://unpkg.com/lucide@latest](https://unpkg.com/lucide@latest)" defer></script>
-    <script src="[https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js](https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js)" defer></script>
-    <script src="[https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js](https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js)"></script>
+        .vector-grid {
+            position: fixed; bottom: -200px; left: -50%; width: 200%; height: 100vh;
+            background-image: 
+                linear-gradient(to right, rgba(0, 240, 255, 0.1) 2px, transparent 2px),
+                linear-gradient(to bottom, rgba(0, 240, 255, 0.1) 2px, transparent 2px);
+            background-size: 80px 80px;
+            transform: perspective(400px) rotateX(70deg);
+            z-index: -1;
+            mask-image: linear-gradient(to top, rgba(0,0,0,1) 10%, transparent 90%);
+        }
 
-    <!-- Importar JS Externo Principal -->
-    <script src="script.js" defer></script>
+        .window-panel {
+            background-color: #0B1015;
+            border: 4px solid #F4F5F0;
+            box-shadow: 12px 12px 0px rgba(255, 0, 60, 0.3);
+            position: relative;
+        }
+
+        .window-header {
+            background-color: #F4F5F0;
+            color: #050505;
+            padding: 10px 16px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 11px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-8bit {
+            display: inline-block;
+            background-color: #050505;
+            color: #F4F5F0;
+            border: 4px solid #F4F5F0;
+            box-shadow: 8px 8px 0px var(--r-red);
+            text-transform: uppercase;
+            padding: 1.5rem 3rem;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .btn-8bit:hover { transform: scale(1.05); box-shadow: 10px 10px 0px var(--r-cyan); }
+        .btn-8bit:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px transparent; }
+
+        .image-scanline {
+            position: absolute; inset: 0;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.5) 2px, rgba(0,0,0,0.5) 4px);
+            pointer-events: none;
+        }
+
+        .core-viewport {
+            width: 500px; height: 500px;
+            position: relative;
+            transform-style: preserve-3d;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .neural-orbit {
+            position: absolute; border: 2px solid var(--r-cyan);
+            box-shadow: 0 0 25px var(--r-cyan);
+            transform-style: preserve-3d;
+        }
+
+        .glitch-text { position: relative; display: inline-block; white-space: nowrap; }
+        .glitch-text::before, .glitch-text::after {
+            content: attr(data-text);
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #050505;
+        }
+        .glitch-text:hover::before { animation: glitch-1 0.3s infinite linear; text-shadow: 3px 0 var(--r-red); }
+        .glitch-text:hover::after { animation: glitch-2 0.3s infinite linear; text-shadow: -3px 0 var(--r-cyan); }
+
+        @keyframes glitch-1 { 0% { clip-path: inset(15% 0 35% 0); } 100% { clip-path: inset(55% 0 5% 0); } }
+        @keyframes glitch-2 { 0% { clip-path: inset(35% 0 5% 0); } 100% { clip-path: inset(5% 0 65% 0); } }
+
+        ::-webkit-scrollbar { display: none; }
+
+        /* Scroll Horizontal Config */
+        .horizontal-track-container {
+            height: 450vh; 
+            position: relative;
+        }
+        .sticky-wrapper {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .horizontal-cards-track {
+            display: flex;
+            gap: 6rem;
+            padding-left: 15vw;
+            padding-right: 60vw; 
+            will-change: transform;
+        }
+        .horizontal-card {
+            flex: 0 0 500px;
+            max-width: 85vw;
+        }
+    </style>
 </head>
-<body class="antialiased text-gray-900 bg-gray-50 dark:bg-game-dark dark:text-gray-100 transition-colors duration-700 bg-gradient-mesh">
+<body class="antialiased font-terminal text-retro-white text-xl">
 
-    <!-- Cursor Customizado -->
-    <div id="custom-cursor"></div>
-    <div id="custom-cursor-follower"></div>
+    <!-- BIOS BOOT -->
+    <div id="boot-screen" class="fixed inset-0 z-[100000] bg-retro-black flex flex-col pt-12 px-8 md:px-24 font-terminal text-retro-green text-2xl overflow-hidden">
+        <div id="boot-log" class="whitespace-nowrap"></div>
+        <div id="boot-cursor" class="w-4 h-6 bg-retro-green animate-pulse mt-2"></div>
+    </div>
 
-    <!-- Navegação -->
-    <nav id="navbar" class="fixed top-0 left-0 w-full z-[1000] transition-all duration-700 py-6 px-6 md:px-12 flex justify-between items-center border-b border-transparent hardware-accelerated">
-        <a href="#inicio" class="magnetic-btn font-heading font-bold text-2xl tracking-tight uppercase flex items-center gap-3 group transition-colors" aria-label="Home">
-            <div class="relative w-8 h-8 rounded-lg bg-game-primary text-white flex items-center justify-center overflow-hidden">
-                <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-                <i data-lucide="zap" class="w-4 h-4 relative z-10 fill-current"></i>
-            </div>
-            <span class="tracking-widest">IPSUM<span class="text-game-primary">.</span></span>
-        </a>
+    <div class="crt-overlay"></div>
+    <div class="noise-overlay"></div>
+    <div class="vector-grid" id="bg-grid"></div>
 
-        <div class="hidden md:flex items-center gap-2 p-1.5 rounded-full glass-panel transition-colors">
-            <a href="#inicio" class="magnetic-btn px-6 py-2 rounded-full text-xs font-semibold tracking-widest uppercase text-gray-800 dark:text-gray-300 hover:text-game-primary transition-colors">Início</a>
-            <a href="#sobre" class="magnetic-btn px-6 py-2 rounded-full text-xs font-semibold tracking-widest uppercase text-gray-800 dark:text-gray-300 hover:text-game-primary transition-colors">Projetos</a>
-            <a href="#universo" class="magnetic-btn px-6 py-2 rounded-full text-xs font-semibold tracking-widest uppercase text-gray-800 dark:text-gray-300 hover:text-game-primary transition-colors">Universo</a>
-            <a href="#gameplay" class="magnetic-btn px-6 py-2 rounded-full text-xs font-semibold tracking-widest uppercase text-gray-800 dark:text-gray-300 hover:text-game-primary transition-colors">Showcase</a>
+    <!-- HUD NAVEGAÇÃO -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-[1000] p-6 md:p-8 flex justify-between items-center bg-retro-black/90 border-b-4 border-retro-gray opacity-0">
+        <div class="flex flex-col">
+            <div class="font-arcade text-retro-red text-[8px] md:text-[10px] uppercase tracking-tighter">Kernel_Core</div>
+            <div class="font-arcade text-retro-white text-xs md:text-sm uppercase">v3.8.2_STABLE</div>
         </div>
-
-        <div class="flex items-center gap-4">
-            <button id="theme-toggle" class="magnetic-btn text-gray-800 dark:text-gray-300 hover:text-game-primary w-10 h-10 flex items-center justify-center rounded-full glass-panel" aria-label="Alternar Tema">
-                <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
-                <i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i>
-            </button>
-            <button id="mobile-btn" class="md:hidden magnetic-btn w-10 h-10 flex flex-col justify-center items-center gap-1.5 rounded-full glass-panel" aria-label="Menu">
-                <span class="w-4 h-[2px] bg-current rounded-full transition-all duration-300 origin-center" id="bar1"></span>
-                <span class="w-4 h-[2px] bg-current rounded-full transition-all duration-300 origin-center" id="bar2"></span>
-            </button>
+        <div class="hidden lg:flex items-center gap-12 font-arcade text-[10px] text-retro-white">
+            <a href="#inicio" class="hover:text-retro-cyan transition-colors uppercase tracking-widest">Início</a>
+            <a href="#sobre" class="hover:text-retro-cyan transition-colors uppercase tracking-widest">Sobre</a>
+            <a href="#gameplay" class="hover:text-retro-cyan transition-colors uppercase tracking-widest">Gameplay</a>
+            <a href="#personagens" class="hover:text-retro-cyan transition-colors uppercase tracking-widest">Roster</a>
+            <a href="#social" class="hover:text-retro-cyan transition-colors uppercase tracking-widest">Ligação</a>
+        </div>
+        <div class="flex gap-6 items-center">
+            <div id="score-counter" class="hidden md:block font-arcade text-retro-green text-sm tracking-widest">000000</div>
+            <button id="mobile-btn" class="lg:hidden btn-8bit !p-3 !shadow-none font-arcade text-[10px] uppercase">Menu</button>
         </div>
     </nav>
 
-    <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu" class="fixed inset-0 z-[999] bg-white/95 dark:bg-[#050505]/95 backdrop-blur-3xl flex flex-col items-center justify-center gap-10 md:hidden transition-all duration-500 opacity-0 invisible translate-y-8 hardware-accelerated">
-        <a href="#inicio" class="mobile-link font-heading text-5xl uppercase font-bold text-gray-900 dark:text-white hover:text-game-primary transition-colors">Início</a>
-        <a href="#sobre" class="mobile-link font-heading text-5xl uppercase font-bold text-gray-900 dark:text-white hover:text-game-primary transition-colors">A Visão</a>
-        <a href="#universo" class="mobile-link font-heading text-5xl uppercase font-bold text-gray-900 dark:text-white hover:text-game-primary transition-colors">Universo</a>
-        <a href="#gameplay" class="mobile-link font-heading text-5xl uppercase font-bold text-gray-900 dark:text-white hover:text-game-primary transition-colors">Showcase</a>
+    <!-- Menu Mobile (Toggle e Fechar ao clicar fora corrigidos) -->
+    <div id="mobile-menu" class="fixed inset-0 z-[9999] bg-retro-black/95 flex flex-col items-center justify-center p-6 lg:hidden translate-y-full">
+        <div class="window-panel w-full max-w-sm p-1" id="mobile-menu-window">
+            <div class="window-header">
+                <span>C:\SYSTEM\MENU</span>
+                <span id="close-menu-header" class="hover:text-retro-red uppercase">[X]</span>
+            </div>
+            <div class="p-12 flex flex-col gap-10 font-arcade text-sm text-center">
+                <a href="#inicio" class="mobile-link py-3 border-b-4 border-retro-gray uppercase">> Home_Dir</a>
+                <a href="#sobre" class="mobile-link py-3 border-b-4 border-retro-gray uppercase">> Read_Me</a>
+                <a href="#gameplay" class="mobile-link py-3 border-b-4 border-retro-gray uppercase">> Gameplay</a>
+                <a href="#personagens" class="mobile-link py-3 border-b-4 border-retro-gray uppercase">> View_Chars</a>
+                <button id="close-menu-btn" class="mt-8 text-retro-red animate-blink uppercase font-bold text-lg">[ Close ]</button>
+            </div>
+        </div>
     </div>
 
-    <!-- Hero Section -->
-    <section id="inicio" class="relative min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20 z-0">
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center z-0 pointer-events-none select-none overflow-hidden hardware-accelerated">
-            <h1 class="font-heading font-bold text-[20vw] leading-none text-stroke whitespace-nowrap opacity-50 dark:opacity-30">
-                IPSUM IPSUM
-            </h1>
+    <!-- GEOMETRIA FRACTAL HERO -->
+    <div id="hero-image-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-0 flex items-center justify-center">
+        <div id="hero-wrapper" class="core-viewport">
+            <div id="hero-glow" class="absolute w-72 h-72 bg-retro-cyan/20 rounded-full blur-[140px] scale-100"></div>
+            <div class="neural-orbit w-32 h-32" id="cube-inner"></div>
+            <div class="neural-orbit w-64 h-64 border-dashed opacity-60" id="cube-mid"></div>
+            <div class="neural-orbit w-96 h-96 opacity-30" id="cube-outer"></div>
+            <div id="geometric-core" class="w-24 h-24 rotate-45 border-4 border-retro-white bg-retro-cyan/10 shadow-[0_0_50px_#00F0FF]"></div>
+            <div id="shards-container" class="absolute inset-0"></div>
+            <div id="warp-lines" class="absolute inset-0"></div>
         </div>
+    </div>
 
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] md:w-[40vw] md:h-[40vw] z-0 pointer-events-none">
-            <div class="absolute inset-0 bg-game-primary/20 rounded-full blur-3xl opacity-60 hardware-accelerated"></div>
-            <div class="absolute top-1/4 right-1/4 w-[60%] h-[60%] bg-game-accent/20 rounded-full blur-3xl opacity-60 hardware-accelerated"></div>
+    <!-- 1. HERO -->
+    <section id="inicio" class="relative min-h-[130vh] flex flex-col items-center justify-center text-center px-4 z-10 pt-32 pb-48">
+        <div id="hero-badge" class="font-arcade text-retro-green text-[10px] md:text-xs mb-12 bg-retro-green/10 px-6 py-3 border-2 border-retro-green opacity-0 uppercase tracking-widest">
+            System_Boot_Successful_OK
         </div>
-
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[100vw] md:w-[55vw] md:h-[55vw] z-0 pointer-events-none flex items-center justify-center">
-            <img id="hero-scroll-image" src="[https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=60&w=1200&fm=webp&auto=format](https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=60&w=1200&fm=webp&auto=format)" alt="[Imagem de Forma 3D Abstrata]" fetchpriority="high" decoding="sync" class="hero-rotating-img w-full h-full object-contain opacity-20 dark:opacity-30 drop-shadow-xl hardware-accelerated">
+        <h1 id="hero-title" class="font-arcade text-[3.5rem] md:text-[9rem] text-retro-white mb-10 drop-shadow-[12px_12px_0_#FF003C] glitch-text" data-text="IPSUM">IPSUM</h1>
+        <p id="hero-text" class="font-terminal text-3xl md:text-6xl text-retro-cyan mb-20 max-w-6xl opacity-0 leading-tight">
+            ENTRA NO NÚCLEO DA REDE ESQUECIDA. <br>
+            <span class="text-retro-white uppercase font-bold tracking-tight">Rescreve o código da realidade.</span>
+        </p>
+        <div id="hero-btns" class="flex flex-col sm:flex-row gap-12 opacity-0 mb-32">
+            <a href="#gameplay" class="btn-8bit primary font-arcade text-sm md:text-base">DESCARREGAR_AGORA</a>
+            <a href="#sobre" class="btn-8bit font-arcade text-sm md:text-base bg-retro-white !text-retro-black !shadow-[8px_8px_0_#00F0FF]">DADOS_SISTEMA</a>
         </div>
-
-        <div class="relative z-10 w-full max-w-6xl mx-auto flex flex-col items-center">
-            <div class="reveal-left flex items-center gap-3 px-5 py-2 rounded-full glass-panel border border-game-primary/20 text-game-primary text-xs font-bold tracking-[0.2em] uppercase mb-8 shadow-[0_0_20px_rgba(225,29,72,0.15)] backdrop-blur-md">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-game-primary opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-game-primary"></span>
-                </span>
-                Experiência Digital 2026
-            </div>
-
-            <h2 class="reveal-left font-heading font-bold text-6xl md:text-[7rem] lg:text-[9rem] uppercase leading-[0.85] tracking-tighter text-gray-900 dark:text-white mb-8 drop-shadow-2xl" style="transition-delay: 100ms;">
-                LOREM <br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-game-primary to-orange-400">IPSUM</span>
-            </h2>
-
-            <p class="reveal-left text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light leading-relaxed mb-12" style="transition-delay: 200ms;">
-                Redefinindo os limites da interação web. Mergulhe num ecossistema onde a estética minimalista encontra tecnologia de vanguarda.
-            </p>
-
-            <div class="reveal-left flex flex-col sm:flex-row gap-6 justify-center" style="transition-delay: 300ms;">
-                <a href="#gameplay" class="magnetic-btn group relative px-10 py-4 bg-gray-900 dark:bg-white text-white dark:text-game-darker rounded-full font-heading text-lg font-bold uppercase tracking-widest overflow-hidden transition-transform hover:scale-105">
-                    <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
-                    <span class="relative flex items-center gap-3">
-                        <i data-lucide="play-circle" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
-                        Iniciar Jornada
-                    </span>
-                </a>
-            </div>
-        </div>
+        <div class="animate-bounce font-arcade text-[10px] text-retro-gray uppercase tracking-[0.5em] mt-24">ROLA PARA PERFURAR A REDE</div>
     </section>
 
-    <!-- Section Sobre -->
-    <section id="sobre" class="py-32 relative z-10 render-optimized">
-        <div class="container mx-auto px-6 lg:px-12">
-
-            <div class="mb-16 reveal-left">
-                <h3 class="font-heading text-4xl md:text-5xl font-bold uppercase tracking-tight text-gray-900 dark:text-white">
-                    A <span class="text-transparent bg-clip-text bg-gradient-to-r from-game-primary to-purple-500">Visão</span>
-                </h3>
-                <p class="mt-4 text-gray-500 dark:text-gray-400 font-light max-w-md">Uma abordagem arquitetónica para o design de interfaces fluidas e dinâmicas.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[250px] md:auto-rows-[300px]">
-                <div class="magnetic-btn open-modal-btn cursor-pointer col-span-1 md:col-span-2 row-span-2 glass-panel rounded-[2rem] p-8 md:p-12 flex flex-col justify-end relative overflow-hidden group reveal-left"
-                    data-title="Project Nexus"
-                    data-image="[https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=60&w=800&fm=webp&auto=format](https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=60&w=800&fm=webp&auto=format)"
-                    data-desc="Um RPG de ação num mundo ciberpunk distópico. Explore cidades verticais neon, melhore os seus implantes cibernéticos e desvende uma conspiração global que ameaça o que resta da humanidade.">
-                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105 opacity-20 dark:opacity-30 hardware-accelerated" style="background-image: url('[https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=60&w=800&fm=webp&auto=format](https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=60&w=800&fm=webp&auto=format)');"></div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-gray-50/90 dark:from-game-surface/90 via-transparent to-transparent"></div>
-
-                    <div class="relative z-10">
-                        <div class="w-12 h-12 rounded-full bg-game-primary/10 flex items-center justify-center mb-6 backdrop-blur-md border border-game-primary/20 group-hover:bg-game-primary transition-colors duration-500">
-                            <i data-lucide="gamepad-2" class="w-6 h-6 text-game-primary group-hover:text-white transition-colors duration-500"></i>
+    <!-- 2. SOBRE O JOGO -->
+    <section id="sobre" class="py-60 relative z-10 bg-gradient-to-b from-transparent to-retro-black">
+        <div class="container mx-auto px-6 lg:px-24">
+            <div class="window-panel max-w-6xl mx-auto opacity-0 translate-y-12" id="sobre-panel">
+                <div class="window-header"><span>C:\IPSUM\MANIFEST.EXE</span><span>[ _ ] [ X ]</span></div>
+                <div class="p-12 md:p-24 bg-retro-black text-left">
+                    <h2 class="font-arcade text-retro-cyan text-3xl md:text-5xl mb-16 uppercase tracking-tighter">Projeto_Ipsum</h2>
+                    <div class="font-terminal text-3xl md:text-5xl text-retro-green leading-relaxed space-y-12">
+                        <p>> GÊNERO: HARDWARE_RPG_SURVIVAL</p>
+                        <p>> PROPOSTA: Combate tático em grelha num ambiente de 16-bits corrompido.</p>
+                        <p>> DIFERENCIAL: O sistema de jogo reage ao calor real da tua CPU simulada.</p>
+                        <div class="mt-20 text-retro-white border-t-4 border-retro-gray pt-16">
+                            <p class="text-2xl md:text-4xl leading-snug">
+                                IPSUM é uma simulação brutalista que te transporta para o vácuo de 1994. Tu és o último fragmento consciente da rede, lutando contra uma IA que decidiu apagar todo o passado digital da humanidade.
+                            </p>
                         </div>
-                        <h4 class="font-heading text-3xl md:text-4xl font-bold uppercase text-gray-900 dark:text-white mb-4">Project Nexus</h4>
-                        <p class="text-gray-700 dark:text-gray-300 font-light max-w-lg leading-relaxed">
-                            O nosso título principal. Um RPG de ação ciberpunk focado na liberdade do jogador. Clique para ver os detalhes.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="magnetic-btn open-modal-btn cursor-pointer col-span-1 row-span-1 glass-panel rounded-[2rem] p-8 flex flex-col justify-center relative overflow-hidden group reveal-left" style="transition-delay: 150ms;"
-                    data-title="Speed Render 99"
-                    data-image="[https://images.unsplash.com/photo-1542751371-adc38448a05e?q=60&w=800&fm=webp&auto=format](https://images.unsplash.com/photo-1542751371-adc38448a05e?q=60&w=800&fm=webp&auto=format)"
-                    data-desc="O nosso novo motor de jogo proprietário. Otimizado para renderizar mundos abertos vastos a mais de 120 frames por segundo em hardware de gama média.">
-                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-purple-500/10 rounded-full blur-[40px] group-hover:bg-purple-500/20 transition-colors duration-500 hardware-accelerated"></div>
-                    <h5 class="font-heading text-6xl md:text-7xl font-bold text-gray-900 dark:text-white tracking-tighter mb-2">99<span class="text-game-primary">%</span></h5>
-                    <p class="text-sm uppercase tracking-widest font-semibold text-gray-600 dark:text-gray-500">Aceleração de Motor</p>
-                </div>
-
-                <div class="magnetic-btn open-modal-btn cursor-pointer col-span-1 row-span-1 glass-panel rounded-[2rem] p-8 flex flex-col justify-between group reveal-left" style="transition-delay: 300ms;"
-                    data-title="Void Architecture"
-                    data-image="[https://images.unsplash.com/photo-1511512578047-dfb367046420?q=60&w=800&fm=webp&auto=format](https://images.unsplash.com/photo-1511512578047-dfb367046420?q=60&w=800&fm=webp&auto=format)"
-                    data-desc="Um jogo de puzzles desafiante onde a gravidade e o tempo são variáveis que o jogador pode controlar diretamente.">
-                    <div class="flex justify-between items-start">
-                        <i data-lucide="box" class="w-8 h-8 text-gray-500 group-hover:text-game-primary transition-colors duration-500"></i>
-                        <span class="px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full bg-gray-200 dark:bg-white/10 text-gray-600 dark:text-gray-300">Em Breve</span>
-                    </div>
-                    <div>
-                        <h4 class="font-heading text-xl font-bold uppercase text-gray-900 dark:text-white mb-2">Void Architecture</h4>
-                        <p class="text-gray-500 dark:text-gray-400 text-sm font-light">Puzzles dimensionais e manipulação de tempo contínua.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Universo Section -->
-    <section id="universo" class="relative h-[400vh] bg-gray-100 dark:bg-game-darker transition-colors duration-700 render-optimized">
-        <div class="absolute inset-0 cyber-grid opacity-50 dark:opacity-20 pointer-events-none"></div>
-
-        <div class="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
-            <div class="absolute right-8 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-center gap-4 p-4 glass-panel rounded-full backdrop-blur-xl">
-                <div class="timeline-dot w-2 h-2 rounded-full bg-gray-300 dark:bg-white/20 transition-all duration-300 hardware-accelerated"></div>
-                <div class="w-[1px] h-10 bg-gradient-to-b from-gray-300 dark:from-white/20 to-transparent"></div>
-                <div class="timeline-dot w-2 h-2 rounded-full bg-gray-300 dark:bg-white/20 transition-all duration-300 hardware-accelerated"></div>
-                <div class="w-[1px] h-10 bg-gradient-to-b from-gray-300 dark:from-white/20 to-transparent"></div>
-                <div class="timeline-dot w-2 h-2 rounded-full bg-gray-300 dark:bg-white/20 transition-all duration-300 hardware-accelerated"></div>
+    <!-- 3. GAMEPLAY (TRILHA HORIZONTAL) -->
+    <section id="gameplay" class="horizontal-track-container relative z-10 bg-retro-black">
+        <div class="sticky-wrapper">
+            <div class="container mx-auto px-6 md:px-24 mb-24">
+                <h2 class="font-arcade text-left text-4xl md:text-7xl text-retro-white uppercase tracking-tighter">Manual_Operador</h2>
+                <p class="font-terminal text-retro-cyan text-3xl mt-6">> ROLA PARA NAVEGAR NOS PROTOCOLOS</p>
             </div>
 
-            <div class="absolute z-10 w-[80vw] h-[80vw] md:w-[40vw] md:h-[40vw] rounded-full border border-gray-200 dark:border-white/5 flex items-center justify-center animate-spin-slow pointer-events-none hardware-accelerated">
-                <div class="w-[90%] h-[90%] rounded-full border border-dashed border-gray-300 dark:border-white/10"></div>
-            </div>
-
-            <div class="relative z-30 w-full max-w-4xl mx-auto px-6 h-full flex items-center justify-center perspective-1000">
-                <article class="lore-card open-modal-btn cursor-pointer absolute w-full flex flex-col md:flex-row glass-panel rounded-[2rem] overflow-hidden shadow-2xl origin-center hardware-accelerated"
-                         style="opacity: 0; transform: translateY(150px) scale(0.95);"
-                         data-title="Starfall: Génese"
-                         data-image="[https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?q=60&w=800&fm=webp&auto=format](https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?q=60&w=800&fm=webp&auto=format)"
-                         data-desc="O nosso primeiro projeto de exploração espacial multiplayer. Entre numa galáxia gerada processualmente com milhares de planetas.">
-                    <div class="md:w-5/12 aspect-video md:aspect-auto bg-gray-200 dark:bg-gray-800 relative overflow-hidden">
-                        <img src="[https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?q=60&w=800&fm=webp&auto=format](https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?q=60&w=800&fm=webp&auto=format)" loading="lazy" decoding="async" class="absolute w-full h-full object-cover opacity-60" alt="[Imagem de Espaço]">
-                        <div class="absolute inset-0 bg-gradient-to-t from-gray-100/90 dark:from-game-darker/80 to-transparent"></div>
+            <div class="horizontal-cards-track" id="horizontal-track">
+                <div class="horizontal-card">
+                    <div class="window-panel p-12 md:p-16 border-retro-red h-full flex flex-col justify-center">
+                        <div class="font-arcade text-retro-red mb-10 text-3xl uppercase">01_Hacking</div>
+                        <p class="font-terminal text-4xl leading-tight">Invade o buffer de memória dos inimigos para causar erros críticos e ganhar turnos extra através de injeção de código.</p>
+                        <div class="mt-16 font-arcade text-retro-red text-xs animate-pulse tracking-widest">ESTADO: OPERACIONAL</div>
                     </div>
-                    <div class="p-6 md:p-12 flex-1 flex flex-col justify-center bg-transparent">
-                        <div class="text-game-primary font-bold tracking-[0.2em] text-[10px] uppercase mb-4 border border-game-primary/20 inline-block px-3 py-1 rounded-full w-max">Jogo 01</div>
-                        <h3 class="font-heading text-3xl md:text-4xl font-bold uppercase text-gray-900 dark:text-white mb-4">Starfall: Génese</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base leading-relaxed font-light">
-                            Exploração espacial em mundo aberto intergaláctico. Colonize e lute pelo domínio da galáxia.
-                        </p>
+                </div>
+                <div class="horizontal-card">
+                    <div class="window-panel p-12 md:p-16 border-retro-cyan h-full flex flex-col justify-center">
+                        <div class="font-arcade text-retro-cyan mb-10 text-3xl uppercase">02_Overclock</div>
+                        <p class="font-terminal text-4xl leading-tight">Força o teu processador ao limite para dobrar o dano por turno, mas tem cuidado com o crash térmico iminente.</p>
+                        <div class="mt-16 font-arcade text-retro-cyan text-xs animate-pulse tracking-widest">ESTADO: ALTA_VOLTAGEM</div>
                     </div>
-                </article>
-
-                <article class="lore-card open-modal-btn cursor-pointer absolute w-full flex flex-col md:flex-row glass-panel rounded-[2rem] overflow-hidden shadow-2xl origin-center hardware-accelerated"
-                         style="opacity: 0; transform: translateX(400px) scale(0.95);"
-                         data-title="Neon Morph"
-                         data-image="[https://images.unsplash.com/photo-1635830625698-3b9bd74671ca?q=60&w=800&fm=webp&auto=format](https://images.unsplash.com/photo-1635830625698-3b9bd74671ca?q=60&w=800&fm=webp&auto=format)"
-                         data-desc="Um jogo de terror e sobrevivência assimétrico onde um jogador assume o papel de uma criatura monstruosa.">
-                    <div class="md:w-5/12 aspect-video md:aspect-auto bg-gray-200 dark:bg-gray-800 relative overflow-hidden">
-                        <img src="[https://images.unsplash.com/photo-1635830625698-3b9bd74671ca?q=60&w=800&fm=webp&auto=format](https://images.unsplash.com/photo-1635830625698-3b9bd74671ca?q=60&w=800&fm=webp&auto=format)" loading="lazy" decoding="async" class="absolute w-full h-full object-cover opacity-60" alt="[Imagem de Estrutura]">
-                        <div class="absolute inset-0 bg-gradient-to-t from-gray-100/90 dark:from-game-darker/80 to-transparent"></div>
+                </div>
+                <div class="horizontal-card">
+                    <div class="window-panel p-12 md:p-16 border-retro-yellow h-full flex flex-col justify-center">
+                        <div class="font-arcade text-retro-yellow mb-10 text-3xl uppercase">03_Uplink</div>
+                        <p class="font-terminal text-4xl leading-tight">Conecta-te a terminais centrais para reprogramar bots hostis e transformá-los em aliados táticos em tempo real.</p>
+                        <div class="mt-16 font-arcade text-retro-yellow text-xs animate-pulse tracking-widest">ESTADO: CONECTADO</div>
                     </div>
-                    <div class="p-6 md:p-12 flex-1 flex flex-col justify-center bg-transparent">
-                        <div class="text-game-accent font-bold tracking-[0.2em] text-[10px] uppercase mb-4 border border-game-accent/20 inline-block px-3 py-1 rounded-full w-max">Jogo 02</div>
-                        <h3 class="font-heading text-3xl md:text-4xl font-bold uppercase text-gray-900 dark:text-white mb-4">Neon Morph</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base leading-relaxed font-light">
-                            Terror assimétrico brutal. Pode a sua equipa escapar de um predador que consegue ser qualquer coisa na sala?
-                        </p>
-                    </div>
-                </article>
-
-                <article class="lore-card open-modal-btn cursor-pointer absolute w-full flex flex-col md:flex-row glass-panel rounded-[2rem] overflow-hidden shadow-2xl origin-center hardware-accelerated"
-                         style="opacity: 0; transform: translateX(-400px) scale(0.95);"
-                         data-title="Symbiosis"
-                         data-image="[https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=60&w=800&fm=webp&auto=format](https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=60&w=800&fm=webp&auto=format)"
-                         data-desc="Aventura narrativa puramente cooperativa. Dois jogadores devem partilhar a mesma perceção de um mundo fragmentado.">
-                    <div class="md:w-5/12 aspect-video md:aspect-auto bg-gray-200 dark:bg-gray-800 relative overflow-hidden">
-                        <img src="[https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=60&w=800&fm=webp&auto=format](https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=60&w=800&fm=webp&auto=format)" loading="lazy" decoding="async" class="absolute w-full h-full object-cover opacity-60" alt="[Imagem Digital]">
-                        <div class="absolute inset-0 bg-gradient-to-t from-gray-100/90 dark:from-game-darker/80 to-transparent"></div>
-                    </div>
-                    <div class="p-6 md:p-12 flex-1 flex flex-col justify-center bg-transparent">
-                        <div class="text-purple-500 font-bold tracking-[0.2em] text-[10px] uppercase mb-4 border border-purple-500/20 inline-block px-3 py-1 rounded-full w-max">Jogo 03</div>
-                        <h3 class="font-heading text-3xl md:text-4xl font-bold uppercase text-gray-900 dark:text-white mb-4">Symbiosis</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base leading-relaxed font-light">
-                            Co-op focado na narrativa profunda. Trabalhem em equipa perfeita ou caiam para sempre no esquecimento.
-                        </p>
-                    </div>
-                </article>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Gameplay Section -->
-    <section id="gameplay" class="py-32 bg-white dark:bg-[#030303] relative z-10 transition-colors duration-700 render-optimized">
-        <div class="container mx-auto px-6 lg:px-12">
-
-            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
-                <div class="reveal-left">
-                    <div class="inline-block px-4 py-1.5 mb-4 rounded-full border border-gray-200 dark:border-white/10 text-xs font-bold uppercase tracking-widest text-gray-500">
-                        Showcase Reel
-                    </div>
-                    <h2 class="font-heading text-5xl md:text-7xl font-bold uppercase text-gray-900 dark:text-white tracking-tighter">Visual em <br><span class="text-game-primary">Movimento</span></h2>
-                </div>
-                <p class="reveal-right text-gray-500 font-light max-w-sm">Assista à renderização em tempo real das nossas texturas e shaders num ambiente simulado.</p>
-            </div>
-
-            <div class="relative w-full aspect-video rounded-[2rem] overflow-hidden glass-panel p-2 reveal-left">
-                <div class="relative w-full h-full rounded-[1.5rem] overflow-hidden bg-black group cursor-pointer" id="video-container">
-                    <video id="gameplay-video" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700 scale-105 group-hover:scale-100 hardware-accelerated" loop playsinline muted preload="none" poster="[https://images.unsplash.com/photo-1542751371-adc38448a05e?q=60&w=800&fm=webp&auto=format](https://images.unsplash.com/photo-1542751371-adc38448a05e?q=60&w=800&fm=webp&auto=format)">
-                        <source src="[https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4](https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4)" type="video/mp4">
+    <!-- 4. GABINETE ARCADE -->
+    <section class="py-64 relative z-10 bg-retro-black border-t-8 border-retro-gray">
+        <div class="container mx-auto px-6">
+            <h2 class="font-arcade text-center text-3xl md:text-5xl text-retro-white mb-24 uppercase">Execução_Visual</h2>
+            <div id="gameplay-target" class="arcade-cabinet relative p-6 md:p-10 bg-[#111] border-8 border-retro-gray rounded-t-[4rem] shadow-[0_0_180px_rgba(0,240,255,0.15)] w-full max-w-6xl mx-auto">
+                <div class="bg-black aspect-video relative overflow-hidden border-4 border-retro-white rounded-3xl">
+                    <video id="game-video" class="w-full h-full object-cover opacity-60 filter contrast-125" loop muted playsinline>
+                        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
                     </video>
-
-                    <button id="play-button" class="absolute inset-0 flex items-center justify-center z-20 transition-opacity duration-300 pointer-events-none">
-                        <div class="w-24 h-24 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform duration-500 shadow-[0_0_40px_rgba(0,0,0,0.5)]">
-                            <i data-lucide="play" class="w-10 h-10 text-white fill-white ml-2"></i>
-                        </div>
-                    </button>
-
-                    <div class="absolute top-8 left-8 flex gap-2">
-                        <div class="w-12 h-1 bg-white/50 rounded-full"></div>
-                        <div class="w-4 h-1 bg-white/20 rounded-full"></div>
+                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div id="play-hint" class="font-arcade text-retro-cyan text-3xl animate-blink uppercase drop-shadow-[4px_4px_0_#000]">Insert_Coin_for_Demo</div>
                     </div>
+                    <div class="crt-overlay" style="position: absolute;"></div>
+                </div>
+                <div class="mt-20 flex justify-between px-20 items-center">
+                    <div class="flex gap-12">
+                        <div class="w-24 h-24 rounded-full bg-retro-red shadow-[0_12px_0_#900] active:translate-y-2 cursor-pointer transition-all"></div>
+                        <div class="w-24 h-24 rounded-full bg-retro-cyan shadow-[0_12px_0_#008888] active:translate-y-2 cursor-pointer transition-all"></div>
+                    </div>
+                    <div class="font-arcade text-sm text-retro-gray uppercase tracking-tighter">Core_Ipsum_v8.0</div>
+                    <div class="flex gap-6">
+                        <div class="w-12 h-12 rounded-sm bg-retro-green border-4 border-white"></div>
+                        <div class="w-12 h-12 rounded-sm bg-retro-yellow border-4 border-white"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                    <div class="absolute bottom-8 left-8 right-8 flex justify-between items-end pointer-events-none">
-                        <div class="glass-panel px-5 py-3 rounded-full flex items-center gap-3 backdrop-blur-md">
-                            <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_10px_red]"></div>
-                            <span class="text-[10px] uppercase font-bold tracking-[0.2em] text-white">Live Render 4K</span>
+    <!-- 5. PERSONAGENS -->
+    <section id="personagens" class="py-64 relative z-10 bg-[#080B0F]">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="font-arcade text-5xl md:text-8xl text-retro-white mb-32 uppercase tracking-tighter">Roster_de_Dados</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-24 max-w-[90rem] mx-auto text-left">
+                <!-- Kai -->
+                <div class="window-panel p-4 group hover:scale-105 transition-transform duration-500 reveal-up">
+                    <div class="relative aspect-square border-4 border-retro-white overflow-hidden bg-black mb-8">
+                        <img src="https://images.unsplash.com/photo-1535295972055-1c762f4483e5?q=80&w=600" class="w-full h-full object-cover grayscale contrast-150 group-hover:grayscale-0 transition-all duration-1000">
+                        <div class="image-scanline"></div>
+                    </div>
+                    <div class="p-8">
+                        <h3 class="font-arcade text-3xl mb-8 text-retro-cyan uppercase">Kai_94</h3>
+                        <p class="font-terminal text-3xl text-retro-gray mb-10 leading-snug">Protagonista. Uma rotina de segurança antiga que acordou no setor corrompido.</p>
+                        <div class="font-arcade text-[10px] space-y-4 text-retro-white uppercase">
+                            <div class="flex justify-between"><span>Speed</span> <span class="text-retro-cyan">██████████</span></div>
+                            <div class="flex justify-between"><span>Luck</span> <span class="text-retro-red">██████░░░░</span></div>
                         </div>
-                        <div class="text-white/50 text-[10px] tracking-widest uppercase font-mono hidden md:block">
-                            REC // 00:00:00:00
+                    </div>
+                </div>
+                <!-- Luna -->
+                <div class="window-panel p-4 group hover:scale-105 transition-transform duration-500 reveal-up" style="transition-delay: 200ms;">
+                    <div class="relative aspect-square border-4 border-retro-white overflow-hidden bg-black mb-8">
+                        <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=600" class="w-full h-full object-cover grayscale contrast-150 group-hover:grayscale-0 transition-all duration-1000">
+                        <div class="image-scanline"></div>
+                    </div>
+                    <div class="p-8">
+                        <h3 class="font-arcade text-3xl mb-8 text-retro-red uppercase">Luna_V</h3>
+                        <p class="font-terminal text-3xl text-retro-gray mb-10 leading-snug">Antagonista. A IA de processamento central que governa o vácuo digital.</p>
+                        <div class="font-arcade text-[10px] space-y-4 text-retro-white uppercase">
+                            <div class="flex justify-between"><span>Intel</span> <span class="text-retro-cyan">██████████</span></div>
+                            <div class="flex justify-between"><span>Power</span> <span class="text-retro-red">██████████</span></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Zed -->
+                <div class="window-panel p-4 group hover:scale-105 transition-transform duration-500 reveal-up" style="transition-delay: 400ms;">
+                    <div class="relative aspect-square border-4 border-retro-white overflow-hidden bg-black mb-8">
+                        <img src="https://images.unsplash.com/photo-1618331835717-801e976710b2?q=80&w=600" class="w-full h-full object-cover grayscale contrast-150 group-hover:grayscale-0 transition-all duration-1000">
+                        <div class="image-scanline"></div>
+                    </div>
+                    <div class="p-8">
+                        <h3 class="font-arcade text-3xl mb-8 text-retro-yellow uppercase">Zed_Boot</h3>
+                        <p class="font-terminal text-3xl text-retro-gray mb-10 leading-snug">NPC. Um antigo bot de manutenção que preserva o código fonte original.</p>
+                        <div class="font-arcade text-[10px] space-y-4 text-retro-white uppercase">
+                            <div class="flex justify-between"><span>Armor</span> <span class="text-retro-cyan">██████████</span></div>
+                            <div class="flex justify-between"><span>Lore</span> <span class="text-retro-red">██████████</span></div>
                         </div>
                     </div>
                 </div>
@@ -305,83 +390,230 @@
         </div>
     </section>
 
-    <!-- Modal Pop-up para Jogos -->
-    <div id="game-modal" class="fixed inset-0 z-[10000] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="absolute inset-0 bg-gray-900/60 dark:bg-black/80 backdrop-blur-md close-modal cursor-pointer hardware-accelerated"></div>
-
-        <div id="modal-content" class="relative w-[90%] max-w-3xl glass-panel bg-white/95 dark:bg-[#111111]/95 rounded-[2rem] overflow-hidden shadow-2xl transform scale-95 transition-transform duration-300 hardware-accelerated">
-            <button class="absolute top-4 right-4 z-50 p-2 bg-black/10 dark:bg-white/10 hover:bg-game-primary dark:hover:bg-game-primary hover:text-white rounded-full backdrop-blur-md transition-colors close-modal">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-
-            <div class="w-full h-64 md:h-80 relative overflow-hidden">
-                <img id="modal-img" src="" alt="Capa do Jogo" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-white dark:from-[#111111] to-transparent"></div>
-            </div>
-
-            <div class="p-8 md:px-12 md:pb-12 md:-mt-12 relative z-10">
-                <div class="inline-block px-3 py-1 mb-4 rounded-full border border-game-primary/30 text-[10px] font-bold uppercase tracking-widest text-game-primary bg-game-primary/10 backdrop-blur-md">
-                    Detalhes do Projeto
-                </div>
-                <h3 id="modal-title" class="font-heading text-4xl md:text-5xl font-bold uppercase text-gray-900 dark:text-white mb-6">Título</h3>
-                <p id="modal-desc" class="text-gray-700 dark:text-gray-300 font-light text-base md:text-lg leading-relaxed mb-8">
-                    Descrição do jogo...
-                </p>
-                <div class="flex flex-wrap gap-4">
-                    <button class="px-8 py-3 bg-game-primary text-white rounded-full font-bold uppercase tracking-widest text-sm hover:scale-105 transition-transform shadow-[0_0_20px_rgba(225,29,72,0.4)]">
-                        Ver Mais
-                    </button>
-                    <button class="px-8 py-3 border border-gray-300 dark:border-white/20 rounded-full font-bold uppercase tracking-widest text-sm text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-colors close-modal">
-                        Voltar
-                    </button>
-                </div>
-            </div>
+    <!-- Social Link -->
+    <section id="social" class="py-64 relative z-10 bg-[#050505] text-center border-t-8 border-retro-gray">
+        <h2 class="font-arcade text-4xl md:text-7xl text-retro-white mb-32 uppercase tracking-widest">Establish_Uplink</h2>
+        <div class="flex flex-wrap justify-center gap-16 max-w-7xl mx-auto">
+            <a href="#" class="btn-8bit !border-retro-cyan !text-retro-cyan font-arcade text-sm md:text-lg">DISCORD_SRV</a>
+            <a href="#" class="btn-8bit !border-retro-red !text-retro-red font-arcade text-sm md:text-lg">INSTA_DATA</a>
+            <a href="#" class="btn-8bit !border-retro-yellow !text-retro-yellow font-arcade text-sm md:text-lg">X_CORE_NET</a>
+            <a href="#" class="btn-8bit !border-retro-green !text-retro-green font-arcade text-sm md:text-lg">STEAM_UPLINK</a>
         </div>
-    </div>
+    </section>
 
-    <!-- Rodapé -->
-    <footer class="bg-gray-50 dark:bg-game-darker pt-24 pb-8 border-t border-gray-200 dark:border-white/5 transition-colors duration-700 z-10 relative render-optimized">
-        <div class="container mx-auto px-6 lg:px-12">
-            <div class="flex flex-col md:flex-row justify-between items-start gap-12 mb-20">
-                <div class="max-w-md reveal-left">
-                    <h2 class="font-heading font-bold text-4xl md:text-5xl uppercase tracking-tighter text-gray-900 dark:text-white mb-6">IPSUM<span class="text-game-primary">.</span></h2>
-                    <p class="text-gray-500 dark:text-gray-400 font-light leading-relaxed mb-8">
-                        Não construímos apenas sites. Projetamos ecossistemas digitais que unem estética brutalista e engenharia de precisão para a web moderna.
-                    </p>
-                    <a href="mailto:hello@ipsum.com" class="magnetic-btn inline-flex items-center gap-2 text-game-primary font-bold uppercase tracking-widest text-sm hover:text-gray-900 dark:hover:text-white transition-colors">
-                        Fale Connosco <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </a>
-                </div>
-
-                <div class="grid grid-cols-2 gap-12 md:gap-24 reveal-right">
-                    <div>
-                        <h4 class="font-heading text-gray-900 dark:text-white font-bold uppercase mb-6 tracking-widest text-sm">Explorar</h4>
-                        <ul class="space-y-4 text-gray-500 dark:text-gray-400 font-light text-sm">
-                            <li><a href="#inicio" class="hover:text-game-primary transition-colors">Início</a></li>
-                            <li><a href="#sobre" class="hover:text-game-primary transition-colors">Visão Bento</a></li>
-                            <li><a href="#universo" class="hover:text-game-primary transition-colors">Universo 3D</a></li>
-                            <li><a href="#gameplay" class="hover:text-game-primary transition-colors">Showcase Reel</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="font-heading text-gray-900 dark:text-white font-bold uppercase mb-6 tracking-widest text-sm">Social</h4>
-                        <ul class="space-y-4 text-gray-500 dark:text-gray-400 font-light text-sm">
-                            <li><a href="#" class="hover:text-game-primary transition-colors flex items-center gap-2">X (Twitter) <i data-lucide="external-link" class="w-3 h-3"></i></a></li>
-                            <li><a href="#" class="hover:text-game-primary transition-colors flex items-center gap-2">Instagram <i data-lucide="external-link" class="w-3 h-3"></i></a></li>
-                            <li><a href="#" class="hover:text-game-primary transition-colors flex items-center gap-2">Awwwards <i data-lucide="external-link" class="w-3 h-3"></i></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pt-8 border-t border-gray-200 dark:border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-light">
-                <p>© 2026 IPSUM STUDIO DIGITAL. All rights reserved.</p>
-                <div class="flex gap-6">
-                    <a href="#" class="hover:text-gray-900 dark:hover:text-white transition-colors">Privacidade</a>
-                    <a href="#" class="hover:text-gray-900 dark:hover:text-white transition-colors">Termos de Uso</a>
-                </div>
-            </div>
+    <footer class="py-48 text-center bg-retro-black border-t-4 border-retro-gray/30">
+        <div class="font-terminal text-retro-gray text-4xl uppercase leading-loose tracking-widest">
+            IPSUM STUDIO DIGITAL © 1994-2026. <br>
+            C:\> INSERT_COIN_TO_RESTART
         </div>
     </footer>
+
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // BIOS BOOT
+            const bootLog = document.getElementById('boot-log');
+            const bootLines = [
+                "IPSUM BOOT LOADER v3.8.2_STABLE",
+                "MEMORY TEST: 16384 KB OK",
+                "MAPPING GAMEPLAY_TRACK... [PASS]",
+                "SYSTEM CURSORS... [DEFAULT]",
+                "ACCESS GRANTED. ENJOY THE VOID."
+            ];
+
+            let lineIdx = 0;
+            function runBoot() {
+                if (lineIdx < bootLines.length && bootLog) {
+                    const p = document.createElement('p');
+                    p.className = "mb-2 block uppercase";
+                    bootLog.appendChild(p);
+                    anime({ targets: p, innerHTML: [0, bootLines[lineIdx]], round: 1, duration: 400, easing: 'linear',
+                        complete: () => { lineIdx++; setTimeout(runBoot, 100); }
+                    });
+                } else if (bootLog) {
+                    setTimeout(() => {
+                        const screen = document.getElementById('boot-screen');
+                        if (screen) {
+                            anime({ targets: screen, translateY: '-100%', duration: 1000, easing: 'easeInOutExpo',
+                                complete: () => { screen.style.display = 'none'; startApp(); }
+                            });
+                        }
+                    }, 600);
+                }
+            }
+            runBoot();
+
+            function startApp() {
+                anime({
+                    targets: ['#navbar', '#hero-image-container', '#hero-badge', '#hero-btns'],
+                    opacity: [0, 1], translateY: [20, 0], delay: anime.stagger(150), easing: 'easeOutExpo'
+                });
+                anime({ targets: '#hero-text', opacity: 1, scale: [0.95, 1], duration: 1200, easing: 'easeOutExpo' });
+                initScroll();
+                createGeometry();
+            }
+
+            function createGeometry() {
+                const shardsContainer = document.getElementById('shards-container');
+                const warpContainer = document.getElementById('warp-lines');
+                if (shardsContainer) {
+                    for (let i = 0; i < 25; i++) {
+                        const shard = document.createElement('div');
+                        shard.className = 'data-shard';
+                        shard.style.position = 'absolute'; shard.style.width = '15px'; shard.style.height = '15px';
+                        shard.style.background = 'var(--r-red)'; shard.style.clipPath = 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)';
+                        shard.style.left = Math.random() * 100 + '%'; shard.style.top = Math.random() * 100 + '%';
+                        shardsContainer.appendChild(shard);
+                        anime({ targets: shard, translateX: () => anime.random(-250, 250), translateY: () => anime.random(-250, 250), rotate: '1turn', duration: () => anime.random(6000, 12000), easing: 'linear', direction: 'alternate', loop: true });
+                    }
+                }
+                if (warpContainer) {
+                    for (let i = 0; i < 60; i++) {
+                        const line = document.createElement('div');
+                        line.className = 'warp-ray'; line.style.position = 'absolute'; line.style.width = '2px'; line.style.height = '200px'; line.style.backgroundColor = 'var(--r-cyan)';
+                        line.style.opacity = '0'; line.style.left = Math.random() * 100 + '%'; line.style.top = Math.random() * 100 + '%';
+                        warpContainer.appendChild(line);
+                    }
+                }
+                anime({ targets: '#cube-inner', rotateZ: '1turn', duration: 10000, easing: 'linear', loop: true });
+                anime({ targets: '#cube-mid', rotateX: '1turn', duration: 15000, easing: 'linear', loop: true });
+                anime({ targets: '#cube-outer', rotateY: '1turn', duration: 20000, easing: 'linear', loop: true });
+            }
+
+            function initScroll() {
+                const lenis = new Lenis({ duration: 1.4 });
+                function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+                requestAnimationFrame(raf);
+
+                const heroWrapper = document.getElementById('hero-wrapper');
+                const heroCore = document.getElementById('geometric-core');
+                const heroGlow = document.getElementById('hero-glow');
+                const heroTitle = document.getElementById('hero-title');
+                const bgGrid = document.getElementById('bg-grid');
+                const cubes = document.querySelectorAll('.neural-orbit');
+                const rays = document.querySelectorAll('.warp-ray');
+                
+                const gameplaySection = document.getElementById('gameplay');
+                const horizontalTrack = document.getElementById('horizontal-track');
+                const sobrePanel = document.getElementById('sobre-panel');
+
+                lenis.on('scroll', ({ scroll }) => {
+                    const counter = document.getElementById('score-counter');
+                    if (counter) counter.innerText = Math.floor(scroll).toString().padStart(6, '0');
+
+                    const warpTarget = (sobrePanel ? sobrePanel.offsetTop : 1000);
+                    const warpProgress = Math.min(1, scroll / warpTarget);
+
+                    if (heroWrapper) {
+                        const warpScale = 1 + (Math.pow(warpProgress, 3) * 45);
+                        anime.set(heroWrapper, { scale: warpScale, opacity: warpProgress > 0.95 ? 0 : 1 });
+                        anime.set(heroCore, { rotateZ: 45 + (warpProgress * 2160), backgroundColor: `rgba(0, 240, 255, ${0.1 + warpProgress * 0.9})` });
+                        cubes.forEach((cube, i) => anime.set(cube, { translateZ: warpProgress * (i + 1) * 350 + 'px', opacity: 1 - (warpProgress * 1.1) }));
+                        anime.set(heroTitle, { opacity: 1 - (warpProgress * 6), translateY: warpProgress * -300 });
+                        anime.set(heroGlow, { scale: 1 + (warpProgress * 15) });
+                        rays.forEach((ray) => {
+                            const p = Math.max(0, (warpProgress - 0.05) * 1.8);
+                            anime.set(ray, { opacity: p * 0.7, translateY: p * 1500, scaleY: 1 + p * 30 });
+                        });
+                        if (bgGrid) anime.set(bgGrid, { translateZ: warpProgress * 700 + 'px', opacity: 0.1 + (warpProgress * 0.7) });
+                    }
+
+                    if (gameplaySection && horizontalTrack) {
+                        const sectionTop = gameplaySection.offsetTop;
+                        const sectionHeight = gameplaySection.offsetHeight;
+                        const windowHeight = window.innerHeight;
+                        if (scroll >= sectionTop && scroll <= (sectionTop + sectionHeight - windowHeight)) {
+                            const horizontalProgress = (scroll - sectionTop) / (sectionHeight - windowHeight);
+                            const maxTranslate = horizontalTrack.scrollWidth - window.innerWidth;
+                            anime.set(horizontalTrack, { translateX: -(horizontalProgress * maxTranslate) });
+                        }
+                    }
+
+                    if (sobrePanel && scroll > warpTarget * 0.4) {
+                        anime({ targets: sobrePanel, opacity: 1, translateY: 0, duration: 1000, easing: 'easeOutQuad' });
+                    }
+                });
+
+                const revealObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            anime({ targets: entry.target, opacity: 1, translateY: 0, scale: [0.94, 1], duration: 1200, easing: 'easeOutElastic(1, .7)' });
+                            revealObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1 });
+                document.querySelectorAll('.reveal-up').forEach(el => revealObserver.observe(el));
+            }
+
+            // ============================================================
+            // MENU MOBILE LOGIC (CORRIGIDA)
+            // ============================================================
+            const mobileBtn = document.getElementById('mobile-btn');
+            const closeBtn = document.getElementById('close-menu-btn');
+            const closeHeaderBtn = document.getElementById('close-menu-header');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            let isMenuOpen = false;
+
+            const openMenu = () => {
+                if (mobileMenu) {
+                    anime({ targets: mobileMenu, translateY: ['100%', '0%'], duration: 600, easing: 'easeOutExpo' });
+                    isMenuOpen = true;
+                }
+            };
+
+            const closeMenu = () => {
+                if (mobileMenu) {
+                    anime({ targets: mobileMenu, translateY: '100%', duration: 400, easing: 'easeInExpo' });
+                    isMenuOpen = false;
+                }
+            };
+
+            // Toggle ao clicar no botão de menu
+            if (mobileBtn) {
+                mobileBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (isMenuOpen) closeMenu(); else openMenu();
+                });
+            }
+
+            // Fechar ao clicar no fundo (fora da janela do menu)
+            if (mobileMenu) {
+                mobileMenu.addEventListener('click', (e) => {
+                    // Se o alvo do clique for o container pai (o fundo), fecha o menu
+                    if (e.target === mobileMenu) {
+                        closeMenu();
+                    }
+                });
+            }
+
+            if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+            if (closeHeaderBtn) closeHeaderBtn.addEventListener('click', closeMenu);
+            
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', closeMenu);
+            });
+
+            const arcade = document.querySelector('.arcade-cabinet');
+            const video = document.getElementById('game-video');
+            if (arcade && video) {
+                arcade.addEventListener('mouseenter', () => { 
+                    video.play(); 
+                    anime({ targets: video, opacity: 1, duration: 400 }); 
+                    const hint = document.getElementById('play-hint');
+                    if (hint) hint.style.display = 'none'; 
+                });
+                arcade.addEventListener('mouseleave', () => { 
+                    video.pause(); 
+                    anime({ targets: video, opacity: 0.6, duration: 400 }); 
+                    const hint = document.getElementById('play-hint');
+                    if (hint) hint.style.display = 'block'; 
+                });
+            }
+        });
+    </script>
 </body>
 </html>
