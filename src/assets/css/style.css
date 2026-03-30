@@ -235,11 +235,14 @@ body {
     }
 }
 
-/* Pre-fix for hero performance */
+/* Pre-fix for hero performance (Otimizações de GPU) */
 #hero-wrapper,
 #geometric-core,
 #hero-title,
-.neural-orbit {
+.neural-orbit,
+.warp-ray,
+.horizontal-cards-track {
     backface-visibility: hidden;
     transform-style: preserve-3d;
+    will-change: transform;
 }
