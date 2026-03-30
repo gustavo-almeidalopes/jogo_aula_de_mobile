@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-PT" class="bg-[#050505] scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -12,225 +13,24 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        arcade: ['"Press Start 2P"', 'cursive'], 
-                        terminal: ['"VT323"', 'monospace'],          
-                    },
-                    colors: {
-                        retro: {
-                            black: '#050505',
-                            dark: '#0B1015',
-                            red: '#FF003C',
-                            orange: '#FF671F',
-                            yellow: '#FEE715',
-                            green: '#39FF14',
-                            cyan: '#00F0FF',
-                            white: '#F4F5F0',
-                            gray: '#2A2E33',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- TAILWIND JS -->
+    <script src="src/assets/js/tailwind.config.js"></script>
+
+    <!-- JS -->
+    <script src="src/assets/js/script.js"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 
-    <style>
-        :root {
-            --r-red: #FF003C;
-            --r-cyan: #00F0FF;
-            --r-green: #39FF14;
-        }
+    <!-- CSS -->
+    <link rel="stylesheet" href="src/assets/css/style.css">
 
-        html, body {
-            cursor: default;
-            overflow-x: hidden;
-            width: 100%;
-            background-color: #050505;
-            -webkit-font-smoothing: antialiased;
-        }
-        
-        body {
-            overscroll-behavior-y: none;
-        }
-
-        .crt-overlay {
-            position: fixed; inset: 0; z-index: 9999; pointer-events: none;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%);
-            background-size: 100% 4px;
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
-        }
-        
-        .noise-overlay {
-            position: fixed; inset: 0; z-index: 9998; pointer-events: none;
-            background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noise)" opacity="0.05"/%3E%3C/svg%3E');
-        }
-
-        .vector-grid {
-            position: fixed; bottom: -200px; left: -50%; width: 200%; height: 100vh;
-            background-image: 
-                linear-gradient(to right, rgba(0, 240, 255, 0.05) 2px, transparent 2px),
-                linear-gradient(to bottom, rgba(0, 240, 255, 0.05) 2px, transparent 2px);
-            background-size: 40px 40px;
-            transform: perspective(400px) rotateX(75deg);
-            z-index: -1;
-            mask-image: linear-gradient(to top, rgba(0,0,0,1) 5%, transparent 80%);
-            will-change: transform, opacity;
-        }
-
-        .window-panel {
-            background-color: #0B1015;
-            border: 3px solid #F4F5F0;
-            box-shadow: 8px 8px 0px rgba(255, 0, 60, 0.2);
-            position: relative;
-        }
-
-        .window-header {
-            background-color: #F4F5F0;
-            color: #050505;
-            padding: 6px 12px;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .btn-8bit {
-            display: inline-block;
-            background-color: #050505;
-            color: #F4F5F0;
-            border: 3px solid #F4F5F0;
-            box-shadow: 4px 4px 0px var(--r-red);
-            text-transform: uppercase;
-            padding: 0.8rem 1.2rem;
-            transition: all 0.2s;
-            white-space: nowrap;
-            font-size: 10px;
-        }
-
-        .core-viewport {
-            width: 260px; height: 260px;
-            position: relative;
-            transform-style: preserve-3d;
-            display: flex; align-items: center; justify-content: center;
-            will-change: transform, opacity;
-        }
-
-        .neural-orbit {
-            position: absolute; border: 1.5px solid var(--r-cyan);
-            box-shadow: 0 0 15px var(--r-cyan);
-            transform-style: preserve-3d;
-        }
-
-        .glitch-text { position: relative; display: inline-block; }
-        .glitch-text::before, .glitch-text::after {
-            content: attr(data-text);
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: #050505;
-        }
-
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-        .animate-blink { animation: blink 1s infinite; }
-
-        ::-webkit-scrollbar { display: none; }
-
-        /* SCROLL DINÂMICO: DESKTOP VS MOBILE */
-        .horizontal-track-container {
-            position: relative;
-            background-color: #050505;
-            height: auto; 
-            padding: 4rem 0;
-        }
-        
-        .sticky-wrapper {
-            position: relative;
-            height: auto;
-            width: 100%;
-            overflow: visible;
-            display: flex;
-            flex-direction: column;
-            z-index: 20;
-        }
-
-        .horizontal-cards-track {
-            display: flex;
-            flex-direction: column; 
-            gap: 2rem;
-            padding: 2rem 6vw;
-            width: 100%;
-            transform: none !important;
-        }
-
-        .horizontal-card {
-            flex: 0 0 auto;
-            width: 100%;
-            max-width: 100%;
-            height: auto;
-            min-height: 350px;
-            display: flex;
-        }
-
-        /* Estilos específicos para Desktop (MD+) */
-        @media (min-width: 768px) {
-            .horizontal-track-container { 
-                height: 500vh; 
-                padding: 0;
-            }
-            .sticky-wrapper {
-                position: sticky;
-                top: 0;
-                height: 100vh;
-                overflow: hidden;
-                justify-content: center;
-            }
-            .horizontal-cards-track { 
-                flex-direction: row; 
-                gap: 6rem; 
-                padding-left: 15vw;
-                padding-right: 50vw;
-                width: max-content;
-                transform: translate3d(0, 0, 0);
-            }
-            .horizontal-card { 
-                flex: 0 0 550px; 
-                height: 60vh; 
-            }
-            .btn-8bit { padding: 1.5rem 3rem; border: 4px solid #F4F5F0; box-shadow: 8px 8px 0px var(--r-red); font-size: 14px; }
-            .core-viewport { width: 550px; height: 550px; }
-        }
-
-        .image-scanline {
-            position: absolute; inset: 0;
-            background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.5) 50%);
-            background-size: 100% 4px;
-            pointer-events: none;
-            opacity: 0.3;
-        }
-
-        /* Desativar brilhos extras no mobile para performance */
-        @media (max-width: 767px) {
-            .crt-overlay { box-shadow: none; background-size: 100% 8px; }
-            #hero-glow { display: none; }
-        }
-
-        /* Pre-fix for hero performance */
-        #hero-wrapper, #geometric-core, #hero-title, .neural-orbit {
-            backface-visibility: hidden;
-            transform-style: preserve-3d;
-        }
-    </style>
 </head>
+
 <body class="antialiased font-terminal text-retro-white text-xl">
 
     <!-- BIOS BOOT -->
-    <div id="boot-screen" class="fixed inset-0 z-[100000] bg-retro-black flex flex-col pt-12 px-6 md:px-24 font-terminal text-retro-green text-base md:text-2xl overflow-hidden">
+    <div id="boot-screen"
+        class="fixed inset-0 z-[100000] bg-retro-black flex flex-col pt-12 px-6 md:px-24 font-terminal text-retro-green text-base md:text-2xl overflow-hidden">
         <div id="boot-log" class="whitespace-nowrap leading-relaxed"></div>
         <div id="boot-cursor" class="w-3 h-5 md:w-4 md:h-6 bg-retro-green animate-pulse mt-2"></div>
     </div>
@@ -240,9 +40,11 @@
     <div class="vector-grid" id="bg-grid"></div>
 
     <!-- HUD NAVEGAÇÃO - Removido opacity-0 inicial para garantir visibilidade do botão de menu -->
-    <nav id="navbar" class="fixed top-0 left-0 w-full z-[1000] p-4 md:p-8 flex justify-between items-center bg-retro-black/95 border-b-4 border-retro-gray opacity-0 transition-opacity duration-500">
+    <nav id="navbar"
+        class="fixed top-0 left-0 w-full z-[1000] p-4 md:p-8 flex justify-between items-center bg-retro-black/95 border-b-4 border-retro-gray opacity-0 transition-opacity duration-500">
         <div class="flex flex-col">
-            <div class="font-arcade text-retro-red text-[7px] md:text-[10px] uppercase tracking-tighter">Kernel_Core</div>
+            <div class="font-arcade text-retro-red text-[7px] md:text-[10px] uppercase tracking-tighter">Kernel_Core
+            </div>
             <div class="font-arcade text-retro-white text-[9px] md:text-sm uppercase">v3.8.5_FIXED</div>
         </div>
         <div class="hidden lg:flex items-center gap-12 font-arcade text-[10px] text-retro-white">
@@ -253,14 +55,17 @@
             <a href="#social" class="hover:text-retro-cyan transition-colors uppercase tracking-widest">Ligação</a>
         </div>
         <div class="flex gap-4 items-center">
-            <div id="score-counter" class="hidden md:block font-arcade text-retro-green text-sm tracking-widest">000000</div>
+            <div id="score-counter" class="hidden md:block font-arcade text-retro-green text-sm tracking-widest">000000
+            </div>
             <!-- Botão de menu garantido no mobile -->
-            <button id="mobile-btn" class="lg:hidden btn-8bit !py-2 !px-3 !shadow-none font-arcade text-[8px] uppercase border-2 border-retro-white">Menu</button>
+            <button id="mobile-btn"
+                class="lg:hidden btn-8bit !py-2 !px-3 !shadow-none font-arcade text-[8px] uppercase border-2 border-retro-white">Menu</button>
         </div>
     </nav>
 
     <!-- Menu Mobile -->
-    <div id="mobile-menu" class="fixed inset-0 z-[9999] bg-retro-black/98 flex flex-col items-center justify-center p-4 lg:hidden translate-y-full">
+    <div id="mobile-menu"
+        class="fixed inset-0 z-[9999] bg-retro-black/98 flex flex-col items-center justify-center p-4 lg:hidden translate-y-full">
         <div class="window-panel w-full max-w-[320px] p-1" id="mobile-menu-window">
             <div class="window-header">
                 <span>C:\SYSTEM\NAV</span>
@@ -271,39 +76,53 @@
                 <a href="#sobre" class="mobile-link py-3 border-b-2 border-retro-gray uppercase">> Read_Me</a>
                 <a href="#gameplay" class="mobile-link py-3 border-b-2 border-retro-gray uppercase">> Gameplay</a>
                 <a href="#personagens" class="mobile-link py-3 border-b-2 border-retro-gray uppercase">> View_Chars</a>
-                <button id="close-menu-btn" class="mt-6 text-retro-red animate-blink uppercase font-bold text-xs">[ Close ]</button>
+                <button id="close-menu-btn" class="mt-6 text-retro-red animate-blink uppercase font-bold text-xs">[
+                    Close ]</button>
             </div>
         </div>
     </div>
 
     <!-- GEOMETRIA FRACTAL HERO -->
-    <div id="hero-image-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-0 flex items-center justify-center">
+    <div id="hero-image-container"
+        class="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-0 flex items-center justify-center">
         <div id="hero-wrapper" class="core-viewport">
-            <div id="hero-glow" class="absolute w-40 h-40 md:w-80 md:h-80 bg-retro-cyan/20 rounded-full blur-[80px] md:blur-[140px] scale-100 will-change-transform"></div>
+            <div id="hero-glow"
+                class="absolute w-40 h-40 md:w-80 md:h-80 bg-retro-cyan/20 rounded-full blur-[80px] md:blur-[140px] scale-100 will-change-transform">
+            </div>
             <div class="neural-orbit w-20 h-20 md:w-40 md:h-40" id="cube-inner"></div>
             <div class="neural-orbit w-40 h-40 md:w-72 md:h-72 border-dashed opacity-60" id="cube-mid"></div>
             <div class="neural-orbit w-60 h-60 md:w-[500px] md:h-[500px] opacity-30" id="cube-outer"></div>
-            <div id="geometric-core" class="w-14 h-14 md:w-32 md:h-32 rotate-45 border-2 md:border-4 border-retro-white bg-retro-cyan/10 shadow-[0_0_50px_#00F0FF] will-change-transform"></div>
+            <div id="geometric-core"
+                class="w-14 h-14 md:w-32 md:h-32 rotate-45 border-2 md:border-4 border-retro-white bg-retro-cyan/10 shadow-[0_0_50px_#00F0FF] will-change-transform">
+            </div>
             <div id="shards-container" class="absolute inset-0"></div>
             <div id="warp-lines" class="absolute inset-0"></div>
         </div>
     </div>
 
     <!-- 1. HERO -->
-    <section id="inicio" class="relative min-h-[110vh] md:min-h-[140vh] flex flex-col items-center justify-center text-center px-6 z-10 pt-32 pb-24 md:pb-48">
-        <div id="hero-badge" class="font-arcade text-[7px] md:text-xs mb-8 md:mb-12 bg-retro-green/10 px-4 py-2 md:px-6 md:py-3 border-2 border-retro-green opacity-0 uppercase tracking-widest">
+    <section id="inicio"
+        class="relative min-h-[110vh] md:min-h-[140vh] flex flex-col items-center justify-center text-center px-6 z-10 pt-32 pb-24 md:pb-48">
+        <div id="hero-badge"
+            class="font-arcade text-[7px] md:text-xs mb-8 md:mb-12 bg-retro-green/10 px-4 py-2 md:px-6 md:py-3 border-2 border-retro-green opacity-0 uppercase tracking-widest">
             System_Boot_Successful_OK
         </div>
-        <h1 id="hero-title" class="font-arcade text-[1.8rem] sm:text-[3.5rem] md:text-[9rem] text-retro-white mb-6 md:mb-10 drop-shadow-[5px_5px_0_#FF003C] md:drop-shadow-[12px_12px_0_#FF003C] glitch-text will-change-transform" data-text="IPSUM">IPSUM</h1>
-        <p id="hero-text" class="font-terminal text-lg md:text-6xl text-retro-cyan mb-12 md:mb-20 max-w-6xl opacity-0 leading-tight">
+        <h1 id="hero-title"
+            class="font-arcade text-[1.8rem] sm:text-[3.5rem] md:text-[9rem] text-retro-white mb-6 md:mb-10 drop-shadow-[5px_5px_0_#FF003C] md:drop-shadow-[12px_12px_0_#FF003C] glitch-text will-change-transform"
+            data-text="IPSUM">IPSUM</h1>
+        <p id="hero-text"
+            class="font-terminal text-lg md:text-6xl text-retro-cyan mb-12 md:mb-20 max-w-6xl opacity-0 leading-tight">
             ENTRA NO NÚCLEO DA REDE ESQUECIDA. <br class="hidden md:block">
             <span class="text-retro-white uppercase font-bold tracking-tight">Rescreve o código da realidade.</span>
         </p>
         <div id="hero-btns" class="flex flex-col sm:flex-row gap-6 md:gap-12 opacity-0 mb-16 md:mb-32 items-center">
             <a href="#gameplay" class="btn-8bit primary font-arcade">DESCARREGAR</a>
-            <a href="#sobre" class="btn-8bit font-arcade bg-retro-white !text-retro-black !shadow-[6px_6px_0_#00F0FF]">SISTEMA_LORE</a>
+            <a href="#sobre"
+                class="btn-8bit font-arcade bg-retro-white !text-retro-black !shadow-[6px_6px_0_#00F0FF]">SISTEMA_LORE</a>
         </div>
-        <div class="animate-bounce font-arcade text-[7px] md:text-[10px] text-retro-gray uppercase tracking-[0.3em] md:tracking-[0.5em] mt-12 md:mt-24">ROLA PARA PERFURAR A REDE</div>
+        <div
+            class="animate-bounce font-arcade text-[7px] md:text-[10px] text-retro-gray uppercase tracking-[0.3em] md:tracking-[0.5em] mt-12 md:mt-24">
+            ROLA PARA PERFURAR A REDE</div>
     </section>
 
     <!-- 2. SOBRE O JOGO -->
@@ -312,14 +131,20 @@
             <div class="window-panel max-w-6xl mx-auto opacity-0 translate-y-12" id="sobre-panel">
                 <div class="window-header"><span>C:\IPSUM\MANIFEST.EXE</span><span>[ _ ] [ X ]</span></div>
                 <div class="p-6 md:p-24 bg-retro-black text-left">
-                    <h2 class="font-arcade text-retro-cyan text-lg md:text-5xl mb-8 md:mb-16 uppercase tracking-tighter">Projeto_Ipsum</h2>
-                    <div class="font-terminal text-xl md:text-5xl text-retro-green leading-relaxed space-y-6 md:space-y-12">
+                    <h2
+                        class="font-arcade text-retro-cyan text-lg md:text-5xl mb-8 md:mb-16 uppercase tracking-tighter">
+                        Projeto_Ipsum</h2>
+                    <div
+                        class="font-terminal text-xl md:text-5xl text-retro-green leading-relaxed space-y-6 md:space-y-12">
                         <p>> GÊNERO: HARDWARE_RPG_SURVIVAL</p>
                         <p>> PROPOSTA: Combate tático em grelha 16-bits.</p>
                         <p>> DIFERENCIAL: Sistema reage à temperatura CPU.</p>
-                        <div class="mt-10 md:mt-20 text-retro-white border-t-2 md:border-t-4 border-retro-gray pt-8 md:pt-16">
+                        <div
+                            class="mt-10 md:mt-20 text-retro-white border-t-2 md:border-t-4 border-retro-gray pt-8 md:pt-16">
                             <p class="text-base md:text-4xl leading-snug">
-                                IPSUM é uma simulação brutalista que te transporta para o vácuo de 1994. Tu és o último fragmento consciente da rede, lutando contra uma IA que decidiu apagar todo o passado digital da humanidade.
+                                IPSUM é uma simulação brutalista que te transporta para o vácuo de 1994. Tu és o último
+                                fragmento consciente da rede, lutando contra uma IA que decidiu apagar todo o passado
+                                digital da humanidade.
                             </p>
                         </div>
                     </div>
@@ -332,30 +157,44 @@
     <section id="gameplay" class="horizontal-track-container relative z-10 bg-retro-black">
         <div class="sticky-wrapper">
             <div class="container mx-auto px-6 md:px-24 mb-6 md:mb-12">
-                <h2 class="font-arcade text-left text-2xl md:text-7xl text-retro-white uppercase tracking-tighter">Manual_Operador</h2>
+                <h2 class="font-arcade text-left text-2xl md:text-7xl text-retro-white uppercase tracking-tighter">
+                    Manual_Operador</h2>
                 <p class="font-terminal text-retro-cyan text-base md:text-3xl mt-2 md:mt-4">> PROTOCOLOS_ATIVOS</p>
             </div>
 
             <div class="horizontal-cards-track" id="horizontal-track">
                 <div class="horizontal-card reveal-up">
                     <div class="window-panel p-6 md:p-12 border-retro-red w-full h-full flex flex-col justify-center">
-                        <div class="font-arcade text-retro-red mb-4 md:mb-8 text-lg md:text-3xl uppercase">01_Hacking</div>
-                        <p class="font-terminal text-lg md:text-4xl leading-tight">Invade o buffer de memória dos inimigos para causar erros críticos através de injeção de código.</p>
-                        <div class="mt-6 md:mt-12 font-arcade text-retro-red text-[7px] md:text-xs animate-blink tracking-widest uppercase">ESTADO: OPERACIONAL</div>
+                        <div class="font-arcade text-retro-red mb-4 md:mb-8 text-lg md:text-3xl uppercase">01_Hacking
+                        </div>
+                        <p class="font-terminal text-lg md:text-4xl leading-tight">Invade o buffer de memória dos
+                            inimigos para causar erros críticos através de injeção de código.</p>
+                        <div
+                            class="mt-6 md:mt-12 font-arcade text-retro-red text-[7px] md:text-xs animate-blink tracking-widest uppercase">
+                            ESTADO: OPERACIONAL</div>
                     </div>
                 </div>
                 <div class="horizontal-card reveal-up">
                     <div class="window-panel p-6 md:p-12 border-retro-cyan w-full h-full flex flex-col justify-center">
-                        <div class="font-arcade text-retro-cyan mb-4 md:mb-8 text-lg md:text-3xl uppercase">02_Overclock</div>
-                        <p class="font-terminal text-lg md:text-4xl leading-tight">Força o processador ao limite para dobrar o dano, mas tem cuidado com o crash térmico iminente.</p>
-                        <div class="mt-6 md:mt-12 font-arcade text-retro-cyan text-[7px] md:text-xs animate-blink tracking-widest uppercase">ESTADO: ALTA_VOLTAGEM</div>
+                        <div class="font-arcade text-retro-cyan mb-4 md:mb-8 text-lg md:text-3xl uppercase">02_Overclock
+                        </div>
+                        <p class="font-terminal text-lg md:text-4xl leading-tight">Força o processador ao limite para
+                            dobrar o dano, mas tem cuidado com o crash térmico iminente.</p>
+                        <div
+                            class="mt-6 md:mt-12 font-arcade text-retro-cyan text-[7px] md:text-xs animate-blink tracking-widest uppercase">
+                            ESTADO: ALTA_VOLTAGEM</div>
                     </div>
                 </div>
                 <div class="horizontal-card reveal-up">
-                    <div class="window-panel p-6 md:p-12 border-retro-yellow w-full h-full flex flex-col justify-center">
-                        <div class="font-arcade text-retro-yellow mb-4 md:mb-8 text-lg md:text-3xl uppercase">03_Uplink</div>
-                        <p class="font-terminal text-lg md:text-4xl leading-tight">Conecta-te a terminais centrais para reprogramar bots hostis e transformá-los em aliados.</p>
-                        <div class="mt-6 md:mt-12 font-arcade text-retro-yellow text-[7px] md:text-xs animate-blink tracking-widest uppercase">ESTADO: CONECTADO</div>
+                    <div
+                        class="window-panel p-6 md:p-12 border-retro-yellow w-full h-full flex flex-col justify-center">
+                        <div class="font-arcade text-retro-yellow mb-4 md:mb-8 text-lg md:text-3xl uppercase">03_Uplink
+                        </div>
+                        <p class="font-terminal text-lg md:text-4xl leading-tight">Conecta-te a terminais centrais para
+                            reprogramar bots hostis e transformá-los em aliados.</p>
+                        <div
+                            class="mt-6 md:mt-12 font-arcade text-retro-yellow text-[7px] md:text-xs animate-blink tracking-widest uppercase">
+                            ESTADO: CONECTADO</div>
                     </div>
                 </div>
             </div>
@@ -365,23 +204,35 @@
     <!-- 4. GABINETE ARCADE -->
     <section class="py-24 md:py-64 relative z-10 bg-retro-black border-t-4 md:border-t-8 border-retro-gray">
         <div class="container mx-auto px-6">
-            <h2 class="font-arcade text-center text-xl md:text-5xl text-retro-white mb-16 md:mb-24 uppercase">Execução_Visual</h2>
-            <div id="gameplay-target" class="arcade-cabinet relative p-4 md:p-10 bg-[#111] border-4 md:border-8 border-retro-gray rounded-t-[2rem] md:rounded-t-[4rem] shadow-[0_0_100px_rgba(0,240,255,0.1)] w-full max-w-6xl mx-auto cursor-pointer">
-                <div class="bg-black aspect-video relative overflow-hidden border-2 md:border-4 border-retro-white rounded-xl md:rounded-3xl">
-                    <video id="game-video" class="w-full h-full object-cover opacity-60 filter contrast-125" loop muted playsinline>
-                        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+            <h2 class="font-arcade text-center text-xl md:text-5xl text-retro-white mb-16 md:mb-24 uppercase">
+                Execução_Visual</h2>
+            <div id="gameplay-target"
+                class="arcade-cabinet relative p-4 md:p-10 bg-[#111] border-4 md:border-8 border-retro-gray rounded-t-[2rem] md:rounded-t-[4rem] shadow-[0_0_100px_rgba(0,240,255,0.1)] w-full max-w-6xl mx-auto cursor-pointer">
+                <div
+                    class="bg-black aspect-video relative overflow-hidden border-2 md:border-4 border-retro-white rounded-xl md:rounded-3xl">
+                    <video id="game-video" class="w-full h-full object-cover opacity-60 filter contrast-125" loop muted
+                        playsinline>
+                        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                            type="video/mp4">
                     </video>
                     <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                        <div id="play-hint" class="font-arcade text-retro-cyan text-base md:text-3xl animate-blink uppercase drop-shadow-[2px_2px_0_#000] text-center px-4">Insert_Coin_for_Demo</div>
+                        <div id="play-hint"
+                            class="font-arcade text-retro-cyan text-base md:text-3xl animate-blink uppercase drop-shadow-[2px_2px_0_#000] text-center px-4">
+                            Insert_Coin_for_Demo</div>
                     </div>
                     <div class="crt-overlay" style="position: absolute;"></div>
                 </div>
                 <div class="mt-8 md:mt-20 flex justify-between px-4 md:px-20 items-center">
                     <div class="flex gap-4 md:gap-12">
-                        <div class="w-10 h-10 md:w-24 md:h-24 rounded-full bg-retro-red shadow-[0_4px_0_#900] active:translate-y-2 transition-all"></div>
-                        <div class="w-10 h-10 md:w-24 md:h-24 rounded-full bg-retro-cyan shadow-[0_4px_0_#008888] active:translate-y-2 transition-all"></div>
+                        <div
+                            class="w-10 h-10 md:w-24 md:h-24 rounded-full bg-retro-red shadow-[0_4px_0_#900] active:translate-y-2 transition-all">
+                        </div>
+                        <div
+                            class="w-10 h-10 md:w-24 md:h-24 rounded-full bg-retro-cyan shadow-[0_4px_0_#008888] active:translate-y-2 transition-all">
+                        </div>
                     </div>
-                    <div class="font-arcade text-[7px] md:text-sm text-retro-gray uppercase tracking-tighter">Core_Ipsum_v8.0</div>
+                    <div class="font-arcade text-[7px] md:text-sm text-retro-gray uppercase tracking-tighter">
+                        Core_Ipsum_v8.0</div>
                 </div>
             </div>
         </div>
@@ -390,47 +241,64 @@
     <!-- 5. PERSONAGENS -->
     <section id="personagens" class="py-24 md:py-64 relative z-10 bg-[#080B0F]">
         <div class="container mx-auto px-6 text-center">
-            <h2 class="font-arcade text-2xl md:text-8xl text-retro-white mb-20 md:mb-32 uppercase tracking-tighter">Roster_de_Dados</h2>
+            <h2 class="font-arcade text-2xl md:text-8xl text-retro-white mb-20 md:mb-32 uppercase tracking-tighter">
+                Roster_de_Dados</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-24 max-w-[90rem] mx-auto text-left">
                 <div class="window-panel p-3 md:p-4 group reveal-up">
-                    <div class="relative aspect-square border-2 md:border-4 border-retro-white overflow-hidden bg-black mb-6 md:mb-8">
-                        <img src="https://images.unsplash.com/photo-1535295972055-1c762f4483e5?q=80&w=600" class="w-full h-full object-cover grayscale contrast-150 group-hover:grayscale-0 transition-all duration-1000">
+                    <div
+                        class="relative aspect-square border-2 md:border-4 border-retro-white overflow-hidden bg-black mb-6 md:mb-8">
+                        <img src="https://images.unsplash.com/photo-1535295972055-1c762f4483e5?q=80&w=600"
+                            class="w-full h-full object-cover grayscale contrast-150 group-hover:grayscale-0 transition-all duration-1000">
                         <div class="image-scanline"></div>
                     </div>
                     <div class="p-4 md:p-8">
                         <h3 class="font-arcade text-lg md:text-3xl mb-6 md:mb-8 text-retro-cyan uppercase">Kai_94</h3>
-                        <p class="font-terminal text-xl md:text-3xl text-retro-gray mb-8 leading-snug">Protagonista. Uma rotina de segurança antiga no setor corrompido.</p>
+                        <p class="font-terminal text-xl md:text-3xl text-retro-gray mb-8 leading-snug">Protagonista. Uma
+                            rotina de segurança antiga no setor corrompido.</p>
                         <div class="font-arcade text-[7px] md:text-[10px] space-y-4 text-retro-white uppercase">
-                            <div class="flex justify-between"><span>Speed</span> <span class="text-retro-cyan">██████████</span></div>
-                            <div class="flex justify-between"><span>Luck</span> <span class="text-retro-red">██████░░░░</span></div>
+                            <div class="flex justify-between"><span>Speed</span> <span
+                                    class="text-retro-cyan">██████████</span></div>
+                            <div class="flex justify-between"><span>Luck</span> <span
+                                    class="text-retro-red">██████░░░░</span></div>
                         </div>
                     </div>
                 </div>
                 <div class="window-panel p-3 md:p-4 group reveal-up" style="transition-delay: 100ms;">
-                    <div class="relative aspect-square border-2 md:border-4 border-retro-white overflow-hidden bg-black mb-6 md:mb-8">
-                        <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=600" class="w-full h-full object-cover grayscale contrast-150 group-hover:grayscale-0 transition-all duration-1000">
+                    <div
+                        class="relative aspect-square border-2 md:border-4 border-retro-white overflow-hidden bg-black mb-6 md:mb-8">
+                        <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=600"
+                            class="w-full h-full object-cover grayscale contrast-150 group-hover:grayscale-0 transition-all duration-1000">
                         <div class="image-scanline"></div>
                     </div>
                     <div class="p-4 md:p-8">
                         <h3 class="font-arcade text-lg md:text-3xl mb-6 md:mb-8 text-retro-red uppercase">Luna_V</h3>
-                        <p class="font-terminal text-xl md:text-3xl text-retro-gray mb-10 leading-snug">Antagonista. A IA central que governa o vácuo digital.</p>
+                        <p class="font-terminal text-xl md:text-3xl text-retro-gray mb-10 leading-snug">Antagonista. A
+                            IA central que governa o vácuo digital.</p>
                         <div class="font-arcade text-[7px] md:text-[10px] space-y-4 text-retro-white uppercase">
-                            <div class="flex justify-between"><span>Intel</span> <span class="text-retro-cyan">██████████</span></div>
-                            <div class="flex justify-between"><span>Power</span> <span class="text-retro-red">██████████</span></div>
+                            <div class="flex justify-between"><span>Intel</span> <span
+                                    class="text-retro-cyan">██████████</span></div>
+                            <div class="flex justify-between"><span>Power</span> <span
+                                    class="text-retro-red">██████████</span></div>
                         </div>
                     </div>
                 </div>
                 <div class="window-panel p-3 md:p-4 group reveal-up" style="transition-delay: 200ms;">
-                    <div class="relative aspect-square border-2 md:border-4 border-retro-white overflow-hidden bg-black mb-6 md:mb-8">
-                        <img src="https://images.unsplash.com/photo-1618331835717-801e976710b2?q=80&w=600" class="w-full h-full object-cover grayscale contrast-150 group-hover:grayscale-0 transition-all duration-1000">
+                    <div
+                        class="relative aspect-square border-2 md:border-4 border-retro-white overflow-hidden bg-black mb-6 md:mb-8">
+                        <img src="https://images.unsplash.com/photo-1618331835717-801e976710b2?q=80&w=600"
+                            class="w-full h-full object-cover grayscale contrast-150 group-hover:grayscale-0 transition-all duration-1000">
                         <div class="image-scanline"></div>
                     </div>
                     <div class="p-4 md:p-8">
-                        <h3 class="font-arcade text-lg md:text-3xl mb-6 md:mb-8 text-retro-yellow uppercase">Zed_Boot</h3>
-                        <p class="font-terminal text-xl md:text-3xl text-retro-gray mb-10 leading-snug">NPC. Um bot de manutenção que preserva o código fonte original.</p>
+                        <h3 class="font-arcade text-lg md:text-3xl mb-6 md:mb-8 text-retro-yellow uppercase">Zed_Boot
+                        </h3>
+                        <p class="font-terminal text-xl md:text-3xl text-retro-gray mb-10 leading-snug">NPC. Um bot de
+                            manutenção que preserva o código fonte original.</p>
                         <div class="font-arcade text-[7px] md:text-[10px] space-y-4 text-retro-white uppercase">
-                            <div class="flex justify-between"><span>Armor</span> <span class="text-retro-cyan">██████████</span></div>
-                            <div class="flex justify-between"><span>Lore</span> <span class="text-retro-red">██████████</span></div>
+                            <div class="flex justify-between"><span>Armor</span> <span
+                                    class="text-retro-cyan">██████████</span></div>
+                            <div class="flex justify-between"><span>Lore</span> <span
+                                    class="text-retro-red">██████████</span></div>
                         </div>
                     </div>
                 </div>
@@ -439,15 +307,18 @@
     </section>
 
     <!-- Social Link - Corrigido bug de quebra de texto e alinhamento mobile -->
-    <section id="social" class="py-24 md:py-64 relative z-10 bg-[#050505] text-center border-t-8 border-retro-gray px-4">
+    <section id="social"
+        class="py-24 md:py-64 relative z-10 bg-[#050505] text-center border-t-8 border-retro-gray px-4">
         <div class="container mx-auto max-w-5xl">
-            <h2 class="font-arcade text-xl sm:text-2xl md:text-7xl text-retro-white mb-16 md:mb-32 uppercase tracking-normal md:tracking-widest leading-relaxed break-words">
+            <h2
+                class="font-arcade text-xl sm:text-2xl md:text-7xl text-retro-white mb-16 md:mb-32 uppercase tracking-normal md:tracking-widest leading-relaxed break-words">
                 Establish_<wbr>Uplink
             </h2>
             <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-4 md:gap-16">
                 <a href="#" class="btn-8bit !border-retro-cyan !text-retro-cyan text-[9px] md:text-sm">DISCORD_SRV</a>
                 <a href="#" class="btn-8bit !border-retro-red !text-retro-red text-[9px] md:text-sm">INSTA_DATA</a>
-                <a href="#" class="btn-8bit !border-retro-yellow !text-retro-yellow text-[9px] md:text-sm">X_CORE_NET</a>
+                <a href="#"
+                    class="btn-8bit !border-retro-yellow !text-retro-yellow text-[9px] md:text-sm">X_CORE_NET</a>
             </div>
         </div>
     </section>
@@ -460,241 +331,6 @@
     </footer>
 
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const isMobile = window.innerWidth < 768;
-
-            // BIOS BOOT LOGIC
-            const bootLog = document.getElementById('boot-log');
-            const bootLines = [
-                "IPSUM BOOT LOADER v3.8.5_FIXED",
-                "MEMORY TEST: 16384 KB OK",
-                "MAPPING GAMEPLAY_TRACK... [PASS]",
-                "OPTIMIZING_RESPONSIVE_ENGINES... [OK]",
-                "ACCESS GRANTED. ENJOY THE VOID."
-            ];
-
-            let lineIdx = 0;
-            function runBoot() {
-                if (lineIdx < bootLines.length && bootLog) {
-                    const p = document.createElement('p');
-                    p.className = "mb-1 md:mb-2 block uppercase text-sm md:text-2xl";
-                    bootLog.appendChild(p);
-                    anime({ targets: p, innerHTML: [0, bootLines[lineIdx]], round: 1, duration: 400, easing: 'linear',
-                        complete: () => { lineIdx++; setTimeout(runBoot, 100); }
-                    });
-                } else if (bootLog) {
-                    setTimeout(() => {
-                        const screen = document.getElementById('boot-screen');
-                        if (screen) {
-                            anime({ targets: screen, translateY: '-100%', duration: 1000, easing: 'easeInOutExpo',
-                                complete: () => { screen.style.display = 'none'; startApp(); }
-                            });
-                        }
-                    }, 600);
-                }
-            }
-            runBoot();
-
-            function startApp() {
-                // Garantindo que a navbar fique visível após o boot
-                const navbar = document.getElementById('navbar');
-                navbar.style.opacity = '1';
-
-                anime({
-                    targets: ['#navbar', '#hero-image-container', '#hero-badge', '#hero-btns'],
-                    opacity: [0, 1], translateY: [20, 0], delay: anime.stagger(150), easing: 'easeOutExpo'
-                });
-                anime({ targets: '#hero-text', opacity: 1, scale: [0.95, 1], duration: 1200, easing: 'easeOutExpo' });
-                initScroll();
-                createGeometry();
-            }
-
-            function createGeometry() {
-                const shardsContainer = document.getElementById('shards-container');
-                const warpContainer = document.getElementById('warp-lines');
-                if (shardsContainer) {
-                    const shardCount = isMobile ? 6 : 25;
-                    for (let i = 0; i < shardCount; i++) {
-                        const shard = document.createElement('div');
-                        shard.style.position = 'absolute'; shard.style.width = isMobile ? '6px' : '15px'; shard.style.height = isMobile ? '6px' : '15px';
-                        shard.style.background = 'var(--r-red)'; shard.style.clipPath = 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)';
-                        shard.style.left = Math.random() * 100 + '%'; shard.style.top = Math.random() * 100 + '%';
-                        shardsContainer.appendChild(shard);
-                        anime({ targets: shard, translateX: () => anime.random(-150, 150), translateY: () => anime.random(-150, 150), rotate: '1turn', duration: () => anime.random(6000, 12000), easing: 'linear', direction: 'alternate', loop: true });
-                    }
-                }
-                if (warpContainer) {
-                    const rayCount = isMobile ? 8 : 60;
-                    for (let i = 0; i < rayCount; i++) {
-                        const line = document.createElement('div');
-                        line.className = 'warp-ray'; line.style.position = 'absolute'; line.style.width = '1px'; line.style.height = isMobile ? '80px' : '150px'; line.style.backgroundColor = 'var(--r-cyan)';
-                        line.style.opacity = '0'; line.style.left = Math.random() * 100 + '%'; line.style.top = Math.random() * 100 + '%';
-                        warpContainer.appendChild(line);
-                    }
-                }
-                anime({ targets: '#cube-inner', rotateZ: '1turn', duration: 10000, easing: 'linear', loop: true });
-                anime({ targets: '#cube-mid', rotateX: '1turn', duration: 15000, easing: 'linear', loop: true });
-                anime({ targets: '#cube-outer', rotateY: '1turn', duration: 20000, easing: 'linear', loop: true });
-            }
-
-            function initScroll() {
-                const lenis = new Lenis({ 
-                    duration: 1.2, 
-                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
-                    smoothWheel: true,
-                    smoothTouch: false,
-                    touchMultiplier: 1.5
-                });
-
-                function raf(time) { 
-                    lenis.raf(time); 
-                    requestAnimationFrame(raf); 
-                }
-                requestAnimationFrame(raf);
-
-                const heroWrapper = document.getElementById('hero-wrapper');
-                const heroCore = document.getElementById('geometric-core');
-                const heroGlow = document.getElementById('hero-glow');
-                const heroTitle = document.getElementById('hero-title');
-                const bgGrid = document.getElementById('bg-grid');
-                const cubes = document.querySelectorAll('.neural-orbit');
-                const rays = document.querySelectorAll('.warp-ray');
-                
-                const gameplaySection = document.getElementById('gameplay');
-                const horizontalTrack = document.getElementById('horizontal-track');
-                const sobreSection = document.getElementById('sobre');
-                const sobrePanel = document.getElementById('sobre-panel');
-
-                lenis.on('scroll', ({ scroll }) => {
-                    const counter = document.getElementById('score-counter');
-                    if (counter) counter.innerText = Math.floor(scroll).toString().padStart(6, '0');
-
-                    // --- OTIMIZAÇÃO HERO WARP ---
-                    const warpTarget = (sobreSection) ? sobreSection.offsetTop : 1000;
-                    if (scroll < warpTarget + 800) {
-                        const warpProgress = Math.min(1, scroll / (warpTarget || 1));
-                        
-                        if (heroWrapper) {
-                            const warpFactor = isMobile ? 20 : 60;
-                            const warpScale = 1 + (Math.pow(warpProgress, 3) * warpFactor);
-                            const opacity = warpProgress > 0.9 ? 1 - ((warpProgress - 0.9) * 10) : 1;
-
-                            heroWrapper.style.transform = `scale(${warpScale}) translate3d(0,0,0)`;
-                            heroWrapper.style.opacity = Math.max(0, opacity);
-                            
-                            heroCore.style.transform = `rotateZ(${45 + (warpProgress * (isMobile ? 600 : 1500))}deg) translate3d(0,0,0)`;
-                            
-                            cubes.forEach((cube, i) => {
-                                if (isMobile && i > 0) cube.style.opacity = 1 - (warpProgress * 2);
-                                const zDist = isMobile ? 100 : 400;
-                                cube.style.transform = `translate3d(0,0,${warpProgress * (i + 1) * zDist}px)`;
-                            });
-
-                            if (heroTitle) {
-                                heroTitle.style.opacity = 1 - (warpProgress * 5);
-                                heroTitle.style.transform = `translate3d(0, ${warpProgress * (isMobile ? -80 : -400)}px, 0)`;
-                            }
-                            
-                            rays.forEach((ray) => {
-                                const p = Math.max(0, (warpProgress - 0.05) * 2);
-                                ray.style.opacity = p * 0.5;
-                                ray.style.transform = `translate3d(0, ${p * (isMobile ? 600 : 2000)}px, 0) scaleY(${1 + p * (isMobile ? 10 : 30)})`;
-                            });
-                            
-                            if (bgGrid) {
-                                bgGrid.style.transform = `perspective(400px) rotateX(75deg) translate3d(0,0,${warpProgress * 200}px)`;
-                                bgGrid.style.opacity = 0.1 + (warpProgress * 0.7);
-                            }
-                        }
-                    }
-
-                    // --- SCROLL HORIZONTAL (DESKTOP APENAS) ---
-                    if (!isMobile && gameplaySection && horizontalTrack) {
-                        const rect = gameplaySection.getBoundingClientRect();
-                        const sectionHeight = gameplaySection.offsetHeight;
-                        const windowHeight = window.innerHeight;
-                        
-                        let progress = -rect.top / (sectionHeight - windowHeight);
-                        progress = Math.max(0, Math.min(1, progress));
-
-                        const maxTranslate = horizontalTrack.scrollWidth - window.innerWidth;
-                        horizontalTrack.style.transform = `translate3d(${-progress * maxTranslate}px, 0, 0)`;
-                    }
-
-                    // REVELAÇÃO DO PAINEL SOBRE
-                    if (sobrePanel && scroll > (warpTarget * 0.2)) {
-                        sobrePanel.style.opacity = "1";
-                        sobrePanel.style.transform = "translate3d(0, 0, 0)";
-                    }
-                });
-
-                // Intersection Observer Otimizado para Mobile
-                const revealObserver = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.style.opacity = "1";
-                            entry.target.style.transform = "translate3d(0,0,0) scale(1)";
-                            revealObserver.unobserve(entry.target);
-                        }
-                    });
-                }, { threshold: 0.05 });
-                
-                document.querySelectorAll('.reveal-up').forEach(el => {
-                    el.style.opacity = "0";
-                    el.style.transform = `translate3d(0, ${isMobile ? '20px' : '50px'}, 0) scale(0.98)`;
-                    el.style.transition = "transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.6s ease";
-                    revealObserver.observe(el);
-                });
-            }
-
-            // MENU MOBILE OTIMIZADO
-            const mobileBtn = document.getElementById('mobile-btn');
-            const closeBtn = document.getElementById('close-menu-btn');
-            const closeHeaderBtn = document.getElementById('close-menu-header');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const mobileLinks = document.querySelectorAll('.mobile-link');
-
-            const toggleMenu = (open) => {
-                if (!mobileMenu) return;
-                mobileMenu.style.pointerEvents = open ? 'auto' : 'none';
-                anime({
-                    targets: mobileMenu,
-                    translateY: open ? ['100%', '0%'] : '100%',
-                    duration: 500,
-                    easing: 'easeOutQuart'
-                });
-            };
-
-            if (mobileBtn) mobileBtn.addEventListener('click', () => toggleMenu(true));
-            if (closeBtn) closeBtn.addEventListener('click', () => toggleMenu(false));
-            if (closeHeaderBtn) closeHeaderBtn.addEventListener('click', () => toggleMenu(false));
-            mobileLinks.forEach(l => l.addEventListener('click', () => toggleMenu(false)));
-
-            // VÍDEO ARCADE
-            const arcade = document.querySelector('.arcade-cabinet');
-            const video = document.getElementById('game-video');
-            if (arcade && video) {
-                const playVideo = () => {
-                    video.play().catch(() => {});
-                    video.style.opacity = "1";
-                    const hint = document.getElementById('play-hint');
-                    if (hint) hint.style.opacity = "0";
-                };
-                const pauseVideo = () => {
-                    video.pause();
-                    video.style.opacity = "0.6";
-                    const hint = document.getElementById('play-hint');
-                    if (hint) hint.style.opacity = "1";
-                };
-                arcade.addEventListener('mouseenter', playVideo);
-                arcade.addEventListener('mouseleave', pauseVideo);
-                arcade.addEventListener('touchstart', () => {
-                    if (video.paused) playVideo(); else pauseVideo();
-                }, {passive: true});
-            }
-        });
-    </script>
 </body>
+
 </html>
