@@ -1,0 +1,383 @@
+/* ================= UX/UI ULTIMATE BOSS LEVEL ================= */
+
+body {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+    background-color: #1c1c1e;
+}
+
+/* Ocultar scrollbar nativa na página principal mas manter em elementos se necessário */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1c1c1e;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #983E3C;
+    border: 1px solid #1c1c1e;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #EB70BB;
+}
+
+/* Forçar ocultação do cursor padrão num PC */
+@media (pointer: fine) {
+    * {
+        cursor: none !important;
+    }
+}
+
+/* Cursor Duplo PIXELADO / RETRÔ - Aprimorado com Blend Mode */
+@media (pointer: fine) {
+    #cursor-dot {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 6px;
+        height: 6px;
+        background: #F4E560;
+        /* Yellow */
+        border-radius: 0;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        z-index: 9999999;
+        mix-blend-mode: difference;
+        /* Garante visibilidade máxima */
+    }
+
+    #cursor-ring {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 32px;
+        height: 32px;
+        border: 2px solid #EB70BB;
+        /* Pink */
+        border-radius: 0;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        z-index: 9999998;
+        transition: width 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+            height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+            background-color 0.2s, border-color 0.2s;
+        mix-blend-mode: difference;
+    }
+
+    .cursor-hover-state {
+        width: 48px !important;
+        height: 48px !important;
+        background-color: transparent;
+        border-color: #71A41C !important;
+        /* Green */
+        border-width: 4px !important;
+    }
+
+    .cursor-active-state {
+        width: 16px !important;
+        height: 16px !important;
+        border-color: #DD4B50 !important;
+        border-width: 4px !important;
+        /* Red */
+    }
+}
+
+/* Partículas de Clique */
+.click-particle {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: #EB70BB;
+    pointer-events: none;
+    z-index: 9999997;
+    border-radius: 0;
+    box-shadow: 0 0 10px currentColor;
+}
+
+/* Efeitos CRT, Noise e Vignette (Profundidade) - GPU ACCELERATED */
+.vignette-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999997;
+    background: radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.6) 100%);
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+.noise-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999999;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+.crt-overlay {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(rgba(28, 28, 30, 0) 50%, rgba(28, 28, 30, 0.15) 50%), linear-gradient(90deg, rgba(221, 75, 80, 0.03), rgba(113, 164, 28, 0.01), rgba(235, 112, 187, 0.03));
+    background-size: 100% 4px, 3px 100%;
+    pointer-events: none;
+    z-index: 999998;
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+.animate-blink {
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Componentes Base - UI Melhorada estilo OS Antigo */
+.window-panel {
+    background: #1c1c1e;
+    border: 2px solid #983E3C;
+    position: relative;
+    max-width: 100%;
+    box-sizing: border-box;
+    box-shadow: inset 2px 2px 0px rgba(255, 255, 255, 0.05), inset -2px -2px 0px rgba(0, 0, 0, 0.5), 4px 4px 0px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+@media (min-width: 768px) {
+    .window-panel {
+        box-shadow: inset 2px 2px 0px rgba(255, 255, 255, 0.05), inset -2px -2px 0px rgba(0, 0, 0, 0.5), 6px 6px 0px rgba(0, 0, 0, 0.4);
+    }
+}
+
+.window-header {
+    background: #983E3C;
+    color: #f2f2f7;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: inset 1px 1px 0px rgba(255, 255, 255, 0.2), inset -1px -1px 0px rgba(0, 0, 0, 0.3);
+}
+
+@media (min-width: 768px) {
+    .window-header {
+        font-size: 10px;
+        padding: 12px;
+    }
+}
+
+/* Botões mais "Físicos" e adaptados ao Touch */
+.btn-8bit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 20px;
+    border: 2px solid #8e8e93;
+    font-family: 'Press Start 2P', cursive;
+    text-transform: uppercase;
+    color: #f2f2f7;
+    background: #1c1c1e;
+    box-shadow: inset 2px 2px 0px rgba(255, 255, 255, 0.1), inset -2px -2px 0px rgba(0, 0, 0, 0.5), 3px 3px 0 0 #983E3C;
+    position: relative;
+    overflow: hidden;
+    will-change: transform;
+    cursor: none;
+    transition: all 0.1s ease;
+    min-height: 44px;
+    /* Touch target acessível em mobile */
+}
+
+@media (min-width: 768px) {
+    .btn-8bit {
+        padding: 16px 32px;
+        box-shadow: inset 2px 2px 0px rgba(255, 255, 255, 0.1), inset -2px -2px 0px rgba(0, 0, 0, 0.5), 4px 4px 0 0 #983E3C;
+    }
+}
+
+.btn-8bit::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(242, 242, 247, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+@media (pointer: fine) {
+    .btn-8bit:hover::before {
+        left: 100%;
+    }
+}
+
+.btn-8bit.primary {
+    border-color: #EB70BB;
+    color: #EB70BB;
+    box-shadow: inset 2px 2px 0px rgba(255, 255, 255, 0.1), inset -2px -2px 0px rgba(0, 0, 0, 0.5), 4px 4px 0 0 #EB70BB;
+}
+
+/* Estado de click super responsivo */
+.btn-8bit:active {
+    transform: translate(3px, 3px);
+    box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.5), inset -2px -2px 0px rgba(255, 255, 255, 0.1), 0px 0px 0 0 transparent !important;
+}
+
+/* Scramble e Textos */
+@media (pointer: fine) {
+    .chromatic-hover {
+        transition: text-shadow 0.3s ease;
+    }
+
+    .chromatic-hover:hover {
+        text-shadow: 3px 0 0 rgba(221, 75, 80, 0.8), -3px 0 0 rgba(235, 112, 187, 0.8);
+    }
+}
+
+.text-scramble {
+    display: inline-block;
+    min-height: 1.2em;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.hero-letter {
+    display: inline-block;
+    opacity: 0;
+    transform-origin: 50% 50%;
+    will-change: transform, opacity;
+}
+
+/* Animações de Revelação Base (Ajustadas para Mobile First) */
+.reveal-right {
+    opacity: 0;
+    transform: translateX(20px) rotateY(-5deg);
+    will-change: transform, opacity;
+}
+
+.reveal-up {
+    opacity: 0;
+    transform: translateY(30px) rotateX(5deg);
+    will-change: transform, opacity;
+}
+
+.reveal-scale {
+    opacity: 0;
+    transform: scale(0.95);
+    will-change: transform, opacity;
+}
+
+@media (min-width: 768px) {
+    .reveal-right {
+        transform: translateX(100px) rotateY(-30deg);
+    }
+
+    .reveal-up {
+        transform: translateY(100px) rotateX(30deg);
+    }
+
+    .reveal-scale {
+        transform: scale(0.8) rotate(5deg);
+    }
+}
+
+/* Efeitos visuais do Roster e Arcade */
+.scanline-fx {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: rgba(235, 112, 187, 0.5);
+    box-shadow: 0 0 15px rgba(235, 112, 187, 0.8);
+    opacity: 0;
+    transform: translateY(-100%);
+    z-index: 10;
+}
+
+.arcade-screen-convex::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9), inset 0 0 10px rgba(0, 0, 0, 0.6);
+    pointer-events: none;
+    z-index: 30;
+    border-radius: 4px;
+}
+
+@media (min-width: 768px) {
+    .arcade-screen-convex::after {
+        box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.9), inset 0 0 15px rgba(0, 0, 0, 0.6);
+        border-radius: 8px;
+    }
+}
+
+.matrix-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.15;
+}
+
+/* Modal Scroll Ajustado */
+.retro-scroll::-webkit-scrollbar {
+    width: 4px;
+}
+
+.retro-scroll::-webkit-scrollbar-track {
+    background: #1c1c1e;
+    border-left: 1px solid #333;
+}
+
+.retro-scroll::-webkit-scrollbar-thumb {
+    background: #F4E560;
+}
+
+.retro-scroll::-webkit-scrollbar-thumb:hover {
+    background: #EB70BB;
+}
+
+@media (min-width: 768px) {
+    .retro-scroll::-webkit-scrollbar {
+        width: 6px;
+    }
+}
+
+/* Prevenir texto de quebrar mal no terminal */
+.font-terminal {
+    line-height: 1.4;
+    letter-spacing: 0.5px;
+}
+
+/* Handheld/Arcade responsive adjustments */
+.arcade-cabinet-bg {
+    background-color: #2a2a2c;
+}
+
+@media (max-width: 767px) {
+    .arcade-cabinet-bg {
+        background: linear-gradient(180deg, #1c1c1e 0%, #2a2a2c 100%);
+    }
+}
