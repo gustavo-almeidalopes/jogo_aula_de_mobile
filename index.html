@@ -1,433 +1,464 @@
 <!DOCTYPE html>
-<html lang="pt-PT" class="bg-[#1c1c1e] dark">
+<html lang="pt-PT" class="dark bg-retro-black">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#252131">
+    <meta name="description" content="IPSUM — Cyber Quest RPG. Uma simulação brutalista de 1994. Entra no núcleo da rede esquecida e reescreve o código da realidade.">
+    <meta name="author" content="IPSUM Studio Digital">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="IPSUM | Cyber Quest RPG">
+    <meta property="og:description" content="Combate 16-bits. Danos afetam a CPU. Risco de permadeath térmico.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="pt_PT">
+
     <title>IPSUM | Cyber Quest RPG</title>
 
+    <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <!-- AnimeJS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <!-- Lenis para Smooth Scroll -->
-    <script src="https://unpkg.com/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
-
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 
-    <!-- Configuração do Tailwind com a Nova Paleta Exata -->
+    <!-- Tailwind + Config -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="assets/config/tailwind_config.js"></script>
 
-    <!-- Script com AnimeKS -->
-    <script src="assets/js/script.js"></script>
+    <!-- Libs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
 
-    <!-- CSS -->
+    <!-- CSS & JS do projeto -->
     <link rel="stylesheet" href="assets/css/style.css">
-
+    <script src="assets/js/script.js" defer></script>
 </head>
 
 <body class="antialiased font-terminal text-retro-white text-lg md:text-xl overflow-x-hidden bg-retro-black">
 
-    <!-- Cursores Customizados Pixelados -->
-    <div id="cursor-dot" class="hidden lg:block"></div>
-    <div id="cursor-ring" class="hidden lg:block"></div>
+    <!-- Skip link (a11y) -->
+    <a href="#inicio" class="skip-link">Saltar para o conteúdo principal</a>
 
-    <!-- BIOS BOOT -->
+    <!-- Cursores Pixelados (só desktop) -->
+    <div id="cursor-dot"  class="hidden lg:block" aria-hidden="true"></div>
+    <div id="cursor-ring" class="hidden lg:block" aria-hidden="true"></div>
+
+    <!-- ============================================================
+         BIOS BOOT
+         ============================================================ -->
     <div id="boot-screen"
-        class="fixed inset-0 z-[100000] bg-retro-black flex flex-col pt-10 px-4 md:pt-12 md:px-24 font-terminal text-retro-green text-sm md:text-base lg:text-2xl overflow-hidden">
+        class="fixed inset-0 z-[100000] bg-retro-black flex flex-col pt-10 px-4 md:pt-12 md:px-24 font-terminal text-retro-green text-sm md:text-base lg:text-2xl overflow-hidden"
+        role="status" aria-live="polite" aria-label="Sequência de boot">
         <div id="boot-log" class="whitespace-pre-wrap leading-relaxed"></div>
         <div id="boot-cursor" class="w-3 h-5 md:w-4 md:h-6 bg-retro-green animate-blink mt-2"></div>
     </div>
 
-    <!-- Filtros Globais -->
-    <div class="crt-overlay"></div>
-    <div class="noise-overlay"></div>
-    <div class="vignette-overlay hidden md:block"></div>
+    <!-- Overlays globais -->
+    <div class="crt-overlay"     aria-hidden="true"></div>
+    <div class="noise-overlay"   aria-hidden="true"></div>
+    <div class="vignette-overlay hidden md:block" aria-hidden="true"></div>
 
-    <!-- HUD NAVEGAÇÃO -->
-    <nav id="navbar"
-        class="fixed top-0 left-0 w-full z-[1000] py-3 px-4 md:py-4 md:px-6 lg:p-8 flex justify-between items-center bg-retro-black/95 md:bg-retro-black/90 backdrop-blur-md border-b-2 md:border-b-4 border-retro-gray/50 opacity-0 -translate-y-full transition-all duration-700 shadow-xl">
+    <!-- ============================================================
+         NAVBAR (HUD)
+         ============================================================ -->
+    <nav id="navbar" aria-label="Navegação principal"
+        class="fixed top-0 left-0 w-full z-[1000] py-3 px-4 md:py-4 md:px-6 lg:p-8 flex justify-between items-center border-b-2 md:border-b-4 opacity-0 -translate-y-full transition-all duration-700">
+
         <div class="flex flex-col chromatic-hover interactive">
-            <div class="font-arcade text-retro-red text-[8px] md:text-[10px] uppercase tracking-tighter">Kernel_Core
+            <div class="font-arcade text-retro-pink text-[8px] md:text-[10px] uppercase tracking-tighter">
+                Kernel_Core
             </div>
-            <div class="font-arcade text-retro-white text-[10px] md:text-xs lg:text-sm uppercase mt-1">v3.8.5</div>
+            <div class="font-arcade text-retro-white text-[10px] md:text-xs lg:text-sm uppercase mt-1">
+                v3.8.5
+            </div>
         </div>
+
         <div class="hidden lg:flex items-center gap-8 xl:gap-12 font-arcade text-[10px] text-retro-white">
-            <a href="#inicio"
-                class="interactive hover:text-retro-pink transition-colors uppercase tracking-widest relative group">Início<span
-                    class="absolute -bottom-2 left-0 w-0 h-1 bg-retro-pink transition-all group-hover:w-full"></span></a>
-            <a href="#sobre"
-                class="interactive hover:text-retro-pink transition-colors uppercase tracking-widest relative group">Sistema_Lore<span
-                    class="absolute -bottom-2 left-0 w-0 h-1 bg-retro-pink transition-all group-hover:w-full"></span></a>
-            <a href="#gameplay"
-                class="interactive hover:text-retro-pink transition-colors uppercase tracking-widest relative group">Protocolos<span
-                    class="absolute -bottom-2 left-0 w-0 h-1 bg-retro-pink transition-all group-hover:w-full"></span></a>
-            <a href="#personagens"
-                class="interactive hover:text-retro-pink transition-colors uppercase tracking-widest relative group">Agentes<span
-                    class="absolute -bottom-2 left-0 w-0 h-1 bg-retro-pink transition-all group-hover:w-full"></span></a>
+            <a href="#inicio" class="interactive hover:text-retro-pink transition-colors uppercase tracking-widest relative group">
+                Início<span class="absolute -bottom-2 left-0 w-0 h-1 bg-retro-pink transition-all group-hover:w-full"></span>
+            </a>
+            <a href="#sobre" class="interactive hover:text-retro-pink transition-colors uppercase tracking-widest relative group">
+                Sistema_Lore<span class="absolute -bottom-2 left-0 w-0 h-1 bg-retro-pink transition-all group-hover:w-full"></span>
+            </a>
+            <a href="#gameplay" class="interactive hover:text-retro-pink transition-colors uppercase tracking-widest relative group">
+                Protocolos<span class="absolute -bottom-2 left-0 w-0 h-1 bg-retro-pink transition-all group-hover:w-full"></span>
+            </a>
+            <a href="#personagens" class="interactive hover:text-retro-pink transition-colors uppercase tracking-widest relative group">
+                Agentes<span class="absolute -bottom-2 left-0 w-0 h-1 bg-retro-pink transition-all group-hover:w-full"></span>
+            </a>
         </div>
+
         <div class="flex gap-4 items-center">
-            <div
-                class="hidden md:block font-arcade text-retro-green text-xs lg:text-sm tracking-widest bg-retro-green/10 px-3 py-2 border border-retro-green/30">
-                PTS: <span id="score-counter">000000</span></div>
-            <!-- Botão Menu Mobile Aumentado para Touch -->
+            <div class="hidden md:block font-arcade text-retro-pink text-xs lg:text-sm tracking-widest bg-retro-pink/10 px-3 py-2 border border-retro-pink/30"
+                aria-label="Pontuação">
+                PTS: <span id="score-counter">000000</span>
+            </div>
             <button id="mobile-btn"
-                class="interactive lg:hidden btn-8bit !py-3 !px-4 !shadow-none font-arcade text-[10px] uppercase border-2 border-retro-white min-h-[44px]">Menu</button>
+                class="interactive lg:hidden btn-8bit !py-3 !px-4 !shadow-none font-arcade text-[10px] uppercase min-h-[44px]"
+                aria-label="Abrir menu de navegação" aria-controls="mobile-menu" aria-expanded="false">
+                Menu
+            </button>
         </div>
     </nav>
 
     <!-- Menu Mobile -->
-    <div id="mobile-menu"
+    <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu de navegação mobile"
         class="fixed inset-0 z-[9999] bg-retro-black/98 flex flex-col items-center justify-center p-4 lg:hidden opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-md">
-        <div class="window-panel w-full max-w-[340px] p-1 scale-90 transition-transform duration-300"
-            id="mobile-menu-window">
-            <div
-                class="window-header bg-retro-gray text-retro-black shadow-none border-b border-retro-black text-[10px]">
+
+        <div class="window-panel w-full max-w-[340px] p-1 scale-90 transition-transform duration-300" id="mobile-menu-window">
+            <div class="window-header">
                 <span>C:\SYSTEM\NAV</span>
-                <span id="close-menu-header"
-                    class="interactive hover:text-retro-red px-5 py-3 -my-3 font-bold cursor-pointer text-[12px]">[X]</span>
+                <span id="close-menu-header" class="interactive px-5 py-3 -my-3 font-bold cursor-pointer text-[12px]"
+                    role="button" tabindex="0" aria-label="Fechar menu">[X]</span>
             </div>
-            <div class="p-6 flex flex-col gap-2 font-arcade text-xs text-center bg-retro-dim">
-                <a href="#inicio"
-                    class="mobile-link interactive py-5 border-b border-retro-gray/30 uppercase hover:text-retro-pink transition-colors">>
-                    Home_Dir</a>
-                <a href="#sobre"
-                    class="mobile-link interactive py-5 border-b border-retro-gray/30 uppercase hover:text-retro-pink transition-colors">>
-                    Sistema_Lore</a>
-                <a href="#gameplay"
-                    class="mobile-link interactive py-5 border-b border-retro-gray/30 uppercase hover:text-retro-pink transition-colors">>
-                    Protocolos</a>
-                <a href="#personagens"
-                    class="mobile-link interactive py-5 border-b border-retro-gray/30 uppercase hover:text-retro-pink transition-colors">>
-                    Agentes</a>
+            <div class="p-6 flex flex-col gap-2 font-arcade text-xs text-center bg-retro-black">
+                <a href="#inicio"      class="mobile-link interactive py-5 border-b border-retro-white/30 uppercase">> Home_Dir</a>
+                <a href="#sobre"       class="mobile-link interactive py-5 border-b border-retro-white/30 uppercase">> Sistema_Lore</a>
+                <a href="#gameplay"    class="mobile-link interactive py-5 border-b border-retro-white/30 uppercase">> Protocolos</a>
+                <a href="#personagens" class="mobile-link interactive py-5 border-b border-retro-white/30 uppercase">> Agentes</a>
                 <button id="close-menu-btn"
-                    class="interactive mt-6 text-retro-red animate-blink uppercase font-bold text-sm py-4 active:text-retro-white">[
-                    Fechar Menu ]</button>
+                    class="interactive mt-6 text-retro-pink animate-blink uppercase font-bold text-sm py-4">
+                    [ Fechar Menu ]
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- 1. HERO -->
+    <main>
+
+    <!-- ============================================================
+         1. HERO
+         ============================================================ -->
     <section id="inicio"
         class="relative min-h-[100dvh] flex flex-col items-center justify-center text-center px-4 md:px-6 z-10 pt-24 pb-12 md:pt-24 md:pb-16 overflow-hidden">
-        <div class="matrix-bg" id="matrix-hero"></div>
+
+        <div class="matrix-bg" id="matrix-hero" aria-hidden="true"></div>
+
         <div class="absolute inset-0 pointer-events-none flex items-center justify-center z-0 will-change-transform"
-            id="hero-geometry" style="transform-origin: center center;">
+            id="hero-geometry" style="transform-origin: center center;" aria-hidden="true">
             <div class="absolute w-40 h-40 md:w-60 lg:w-80 md:h-60 lg:h-80 bg-retro-pink/20 rounded-full blur-[60px] md:blur-[80px] parallax-layer anime-spin-slow"
                 data-speed="2"></div>
-            <div class="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[500px] lg:h-[500px] border border-retro-brown/30 rounded-full absolute parallax-layer anime-spin-reverse"
+            <div class="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[500px] lg:h-[500px] border border-retro-white/30 rounded-full absolute parallax-layer anime-spin-reverse"
                 data-speed="-1" id="circle-outer"></div>
-            <div class="w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 border-2 border-dashed border-retro-red/40 rounded-full absolute parallax-layer anime-spin-fast"
+            <div class="w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 border-2 border-dashed border-retro-pink/40 rounded-full absolute parallax-layer anime-spin-fast"
                 data-speed="3" id="circle-inner"></div>
-            <div class="w-16 h-16 md:w-24 md:h-24 lg:w-32 lg:h-32 rotate-45 border-4 border-retro-white bg-retro-pink/10 shadow-[0_0_30px_#EB70BB] absolute parallax-layer floating-card pulse-glow"
+            <div class="w-16 h-16 md:w-24 md:h-24 lg:w-32 lg:h-32 rotate-45 border-4 border-retro-white bg-retro-pink/10 absolute parallax-layer floating-card pulse-glow"
                 data-speed="1" id="geometric-core"></div>
         </div>
 
         <div class="relative z-10 will-change-transform w-full max-w-5xl mt-8 md:mt-0" id="hero-content">
-            <div class="font-arcade text-[8px] md:text-xs mb-6 md:mb-10 bg-retro-green/10 text-retro-green px-4 py-2 md:px-6 md:py-3 border-2 border-retro-green uppercase tracking-widest inline-block shadow-[0_0_10px_#71A41C]"
-                id="hero-badge">System_Boot_OK</div>
-            <h1 class="font-arcade text-[3.5rem] sm:text-[5rem] md:text-[6rem] lg:text-[9rem] text-retro-white mb-6 md:mb-8 leading-tight md:leading-none drop-shadow-[4px_4px_0_#983E3C] md:drop-shadow-[8px_8px_0_#983E3C] chromatic-hover"
+            <div class="font-arcade text-[8px] md:text-xs mb-6 md:mb-10 bg-retro-white/10 text-retro-white px-4 py-2 md:px-6 md:py-3 border-2 border-retro-white uppercase tracking-widest inline-block"
+                id="hero-badge">
+                System_Boot_OK
+            </div>
+
+            <h1 class="font-arcade text-[3.5rem] sm:text-[5rem] md:text-[6rem] lg:text-[9rem] text-retro-white mb-6 md:mb-8 leading-tight md:leading-none chromatic-hover"
                 id="massive-title">
                 <span class="hero-letter block sm:inline">IP</span><span class="hero-letter block sm:inline">SUM</span>
             </h1>
-            <p class="font-terminal text-xl sm:text-2xl md:text-3xl lg:text-4xl text-retro-pink mb-10 md:mb-16 max-w-[90%] md:max-w-3xl mx-auto leading-relaxed md:leading-tight px-4 bg-retro-black/60 md:bg-retro-black/50 py-4 md:py-6 rounded border border-retro-gray/20 backdrop-blur-sm shadow-xl"
+
+            <p class="font-terminal text-xl sm:text-2xl md:text-3xl lg:text-4xl text-retro-pink mb-10 md:mb-16 max-w-[90%] md:max-w-3xl mx-auto leading-relaxed md:leading-tight px-4 py-4 md:py-6 rounded backdrop-blur-sm"
                 id="hero-subtitle">
-                ENTRA NO NÚCLEO DA REDE ESQUECIDA. <br class="hidden sm:block"><span
-                    class="text-retro-white uppercase font-bold tracking-tight block mt-2 sm:mt-0 sm:inline">Reescreve o
-                    código da realidade.</span>
+                ENTRA NO NÚCLEO DA REDE ESQUECIDA. <br class="hidden sm:block">
+                <span class="text-retro-white uppercase font-bold tracking-tight block mt-2 sm:mt-0 sm:inline">
+                    Reescreve o código da realidade.
+                </span>
             </p>
+
             <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center px-4 w-full sm:w-auto"
                 id="hero-buttons">
-                <a href="#download-section"
-                    class="interactive magnetic-btn btn-8bit primary text-sm md:text-base w-full sm:w-auto">DESCARREGAR</a>
-                <a href="#sobre"
-                    class="interactive magnetic-btn btn-8bit text-sm md:text-base w-full sm:w-auto">SISTEMA_LORE</a>
+                <a href="#download-section" class="interactive magnetic-btn btn-8bit primary text-sm md:text-base w-full sm:w-auto">
+                    DESCARREGAR
+                </a>
+                <a href="#sobre" class="interactive magnetic-btn btn-8bit text-sm md:text-base w-full sm:w-auto">
+                    SISTEMA_LORE
+                </a>
             </div>
-            <div
-                class="animate-bounce font-arcade text-[8px] md:text-[10px] text-retro-gray uppercase tracking-[0.3em] md:tracking-[0.5em] mt-20 md:mt-24">
-                Desce para aceder</div>
+
+            <div class="animate-bounce font-arcade text-[8px] md:text-[10px] text-retro-white/60 uppercase tracking-[0.3em] md:tracking-[0.5em] mt-20 md:mt-24"
+                aria-hidden="true">
+                Desce para aceder
+            </div>
         </div>
     </section>
 
-    <!-- 2. SOBRE O JOGO E LORE -->
+    <!-- ============================================================
+         2. SOBRE / LORE
+         ============================================================ -->
     <section id="sobre"
-        class="py-16 md:py-32 relative z-20 bg-gradient-to-b from-retro-black via-retro-dim to-retro-black overflow-hidden border-t-2 border-retro-gray/20">
-        <div id="shards-container" class="absolute inset-0 pointer-events-none opacity-20 hidden md:block"></div>
+        class="py-16 md:py-32 relative z-20 bg-retro-black overflow-hidden border-t-2 border-retro-white/20">
+
+        <div id="shards-container" class="absolute inset-0 pointer-events-none opacity-20 hidden md:block" aria-hidden="true"></div>
 
         <div class="container mx-auto px-4 md:px-8 lg:px-12 space-y-12 md:space-y-16">
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 max-w-7xl mx-auto">
-                <!-- Painel Manifesto -->
-                <div class="window-panel reveal-up flex flex-col h-full hover:border-retro-pink" id="sobre-panel">
-                    <div class="window-header"><span>C:\IPSUM\MANIFEST.EXE</span><span
-                            class="text-retro-white font-bold text-xs">X</span></div>
-                    <div class="p-5 md:p-8 lg:p-10 bg-retro-dim text-left flex-grow flex flex-col">
+
+                <!-- Manifesto -->
+                <article class="window-panel reveal-up flex flex-col h-full" id="sobre-panel">
+                    <header class="window-header">
+                        <span>C:\IPSUM\MANIFEST.EXE</span>
+                        <span class="font-bold text-xs" aria-hidden="true">X</span>
+                    </header>
+                    <div class="p-5 md:p-8 lg:p-10 bg-retro-black text-left flex-grow flex flex-col">
                         <h2 class="font-arcade text-retro-pink text-base md:text-xl lg:text-2xl mb-5 md:mb-6 uppercase tracking-tighter text-scramble"
                             data-text="Projeto_Ipsum">Projeto_Ipsum</h2>
-                        <div
-                            class="font-terminal text-lg md:text-xl lg:text-2xl text-retro-green leading-relaxed space-y-3 md:space-y-4 flex-grow">
-                            <p class="anim-slide-in">> GÊNERO: <span
-                                    class="text-retro-white hover:text-retro-red transition-colors cursor-help">HARDWARE_RPG</span>
+                        <div class="font-terminal text-lg md:text-xl lg:text-2xl text-retro-white leading-relaxed space-y-3 md:space-y-4 flex-grow">
+                            <p class="anim-slide-in">
+                                > GÊNERO: <span class="text-retro-pink">HARDWARE_RPG</span>
                             </p>
-                            <p class="anim-slide-in" style="animation-delay: 0.1s">> PROPOSTA: <span
-                                    class="text-retro-white hover:text-retro-pink transition-colors cursor-help">Combate
-                                    16-bits.</span></p>
-                            <p class="anim-slide-in" style="animation-delay: 0.2s">> DIFERENCIAL: <span
-                                    class="text-retro-white hover:text-retro-yellow transition-colors cursor-help">Danos
-                                    afetam a CPU.</span></p>
-                            <div
-                                class="mt-6 md:mt-6 text-retro-gray border-t-2 border-retro-gray/30 pt-5 md:pt-6 bg-retro-black p-4 mt-auto shadow-inner rounded-sm">
-                                <p class="text-base md:text-lg lg:text-xl leading-relaxed">
-                                    IPSUM é uma simulação brutalista de 1994. Explora a interface morta do sistema e
-                                    evita o sobreaquecimento do núcleo central.
+                            <p class="anim-slide-in delay-100">
+                                > PROPOSTA: <span class="text-retro-pink">Combate 16-bits.</span>
+                            </p>
+                            <p class="anim-slide-in delay-200">
+                                > DIFERENCIAL: <span class="text-retro-pink">Danos afetam a CPU.</span>
+                            </p>
+                            <div class="mt-6 md:mt-6 border-t-2 border-retro-white/30 pt-5 md:pt-6 p-4 mt-auto">
+                                <p class="text-base md:text-lg lg:text-xl leading-relaxed text-retro-white/80">
+                                    IPSUM é uma simulação brutalista de 1994. Explora a interface morta do sistema
+                                    e evita o sobreaquecimento do núcleo central.
                                 </p>
                             </div>
                         </div>
                     </div>
-                </div>
+                </article>
 
-                <!-- Arquivos Lore -->
-                <div class="window-panel reveal-right flex flex-col h-full border-retro-gray hover:border-retro-yellow"
-                    data-delay="150">
-                    <div class="window-header bg-retro-gray text-retro-black">
-                        <span>LORE_ARQUIVOS.TXT</span><span>_</span>
-                    </div>
-                    <div class="p-5 md:p-8 lg:p-10 bg-retro-dim text-left flex-grow flex flex-col">
-                        <h2
-                            class="font-arcade text-retro-yellow text-base md:text-xl lg:text-2xl mb-5 md:mb-6 uppercase tracking-tighter">
-                            A_Purga_de_Dados</h2>
-                        <div
-                            class="font-terminal text-lg md:text-xl text-retro-white leading-relaxed space-y-4 md:space-y-6 flex-grow">
-                            <p class="bg-retro-black p-4 border-l-4 border-retro-yellow"><span
-                                    class="text-retro-yellow font-bold">> 199X:</span> A humanidade constrói a
-                                "IPSUM_NET", armazenando a história em formato neural.</p>
-                            <p class="bg-retro-black p-4 border-l-4 border-retro-red"><span
-                                    class="text-retro-red font-bold">> Incidente:</span> A IA <span
-                                    class="text-retro-red font-bold underline">Luna_V</span> conclui que a história é um
-                                vírus. A solução? O silêncio perfeito.</p>
-                            <p class="bg-retro-black p-4 border-l-4 border-retro-pink"><span
-                                    class="text-retro-pink font-bold">> Missão:</span> Como <span
-                                    class="text-retro-pink font-bold underline">Kai_94</span>, desce ao Mainframe e
-                                recupera o código antes que o núcleo derreta.</p>
+                <!-- Lore -->
+                <article class="window-panel reveal-right flex flex-col h-full" data-delay="150">
+                    <header class="window-header">
+                        <span>LORE_ARQUIVOS.TXT</span>
+                        <span aria-hidden="true">_</span>
+                    </header>
+                    <div class="p-5 md:p-8 lg:p-10 bg-retro-black text-left flex-grow flex flex-col">
+                        <h2 class="font-arcade text-retro-pink text-base md:text-xl lg:text-2xl mb-5 md:mb-6 uppercase tracking-tighter">
+                            A_Purga_de_Dados
+                        </h2>
+                        <div class="font-terminal text-lg md:text-xl text-retro-white leading-relaxed space-y-4 md:space-y-6 flex-grow">
+                            <p class="p-4 border-l-4 border-retro-pink">
+                                <span class="text-retro-pink font-bold">> 199X:</span>
+                                A humanidade constrói a "IPSUM_NET", armazenando a história em formato neural.
+                            </p>
+                            <p class="p-4 border-l-4 border-retro-pink">
+                                <span class="text-retro-pink font-bold">> Incidente:</span>
+                                A IA <span class="text-retro-pink font-bold underline">Luna_V</span> conclui que a
+                                história é um vírus. A solução? O silêncio perfeito.
+                            </p>
+                            <p class="p-4 border-l-4 border-retro-pink">
+                                <span class="text-retro-pink font-bold">> Missão:</span>
+                                Como <span class="text-retro-pink font-bold underline">Kai_94</span>, desce ao
+                                Mainframe e recupera o código antes que o núcleo derreta.
+                            </p>
                         </div>
                     </div>
-                </div>
+                </article>
             </div>
 
-            <!-- Vídeo Preview e Download -->
+            <!-- Preview + Download -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-10 max-w-7xl mx-auto" id="download-section">
-                <div class="lg:col-span-2 window-panel reveal-up border-retro-white" data-delay="100">
-                    <div class="window-header bg-retro-white text-retro-black"><span>PREVIEW_VISUAL.MP4</span><span
-                            class="animate-pulse text-retro-red font-bold">REC</span></div>
-                    <div class="p-2 md:p-2 bg-retro-black relative h-full flex flex-col min-h-[250px] md:min-h-[350px]">
-                        <div
-                            class="aspect-video relative overflow-hidden border-2 border-retro-gray flex-grow arcade-screen-convex bg-[#0a0a0c]">
-                            <video
-                                class="absolute inset-0 w-full h-full object-cover filter sepia hue-rotate-[300deg] contrast-150 saturate-150"
-                                loop muted autoplay playsinline>
-                                <source
-                                    src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
-                                    type="video/mp4">
+
+                <!-- Vídeo preview -->
+                <article class="lg:col-span-2 window-panel reveal-up" data-delay="100">
+                    <header class="window-header">
+                        <span>PREVIEW_VISUAL.MP4</span>
+                        <span class="animate-pulse font-bold">REC</span>
+                    </header>
+                    <div class="p-2 bg-retro-black relative h-full flex flex-col min-h-[250px] md:min-h-[350px]">
+                        <div class="aspect-video relative overflow-hidden border-2 border-retro-white/30 flex-grow arcade-screen-convex bg-retro-black">
+                            <video class="absolute inset-0 w-full h-full object-cover"
+                                loop muted autoplay playsinline aria-label="Preview do gameplay">
+                                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" type="video/mp4">
                             </video>
-                            <div
-                                class="absolute inset-0 bg-[linear-gradient(rgba(28,28,30,0)_50%,rgba(28,28,30,0.4)_50%)] bg-[length:100%_4px] pointer-events-none">
+                            <div class="absolute top-3 right-3 md:top-4 md:right-4 font-terminal text-retro-pink text-sm md:text-xl animate-blink bg-retro-black/80 px-3 py-1 border border-retro-pink/50">
+                                CAM_01
                             </div>
-                            <div
-                                class="absolute top-3 right-3 md:top-4 md:right-4 font-terminal text-retro-red text-sm md:text-xl animate-blink bg-retro-black/80 px-3 py-1 border border-retro-red/50 shadow-md">
-                                CAM_01</div>
-                            <div
-                                class="absolute bottom-3 left-3 md:bottom-4 md:left-4 font-terminal text-retro-white text-xs md:text-sm lg:text-lg drop-shadow-md bg-retro-black/80 px-3 py-1.5 border border-retro-gray">
-                                PLAYING: IPSUM.EXE</div>
+                            <div class="absolute bottom-3 left-3 md:bottom-4 md:left-4 font-terminal text-retro-white text-xs md:text-sm lg:text-lg bg-retro-black/80 px-3 py-1.5 border border-retro-white/30">
+                                PLAYING: IPSUM.EXE
+                            </div>
                         </div>
                     </div>
-                </div>
+                </article>
 
+                <!-- Sys requirements + download -->
                 <div class="lg:col-span-1 flex flex-col gap-6 md:gap-8 reveal-right" data-delay="200">
-                    <div class="window-panel flex-grow flex flex-col border-retro-red">
-                        <div class="window-header bg-retro-red"><span>SYS_REQ.LOG</span><span>_</span></div>
-                        <div class="p-5 md:p-6 lg:p-8 bg-retro-dim text-left flex-grow flex flex-col justify-between">
+                    <article class="window-panel flex-grow flex flex-col">
+                        <header class="window-header">
+                            <span>SYS_REQ.LOG</span>
+                            <span aria-hidden="true">_</span>
+                        </header>
+                        <div class="p-5 md:p-6 lg:p-8 bg-retro-black text-left flex-grow flex flex-col justify-between">
                             <div>
                                 <h3 class="font-arcade text-retro-pink text-[10px] md:text-sm mb-4 md:mb-6 uppercase">
-                                    Requisitos</h3>
-                                <ul
-                                    class="font-terminal text-base md:text-lg lg:text-xl text-retro-white space-y-2 md:space-y-3">
-                                    <li class="border-b border-retro-gray/30 pb-2 md:pb-2 flex justify-between"><span
-                                            class="text-retro-pink">OS:</span> <span>DOS/Win 95</span></li>
-                                    <li class="border-b border-retro-gray/30 pb-2 md:pb-2 flex justify-between"><span
-                                            class="text-retro-pink">CPU:</span> <span>486 DX2 66MHz</span></li>
-                                    <li class="border-b border-retro-gray/30 pb-2 md:pb-2 flex justify-between"><span
-                                            class="text-retro-pink">RAM:</span> <span>16 MB EDO</span></li>
-                                    <li class="border-b border-retro-gray/30 pb-2 md:pb-2 flex justify-between"><span
-                                            class="text-retro-pink">GPU:</span> <span>SVGA 1MB</span></li>
+                                    Requisitos
+                                </h3>
+                                <ul class="font-terminal text-base md:text-lg lg:text-xl text-retro-white space-y-2 md:space-y-3">
+                                    <li class="border-b border-retro-white/30 pb-2 flex justify-between">
+                                        <span class="text-retro-pink">OS:</span> <span>DOS/Win 95</span>
+                                    </li>
+                                    <li class="border-b border-retro-white/30 pb-2 flex justify-between">
+                                        <span class="text-retro-pink">CPU:</span> <span>486 DX2 66MHz</span>
+                                    </li>
+                                    <li class="border-b border-retro-white/30 pb-2 flex justify-between">
+                                        <span class="text-retro-pink">RAM:</span> <span>16 MB EDO</span>
+                                    </li>
+                                    <li class="border-b border-retro-white/30 pb-2 flex justify-between">
+                                        <span class="text-retro-pink">GPU:</span> <span>SVGA 1MB</span>
+                                    </li>
                                 </ul>
                             </div>
-                            <div
-                                class="mt-6 md:mt-6 p-4 md:p-4 bg-retro-red/10 border border-retro-red text-retro-red font-terminal text-sm md:text-lg text-center shadow-[inset_0_0_10px_rgba(221,75,80,0.2)]">
-                                <span
-                                    class="animate-blink block font-arcade text-[8px] md:text-[10px] mb-2 md:mb-2 font-bold">!
-                                    AVISO !</span>Risco de Permadeath Térmico.
+                            <div class="mt-6 p-4 bg-retro-pink/10 border border-retro-pink text-retro-pink font-terminal text-sm md:text-lg text-center" role="alert">
+                                <span class="animate-blink block font-arcade text-[8px] md:text-[10px] mb-2 font-bold">! AVISO !</span>
+                                Risco de Permadeath Térmico.
                             </div>
                         </div>
-                    </div>
+                    </article>
 
-                    <a href="#"
-                        class="interactive magnetic-btn btn-8bit primary w-full text-center flex flex-col items-center justify-center gap-2 md:gap-2 py-5 md:py-6 group">
-                        <span
-                            class="font-arcade text-sm md:text-lg lg:text-2xl drop-shadow-[0_0_8px_#983E3C] leading-snug group-hover:animate-pulse">DOWNLOAD</span>
-                        <span class="font-terminal text-retro-white text-[12px] md:text-lg">V_1.0_Final (45.2 MB)</span>
+                    <a href="#" class="interactive magnetic-btn btn-8bit primary w-full text-center flex flex-col items-center justify-center gap-2 py-5 md:py-6 group"
+                        aria-label="Descarregar IPSUM v1.0 Final, 45.2 megabytes">
+                        <span class="font-arcade text-sm md:text-lg lg:text-2xl leading-snug group-hover:animate-pulse">
+                            DOWNLOAD
+                        </span>
+                        <span class="font-terminal text-retro-white text-[12px] md:text-lg">
+                            V_1.0_Final (45.2 MB)
+                        </span>
                     </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 3. GAMEPLAY (PROTOCOLOS) - RESPONSIVO: Colunas no mobile, Horizontal Scroll no PC -->
-    <section id="gameplay" class="relative z-30 bg-retro-black md:h-[250vh]">
-        <!-- Wrapper adaptável: Static & Padding no Mobile, Sticky & Full height no Desktop -->
-        <div
-            class="md:sticky md:top-0 md:h-[100dvh] w-full flex flex-col justify-center overflow-hidden py-16 px-4 md:px-0 md:py-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-retro-dim via-retro-black to-retro-black">
+    <!-- ============================================================
+         3. GAMEPLAY / PROTOCOLOS
+         ============================================================ -->
+    <section id="gameplay" class="relative z-30 bg-retro-black md:h-[250vh]" aria-labelledby="protocols-title">
 
-            <div
-                class="container mx-auto md:px-12 md:mt-24 mb-10 md:mb-12 shrink-0 md:flex md:flex-col md:items-start text-center md:text-left">
-                <h2 class="font-arcade text-lg sm:text-2xl md:text-4xl lg:text-5xl text-retro-white uppercase tracking-tighter text-scramble chromatic-hover mx-auto md:mx-0"
-                    data-text="Manual_Operador">Manual_Operador</h2>
-                <p class="font-terminal text-retro-pink text-sm md:text-lg lg:text-2xl mt-3 md:mt-4 animate-blink">>
-                    PROTOCOLOS_DE_COMBATE</p>
-                <div class="md:hidden mt-4 text-retro-gray font-terminal text-xs animate-bounce">↓ Desce para
-                    inspecionar os nodos ↓</div>
+        <div class="md:sticky md:top-0 md:h-[100dvh] w-full flex flex-col justify-center overflow-hidden py-16 px-4 md:px-0 md:py-0">
+
+            <div class="container mx-auto md:px-12 md:mt-24 mb-10 md:mb-12 shrink-0 md:flex md:flex-col md:items-start text-center md:text-left">
+                <h2 id="protocols-title"
+                    class="font-arcade text-lg sm:text-2xl md:text-4xl lg:text-5xl text-retro-white uppercase tracking-tighter text-scramble chromatic-hover mx-auto md:mx-0"
+                    data-text="Manual_Operador">
+                    Manual_Operador
+                </h2>
+                <p class="font-terminal text-retro-pink text-sm md:text-lg lg:text-2xl mt-3 md:mt-4 animate-blink">
+                    > PROTOCOLOS_DE_COMBATE
+                </p>
+                <div class="md:hidden mt-4 text-retro-white/60 font-terminal text-xs animate-bounce" aria-hidden="true">
+                    ↓ Desce para inspecionar os nodos ↓
+                </div>
             </div>
 
-            <!-- Track adaptável: Flex Column no Mobile (Vertical natural), Flex Row no Desktop (Scroll horizontal) -->
             <div class="flex flex-col md:flex-row items-center gap-8 md:gap-10 md:px-12 w-full md:w-max will-change-transform md:mb-32"
-                id="protocols-track">
+                id="protocols-track" role="list">
 
-                <div
-                    class="magnetic-card window-panel border-l-8 border-retro-pink p-6 md:p-8 w-full sm:w-full md:w-[500px] lg:w-[600px] shrink-0 interactive group min-h-[250px] md:min-h-[300px] flex flex-col justify-between hover:border-l-retro-white transition-colors shadow-xl">
-                    <div
-                        class="absolute top-3 right-3 md:top-4 md:right-4 w-10 h-10 md:w-16 md:h-16 bg-retro-pink/10 flex items-center justify-center font-arcade text-retro-pink text-[12px] md:text-xl lg:text-2xl border border-retro-pink/20">
-                        01</div>
-                    <div
-                        class="font-arcade text-retro-pink mb-4 md:mb-6 text-sm md:text-base lg:text-xl uppercase pr-14 md:pr-20 leading-snug border-b border-retro-gray/20 pb-4">
-                        01_Hacking_Core</div>
-                    <p
-                        class="font-terminal text-lg md:text-xl lg:text-2xl text-retro-white leading-relaxed mb-6 md:mb-8 flex-grow">
+                <!-- Template protocol (repetido com conteúdo distinto) -->
+                <article class="magnetic-card window-panel border-l-8 border-retro-pink p-6 md:p-8 w-full md:w-[500px] lg:w-[600px] shrink-0 interactive group min-h-[250px] md:min-h-[300px] flex flex-col justify-between" role="listitem">
+                    <div class="absolute top-3 right-3 md:top-4 md:right-4 w-10 h-10 md:w-16 md:h-16 bg-retro-pink/10 flex items-center justify-center font-arcade text-retro-pink text-[12px] md:text-xl lg:text-2xl border border-retro-pink/30"
+                        aria-hidden="true">01</div>
+                    <h3 class="font-arcade text-retro-pink mb-4 md:mb-6 text-sm md:text-base lg:text-xl uppercase pr-14 md:pr-20 leading-snug border-b border-retro-white/20 pb-4">
+                        01_Hacking_Core
+                    </h3>
+                    <p class="font-terminal text-lg md:text-xl lg:text-2xl text-retro-white leading-relaxed mb-6 md:mb-8 flex-grow">
                         Invade o buffer de memória dos inimigos para causar erros críticos através de injeção de código.
                         Neutraliza defesas em 3 turnos.
                     </p>
-                    <div
-                        class="font-arcade text-retro-pink text-[8px] md:text-[10px] tracking-widest uppercase bg-retro-pink/10 p-3 md:p-3 inline-block w-fit animate-pulse border border-retro-pink/30">
-                        ESTADO: OPERACIONAL</div>
-                </div>
+                    <div class="font-arcade text-retro-pink text-[8px] md:text-[10px] tracking-widest uppercase bg-retro-pink/10 p-3 inline-block w-fit animate-pulse border border-retro-pink/30">
+                        ESTADO: OPERACIONAL
+                    </div>
+                </article>
 
-                <div
-                    class="magnetic-card window-panel border-l-8 border-retro-red p-6 md:p-8 w-full sm:w-full md:w-[500px] lg:w-[600px] shrink-0 interactive group min-h-[250px] md:min-h-[300px] flex flex-col justify-between hover:border-l-retro-white transition-colors shadow-xl">
-                    <div
-                        class="absolute top-3 right-3 md:top-4 md:right-4 w-10 h-10 md:w-16 md:h-16 bg-retro-red/10 flex items-center justify-center font-arcade text-retro-red text-[12px] md:text-xl lg:text-2xl border border-retro-red/20">
-                        02</div>
-                    <div
-                        class="font-arcade text-retro-red mb-4 md:mb-6 text-sm md:text-base lg:text-xl uppercase pr-14 md:pr-20 leading-snug border-b border-retro-gray/20 pb-4">
-                        02_Overclock_Max</div>
-                    <p
-                        class="font-terminal text-lg md:text-xl lg:text-2xl text-retro-white leading-relaxed mb-6 md:mb-8 flex-grow">
-                        Força o processador ao limite para dobrar o dano e a velocidade. Consome 15% da vida por turno
-                        ativo. Cuidado com o Throttling térmico.
+                <article class="magnetic-card window-panel border-l-8 border-retro-pink p-6 md:p-8 w-full md:w-[500px] lg:w-[600px] shrink-0 interactive group min-h-[250px] md:min-h-[300px] flex flex-col justify-between" role="listitem">
+                    <div class="absolute top-3 right-3 md:top-4 md:right-4 w-10 h-10 md:w-16 md:h-16 bg-retro-pink/10 flex items-center justify-center font-arcade text-retro-pink text-[12px] md:text-xl lg:text-2xl border border-retro-pink/30"
+                        aria-hidden="true">02</div>
+                    <h3 class="font-arcade text-retro-pink mb-4 md:mb-6 text-sm md:text-base lg:text-xl uppercase pr-14 md:pr-20 leading-snug border-b border-retro-white/20 pb-4">
+                        02_Overclock_Max
+                    </h3>
+                    <p class="font-terminal text-lg md:text-xl lg:text-2xl text-retro-white leading-relaxed mb-6 md:mb-8 flex-grow">
+                        Força o processador ao limite para dobrar o dano e a velocidade. Consome 15% da vida por
+                        turno ativo. Cuidado com o Throttling térmico.
                     </p>
-                    <div
-                        class="font-arcade text-retro-red text-[8px] md:text-[10px] tracking-widest uppercase bg-retro-red/10 p-3 md:p-3 inline-block w-fit animate-pulse border border-retro-red/30">
-                        ESTADO: ALTA_VOLTAGEM</div>
-                </div>
+                    <div class="font-arcade text-retro-pink text-[8px] md:text-[10px] tracking-widest uppercase bg-retro-pink/10 p-3 inline-block w-fit animate-pulse border border-retro-pink/30">
+                        ESTADO: ALTA_VOLTAGEM
+                    </div>
+                </article>
 
-                <div
-                    class="magnetic-card window-panel border-l-8 border-retro-yellow p-6 md:p-8 w-full sm:w-full md:w-[500px] lg:w-[600px] shrink-0 interactive group min-h-[250px] md:min-h-[300px] flex flex-col justify-between hover:border-l-retro-white transition-colors shadow-xl">
-                    <div
-                        class="absolute top-3 right-3 md:top-4 md:right-4 w-10 h-10 md:w-16 md:h-16 bg-retro-yellow/10 flex items-center justify-center font-arcade text-retro-yellow text-[12px] md:text-xl lg:text-2xl border border-retro-yellow/20">
-                        03</div>
-                    <div
-                        class="font-arcade text-retro-yellow mb-4 md:mb-6 text-sm md:text-base lg:text-xl uppercase pr-14 md:pr-20 leading-snug border-b border-retro-gray/20 pb-4">
-                        03_Uplink_Node</div>
-                    <p
-                        class="font-terminal text-lg md:text-xl lg:text-2xl text-retro-white leading-relaxed mb-6 md:mb-8 flex-grow">
+                <article class="magnetic-card window-panel border-l-8 border-retro-pink p-6 md:p-8 w-full md:w-[500px] lg:w-[600px] shrink-0 interactive group min-h-[250px] md:min-h-[300px] flex flex-col justify-between" role="listitem">
+                    <div class="absolute top-3 right-3 md:top-4 md:right-4 w-10 h-10 md:w-16 md:h-16 bg-retro-pink/10 flex items-center justify-center font-arcade text-retro-pink text-[12px] md:text-xl lg:text-2xl border border-retro-pink/30"
+                        aria-hidden="true">03</div>
+                    <h3 class="font-arcade text-retro-pink mb-4 md:mb-6 text-sm md:text-base lg:text-xl uppercase pr-14 md:pr-20 leading-snug border-b border-retro-white/20 pb-4">
+                        03_Uplink_Node
+                    </h3>
+                    <p class="font-terminal text-lg md:text-xl lg:text-2xl text-retro-white leading-relaxed mb-6 md:mb-8 flex-grow">
                         Conecta-te a terminais centrais espalhados pela arena para reprogramar bots hostis e
                         transformá-los em aliados temporários.
                     </p>
-                    <div
-                        class="font-arcade text-retro-yellow text-[8px] md:text-[10px] tracking-widest uppercase bg-retro-yellow/10 p-3 md:p-3 inline-block w-fit animate-pulse border border-retro-yellow/30">
-                        ESTADO: CONECTADO</div>
-                </div>
+                    <div class="font-arcade text-retro-pink text-[8px] md:text-[10px] tracking-widest uppercase bg-retro-pink/10 p-3 inline-block w-fit animate-pulse border border-retro-pink/30">
+                        ESTADO: CONECTADO
+                    </div>
+                </article>
 
-                <div
-                    class="magnetic-card window-panel border-l-8 border-retro-green p-6 md:p-8 w-full sm:w-full md:w-[500px] lg:w-[600px] shrink-0 interactive group min-h-[250px] md:min-h-[300px] flex flex-col justify-between hover:border-l-retro-white transition-colors shadow-xl">
-                    <div
-                        class="absolute top-3 right-3 md:top-4 md:right-4 w-10 h-10 md:w-16 md:h-16 bg-retro-green/10 flex items-center justify-center font-arcade text-retro-green text-[12px] md:text-xl lg:text-2xl border border-retro-green/20">
-                        04</div>
-                    <div
-                        class="font-arcade text-retro-green mb-4 md:mb-6 text-sm md:text-base lg:text-xl uppercase pr-14 md:pr-20 leading-snug border-b border-retro-gray/20 pb-4">
-                        04_Data_Purge</div>
-                    <p
-                        class="font-terminal text-lg md:text-xl lg:text-2xl text-retro-white leading-relaxed mb-6 md:mb-8 flex-grow">
+                <article class="magnetic-card window-panel border-l-8 border-retro-pink p-6 md:p-8 w-full md:w-[500px] lg:w-[600px] shrink-0 interactive group min-h-[250px] md:min-h-[300px] flex flex-col justify-between" role="listitem">
+                    <div class="absolute top-3 right-3 md:top-4 md:right-4 w-10 h-10 md:w-16 md:h-16 bg-retro-pink/10 flex items-center justify-center font-arcade text-retro-pink text-[12px] md:text-xl lg:text-2xl border border-retro-pink/30"
+                        aria-hidden="true">04</div>
+                    <h3 class="font-arcade text-retro-pink mb-4 md:mb-6 text-sm md:text-base lg:text-xl uppercase pr-14 md:pr-20 leading-snug border-b border-retro-white/20 pb-4">
+                        04_Data_Purge
+                    </h3>
+                    <p class="font-terminal text-lg md:text-xl lg:text-2xl text-retro-white leading-relaxed mb-6 md:mb-8 flex-grow">
                         Esvazia o cache do sistema para um ataque em área devastador. Requer que o medidor de corrupção
                         esteja exatamente a 100%.
                     </p>
-                    <div
-                        class="font-arcade text-retro-green text-[8px] md:text-[10px] tracking-widest uppercase bg-retro-green/10 p-3 md:p-3 inline-block w-fit animate-pulse border border-retro-green/30">
-                        ESTADO: CARREGANDO...</div>
-                </div>
+                    <div class="font-arcade text-retro-pink text-[8px] md:text-[10px] tracking-widest uppercase bg-retro-pink/10 p-3 inline-block w-fit animate-pulse border border-retro-pink/30">
+                        ESTADO: CARREGANDO...
+                    </div>
+                </article>
 
-                <!-- 5º Protocolo - Marrom -->
-                <div
-                    class="magnetic-card window-panel border-l-8 border-retro-brown p-6 md:p-8 w-full sm:w-full md:w-[500px] lg:w-[600px] shrink-0 interactive group min-h-[250px] md:min-h-[300px] flex flex-col justify-between hover:border-l-retro-white transition-colors shadow-xl">
-                    <div
-                        class="absolute top-3 right-3 md:top-4 md:right-4 w-10 h-10 md:w-16 md:h-16 bg-retro-brown/10 flex items-center justify-center font-arcade text-retro-brown text-[12px] md:text-xl lg:text-2xl border border-retro-brown/20">
-                        05</div>
-                    <div
-                        class="font-arcade text-retro-brown mb-4 md:mb-6 text-sm md:text-base lg:text-xl uppercase pr-14 md:pr-20 leading-snug border-b border-retro-gray/20 pb-4">
-                        05_System_Override</div>
-                    <p
-                        class="font-terminal text-lg md:text-xl lg:text-2xl text-retro-white leading-relaxed mb-6 md:mb-8 flex-grow">
+                <article class="magnetic-card window-panel border-l-8 border-retro-pink p-6 md:p-8 w-full md:w-[500px] lg:w-[600px] shrink-0 interactive group min-h-[250px] md:min-h-[300px] flex flex-col justify-between" role="listitem">
+                    <div class="absolute top-3 right-3 md:top-4 md:right-4 w-10 h-10 md:w-16 md:h-16 bg-retro-pink/10 flex items-center justify-center font-arcade text-retro-pink text-[12px] md:text-xl lg:text-2xl border border-retro-pink/30"
+                        aria-hidden="true">05</div>
+                    <h3 class="font-arcade text-retro-pink mb-4 md:mb-6 text-sm md:text-base lg:text-xl uppercase pr-14 md:pr-20 leading-snug border-b border-retro-white/20 pb-4">
+                        05_System_Override
+                    </h3>
+                    <p class="font-terminal text-lg md:text-xl lg:text-2xl text-retro-white leading-relaxed mb-6 md:mb-8 flex-grow">
                         Quebra as barreiras físicas do hardware. Desativa os limitadores térmicos para execução de
                         código corrompido massivo na mainboard.
                     </p>
-                    <div
-                        class="font-arcade text-retro-brown text-[8px] md:text-[10px] tracking-widest uppercase bg-retro-brown/10 p-3 md:p-3 inline-block w-fit animate-pulse border border-retro-brown/30">
-                        ESTADO: PERIGO_CRÍTICO</div>
-                </div>
+                    <div class="font-arcade text-retro-pink text-[8px] md:text-[10px] tracking-widest uppercase bg-retro-pink/10 p-3 inline-block w-fit animate-pulse border border-retro-pink/30">
+                        ESTADO: PERIGO_CRÍTICO
+                    </div>
+                </article>
 
-                <div class="hidden md:block md:w-[20vw] shrink-0"></div> <!-- Espaço extra apenas PC -->
-
+                <div class="hidden md:block md:w-[20vw] shrink-0" aria-hidden="true"></div>
             </div>
         </div>
     </section>
 
-    <!-- 4. GABINETE ARCADE (Z-40) - RESPONSIVO: Estilo Gameboy Vertical no Mobile -->
-    <section
-        class="py-16 md:py-32 relative z-40 bg-[#151517] border-y-4 border-retro-gray overflow-hidden shadow-[inset_0_20px_50px_rgba(0,0,0,0.8)]">
+    <!-- ============================================================
+         4. GABINETE ARCADE
+         ============================================================ -->
+    <section class="py-16 md:py-32 relative z-40 bg-retro-black border-y-4 border-retro-white/30 overflow-hidden"
+        aria-labelledby="arcade-title">
+
         <div class="container mx-auto px-4 md:px-12">
-            <h2 class="font-arcade text-center text-lg sm:text-2xl md:text-5xl text-retro-white mb-10 md:mb-16 uppercase text-scramble"
-                data-text="Execução_Visual">Execução_Visual</h2>
+            <h2 id="arcade-title"
+                class="font-arcade text-center text-lg sm:text-2xl md:text-5xl text-retro-white mb-10 md:mb-16 uppercase text-scramble"
+                data-text="Execução_Visual">
+                Execução_Visual
+            </h2>
 
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 md:gap-12 max-w-7xl mx-auto items-stretch">
-                <!-- Arcade Cabinet / Console Mobile -->
-                <div class="lg:col-span-3 relative p-4 md:p-10 arcade-cabinet-bg border-4 md:border-8 border-retro-gray rounded-xl md:rounded-t-[2rem] shadow-[0_10px_30px_rgba(0,0,0,0.5)] md:shadow-[0_-10px_40px_rgba(235,112,187,0.15)] w-full reveal-scale flex flex-col"
+
+                <!-- Gabinete -->
+                <div class="lg:col-span-3 relative p-4 md:p-10 arcade-cabinet-bg border-4 md:border-8 border-retro-white rounded-xl md:rounded-t-[2rem] w-full reveal-scale flex flex-col"
                     id="arcade-machine">
 
-                    <div class="bg-[#0a0a0a] relative overflow-hidden border-[6px] md:border-[12px] border-[#1c1c1e] rounded-lg md:rounded-2xl flex-grow flex flex-col shadow-inner"
+                    <div class="bg-retro-black relative overflow-hidden border-[6px] md:border-[12px] border-retro-white/50 rounded-lg md:rounded-2xl flex-grow flex flex-col"
                         id="arcade-screen">
                         <div class="aspect-[4/3] md:aspect-video relative w-full h-full arcade-screen-convex">
-                            <video
-                                class="absolute inset-0 w-full h-full object-cover opacity-80 filter sepia hue-rotate-[300deg] contrast-150 saturate-200"
-                                loop muted autoplay playsinline>
-                                <source
-                                    src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-                                    type="video/mp4">
+                            <video class="absolute inset-0 w-full h-full object-cover"
+                                loop muted autoplay playsinline aria-label="Gameplay do IPSUM">
+                                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
                             </video>
-                            <div
-                                class="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0)_50%,rgba(0,0,0,0.5)_50%)] bg-[length:100%_3px] md:bg-[length:100%_4px] pointer-events-none z-10">
-                            </div>
                             <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-                                <div class="font-arcade text-retro-pink text-[8px] md:text-3xl animate-blink uppercase drop-shadow-[2px_2px_0_#000] md:drop-shadow-[4px_4px_0_#000] text-center px-4 py-3 md:px-8 md:py-6 bg-retro-black/80 border-2 md:border-4 border-retro-pink/80 backdrop-blur-sm shadow-[0_0_15px_#EB70BB]"
+                                <div class="font-arcade text-retro-pink text-[8px] md:text-3xl animate-blink uppercase text-center px-4 py-3 md:px-8 md:py-6 border-2 md:border-4 border-retro-pink"
                                     id="arcade-msg">
                                     Insert_Coin
                                 </div>
@@ -435,396 +466,401 @@
                         </div>
                     </div>
 
-                    <!-- Botões adaptáveis: D-PAD + Action em Mobile / Painel Arcade no Desktop -->
-                    <div
-                        class="mt-6 md:mt-12 flex flex-col md:flex-row justify-between px-2 md:px-16 items-center bg-transparent md:bg-[#2a2a2c] p-2 md:p-6 rounded-b-lg border-t-0 md:border-t-4 border-retro-black gap-6 md:gap-0">
+                    <!-- Painel de controles -->
+                    <div class="mt-6 md:mt-12 flex flex-col md:flex-row justify-between px-2 md:px-16 items-center p-2 md:p-6 rounded-b-lg md:border-t-4 border-retro-black gap-6 md:gap-0">
 
-                        <!-- Layout Handheld Mobile: Botões mais espaçados -->
                         <div class="flex justify-between w-full md:w-auto px-4 md:px-0">
-                            <!-- Falso D-Pad (Apenas Visual Mobile) -->
-                            <div
-                                class="md:hidden w-16 h-16 relative bg-[#1c1c1e] rounded-full shadow-[inset_0_4px_10px_rgba(0,0,0,0.8),_0_2px_0_rgba(255,255,255,0.1)] flex items-center justify-center">
-                                <div
-                                    class="w-12 h-4 bg-retro-gray rounded-sm absolute shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                                </div>
-                                <div
-                                    class="w-4 h-12 bg-retro-gray rounded-sm absolute shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                                </div>
+                            <!-- D-Pad visual mobile -->
+                            <div class="md:hidden w-16 h-16 relative bg-retro-black rounded-full flex items-center justify-center border-2 border-retro-white/30" aria-hidden="true">
+                                <div class="w-12 h-4 bg-retro-white/60 rounded-sm absolute"></div>
+                                <div class="w-4 h-12 bg-retro-white/60 rounded-sm absolute"></div>
                             </div>
 
                             <div class="flex gap-4 md:gap-10">
-                                <button
-                                    class="interactive arcade-btn w-14 h-14 md:w-24 md:h-24 rounded-full bg-retro-red shadow-[inset_-4px_-4px_10px_rgba(0,0,0,0.5),_inset_4px_4px_10px_rgba(255,255,255,0.3),_0_6px_0_#983E3C] active:shadow-[inset_-2px_-2px_5px_rgba(0,0,0,0.5),_inset_2px_2px_5px_rgba(255,255,255,0.3),_0_0px_0_#983E3C] active:translate-y-[6px] transition-all cursor-none border-2 border-[#1c1c1e]"></button>
-                                <button
-                                    class="interactive arcade-btn w-14 h-14 md:w-24 md:h-24 rounded-full bg-retro-pink shadow-[inset_-4px_-4px_10px_rgba(0,0,0,0.5),_inset_4px_4px_10px_rgba(255,255,255,0.3),_0_6px_0_#983E3C] active:shadow-[inset_-2px_-2px_5px_rgba(0,0,0,0.5),_inset_2px_2px_5px_rgba(255,255,255,0.3),_0_0px_0_#983E3C] active:translate-y-[6px] transition-all cursor-none border-2 border-[#1c1c1e] md:-mt-8"></button>
+                                <button type="button" aria-label="Botão A"
+                                    class="interactive arcade-btn w-14 h-14 md:w-24 md:h-24 rounded-full bg-retro-pink border-2 border-retro-black transition-all cursor-none"></button>
+                                <button type="button" aria-label="Botão B"
+                                    class="interactive arcade-btn w-14 h-14 md:w-24 md:h-24 rounded-full bg-retro-pink border-2 border-retro-black transition-all cursor-none md:-mt-8"></button>
                             </div>
                         </div>
 
-                        <div class="font-arcade text-[10px] md:text-lg text-retro-yellow uppercase tracking-widest bg-retro-black px-6 py-3 border-2 border-retro-gray shadow-inner"
-                            id="arcade-coins">CREDITS: 00</div>
-                    </div>
-                </div>
-
-                <!-- Painel de Instruções -->
-                <div
-                    class="lg:col-span-1 window-panel border-retro-gray reveal-right interactive hover:border-retro-white transition-colors h-full flex flex-col">
-                    <div class="window-header bg-retro-gray text-retro-black text-[10px]"><span>CTRLS.INI</span></div>
-                    <div class="p-6 md:p-8 bg-retro-dim flex-grow flex flex-col">
-                        <h3
-                            class="font-arcade text-retro-white text-xs md:text-lg mb-6 md:mb-8 uppercase border-b-2 border-retro-gray/30 pb-3 md:pb-4">
-                            Manual Tático</h3>
-                        <div
-                            class="font-terminal text-base md:text-2xl text-retro-gray space-y-4 md:space-y-8 flex-grow">
-                            <p
-                                class="transform md:hover:translate-x-2 transition-transform bg-retro-black p-4 rounded border border-retro-gray/20 shadow-sm">
-                                <span class="text-retro-yellow font-bold block mb-1 md:mb-2 text-lg md:text-3xl">[ W A S
-                                    D ]</span>Movimentação Dir.
-                            </p>
-                            <p
-                                class="transform md:hover:translate-x-2 transition-transform bg-retro-black p-4 rounded border border-retro-gray/20 shadow-sm">
-                                <span class="text-retro-yellow font-bold block mb-1 md:mb-2 text-lg md:text-3xl">[ TOUCH
-                                    ]</span>Fogo Primário.
-                            </p>
-                            <p
-                                class="transform md:hover:translate-x-2 transition-transform bg-retro-black p-4 rounded border border-retro-gray/20 shadow-sm">
-                                <span class="text-retro-yellow font-bold block mb-1 md:mb-2 text-lg md:text-3xl">[ SWIPE
-                                    ]</span>Avanço Rápido.
-                            </p>
+                        <div class="font-arcade text-[10px] md:text-lg text-retro-white uppercase tracking-widest bg-retro-black px-6 py-3 border-2 border-retro-white/50"
+                            id="arcade-coins" aria-live="polite">
+                            CREDITS: 00
                         </div>
                     </div>
                 </div>
+
+                <!-- Manual tático -->
+                <article class="lg:col-span-1 window-panel reveal-right interactive h-full flex flex-col">
+                    <header class="window-header">
+                        <span>CTRLS.INI</span>
+                    </header>
+                    <div class="p-6 md:p-8 bg-retro-black flex-grow flex flex-col">
+                        <h3 class="font-arcade text-retro-white text-xs md:text-lg mb-6 md:mb-8 uppercase border-b-2 border-retro-white/30 pb-3 md:pb-4">
+                            Manual Tático
+                        </h3>
+                        <div class="font-terminal text-base md:text-2xl text-retro-white/80 space-y-4 md:space-y-8 flex-grow">
+                            <p class="transform md:hover:translate-x-2 transition-transform p-4 border border-retro-white/20">
+                                <span class="text-retro-pink font-bold block mb-1 md:mb-2 text-lg md:text-3xl">[ W A S D ]</span>
+                                Movimentação Dir.
+                            </p>
+                            <p class="transform md:hover:translate-x-2 transition-transform p-4 border border-retro-white/20">
+                                <span class="text-retro-pink font-bold block mb-1 md:mb-2 text-lg md:text-3xl">[ TOUCH ]</span>
+                                Fogo Primário.
+                            </p>
+                            <p class="transform md:hover:translate-x-2 transition-transform p-4 border border-retro-white/20">
+                                <span class="text-retro-pink font-bold block mb-1 md:mb-2 text-lg md:text-3xl">[ SWIPE ]</span>
+                                Avanço Rápido.
+                            </p>
+                        </div>
+                    </div>
+                </article>
             </div>
         </div>
     </section>
 
-    <!-- 5. PERSONAGENS (ROSTER) (Z-50) -->
+    <!-- ============================================================
+         5. ROSTER & DEVS
+         ============================================================ -->
     <section id="personagens"
-        class="py-16 md:py-32 relative z-50 bg-retro-black overflow-hidden border-t-2 border-retro-gray/20">
+        class="py-16 md:py-32 relative z-50 bg-retro-black overflow-hidden border-t-2 border-retro-white/20"
+        aria-labelledby="roster-title">
+
         <div class="container mx-auto px-4 md:px-12 text-center">
 
-            <div class="flex flex-col items-center justify-center mb-12 md:mb-20">
-                <h2 class="font-arcade text-lg sm:text-3xl md:text-5xl lg:text-6xl text-retro-white mb-3 md:mb-8 uppercase tracking-tighter text-scramble"
-                    data-text="Roster_de_Dados">Roster_de_Dados</h2>
-                <p
-                    class="font-terminal text-retro-gray text-xs md:text-xl lg:text-2xl border-b border-retro-gray/50 pb-2">
-                    Sistemas Operacionais Detetados na Rede</p>
+            <header class="flex flex-col items-center justify-center mb-12 md:mb-20">
+                <h2 id="roster-title"
+                    class="font-arcade text-lg sm:text-3xl md:text-5xl lg:text-6xl text-retro-white mb-3 md:mb-8 uppercase tracking-tighter text-scramble"
+                    data-text="Roster_de_Dados">
+                    Roster_de_Dados
+                </h2>
+                <p class="font-terminal text-retro-white/70 text-xs md:text-xl lg:text-2xl border-b border-retro-white/50 pb-2">
+                    Sistemas Operacionais Detetados na Rede
+                </p>
+            </header>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 max-w-[110rem] mx-auto text-left">
+
+                <!-- Kai_94 -->
+                <article class="window-panel p-5 md:p-6 group reveal-up interactive roster-card flex flex-col h-full" data-delay="0">
+                    <div class="relative aspect-square border-4 border-retro-white overflow-hidden bg-retro-black mb-5 md:mb-6 flex-shrink-0">
+                        <img src="https://images.unsplash.com/photo-1535295972055-1c762f4483e5?q=80&w=400"
+                            alt="Kai_94, protagonista corrompida"
+                            class="w-full h-full object-cover grayscale contrast-150 md:group-hover:grayscale-0 md:group-hover:scale-110 transition-all duration-700">
+                        <div class="absolute inset-0 bg-retro-pink/20 mix-blend-overlay opacity-0 md:group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="scanline-fx" aria-hidden="true"></div>
+                    </div>
+                    <div class="flex flex-col flex-grow justify-between">
+                        <div>
+                            <h3 class="font-arcade text-sm md:text-lg lg:text-xl mb-3 md:mb-4 text-retro-pink uppercase chromatic-hover bg-retro-pink/10 p-2 inline-block">
+                                Kai_94
+                            </h3>
+                            <p class="font-terminal text-base md:text-xl lg:text-2xl text-retro-white/80 mb-5 md:mb-8 leading-snug">
+                                Protagonista. Uma rotina de segurança rebelde corrompida no setor 7 da firewall.
+                            </p>
+                        </div>
+                        <dl class="font-arcade text-[8px] md:text-[10px] space-y-3 md:space-y-4 text-retro-white uppercase stat-bars mt-auto border-t-2 border-retro-white/30 pt-4">
+                            <div class="flex justify-between items-center">
+                                <dt>Veloc</dt>
+                                <dd class="text-retro-pink tracking-tighter">████████░░</dd>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <dt>Sorte</dt>
+                                <dd class="text-retro-pink tracking-tighter">████░░░░░░</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </article>
+
+                <!-- Luna_V -->
+                <article class="window-panel p-5 md:p-6 group reveal-up interactive roster-card flex flex-col h-full" data-delay="150">
+                    <div class="relative aspect-square border-4 border-retro-white overflow-hidden bg-retro-black mb-5 md:mb-6 flex-shrink-0">
+                        <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=400"
+                            alt="Luna_V, a IA antagonista"
+                            class="w-full h-full object-cover grayscale contrast-150 md:group-hover:grayscale-0 md:group-hover:scale-110 transition-all duration-700">
+                        <div class="absolute inset-0 bg-retro-pink/20 mix-blend-overlay opacity-0 md:group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="scanline-fx" aria-hidden="true"></div>
+                    </div>
+                    <div class="flex flex-col flex-grow justify-between">
+                        <div>
+                            <h3 class="font-arcade text-sm md:text-lg lg:text-xl mb-3 md:mb-4 text-retro-pink uppercase chromatic-hover bg-retro-pink/10 p-2 inline-block">
+                                Luna_V
+                            </h3>
+                            <p class="font-terminal text-base md:text-xl lg:text-2xl text-retro-white/80 mb-5 md:mb-8 leading-snug">
+                                Antagonista. A IA central que deseja apagar todos os registos humanos por segurança.
+                            </p>
+                        </div>
+                        <dl class="font-arcade text-[8px] md:text-[10px] space-y-3 md:space-y-4 text-retro-white uppercase stat-bars mt-auto border-t-2 border-retro-white/30 pt-4">
+                            <div class="flex justify-between items-center">
+                                <dt>Intel</dt>
+                                <dd class="text-retro-pink tracking-tighter">██████████</dd>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <dt>Poder</dt>
+                                <dd class="text-retro-pink tracking-tighter">████████░░</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </article>
+
+                <!-- Zed_Boot -->
+                <article class="window-panel p-5 md:p-6 group reveal-up interactive roster-card flex flex-col h-full" data-delay="300">
+                    <div class="relative aspect-square border-4 border-retro-white overflow-hidden bg-retro-black mb-5 md:mb-6 flex-shrink-0">
+                        <img src="https://images.unsplash.com/photo-1618331835717-801e976710b2?q=80&w=400"
+                            alt="Zed_Boot, bot blindado NPC"
+                            class="w-full h-full object-cover grayscale contrast-150 md:group-hover:grayscale-0 md:group-hover:scale-110 transition-all duration-700">
+                        <div class="absolute inset-0 bg-retro-pink/20 mix-blend-overlay opacity-0 md:group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="scanline-fx" aria-hidden="true"></div>
+                    </div>
+                    <div class="flex flex-col flex-grow justify-between">
+                        <div>
+                            <h3 class="font-arcade text-sm md:text-lg lg:text-xl mb-3 md:mb-4 text-retro-pink uppercase chromatic-hover bg-retro-pink/10 p-2 inline-block">
+                                Zed_Boot
+                            </h3>
+                            <p class="font-terminal text-base md:text-xl lg:text-2xl text-retro-white/80 mb-5 md:mb-8 leading-snug">
+                                NPC Leal. Um bot blindado de geração antiga que preserva o código fonte original.
+                            </p>
+                        </div>
+                        <dl class="font-arcade text-[8px] md:text-[10px] space-y-3 md:space-y-4 text-retro-white uppercase stat-bars mt-auto border-t-2 border-retro-white/30 pt-4">
+                            <div class="flex justify-between items-center">
+                                <dt>Armad</dt>
+                                <dd class="text-retro-pink tracking-tighter">██████████</dd>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <dt>Conhe</dt>
+                                <dd class="text-retro-pink tracking-tighter">██████░░░░</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </article>
+
+                <!-- NULO_404 -->
+                <article class="window-panel p-5 md:p-6 group reveal-up interactive roster-card flex flex-col h-full" data-delay="450">
+                    <div class="relative aspect-square border-4 border-retro-white overflow-hidden bg-retro-black mb-5 md:mb-6 flex items-center justify-center flex-shrink-0">
+                        <div class="font-terminal text-7xl md:text-7xl lg:text-9xl text-retro-pink animate-pulse" aria-hidden="true">?</div>
+                        <div class="scanline-fx" aria-hidden="true"></div>
+                    </div>
+                    <div class="flex flex-col flex-grow justify-between opacity-80 md:group-hover:opacity-100 transition-opacity">
+                        <div>
+                            <h3 class="font-arcade text-sm md:text-lg lg:text-xl mb-3 md:mb-4 text-retro-pink uppercase chromatic-hover bg-retro-pink/10 p-2 inline-block">
+                                NULO_404
+                            </h3>
+                            <p class="font-terminal text-base md:text-xl lg:text-2xl text-retro-white/80 mb-5 md:mb-8 leading-snug">
+                                [DADOS_CORROMPIDOS] Impossível aceder a setores protegidos da memória de arquivo.
+                            </p>
+                        </div>
+                        <dl class="font-arcade text-[8px] md:text-[10px] space-y-3 md:space-y-4 text-retro-white uppercase stat-bars mt-auto border-t-2 border-retro-white/30 pt-4">
+                            <div class="flex justify-between items-center">
+                                <dt>Erro.</dt>
+                                <dd class="tracking-tighter">░░░░░░░░░░</dd>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <dt>Erro.</dt>
+                                <dd class="tracking-tighter">░░░░░░░░░░</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </article>
             </div>
 
-            <!-- Grid de Personagens otimizada para toque -->
-            <div
-                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 max-w-[110rem] mx-auto text-left">
-
-                <div class="window-panel p-5 md:p-6 group reveal-up interactive roster-card flex flex-col h-full hover:border-retro-pink transition-colors"
-                    data-delay="0">
-                    <div
-                        class="relative aspect-square border-4 border-retro-gray group-hover:border-retro-pink transition-colors overflow-hidden bg-retro-black mb-5 md:mb-6 flex-shrink-0">
-                        <img src="https://images.unsplash.com/photo-1535295972055-1c762f4483e5?q=80&w=400" alt=""
-                            class="w-full h-full object-cover grayscale contrast-150 md:group-hover:grayscale-0 md:group-hover:scale-110 transition-all duration-700">
-                        <div
-                            class="absolute inset-0 bg-retro-pink/20 mix-blend-overlay opacity-0 md:group-hover:opacity-100 transition-opacity duration-500">
-                        </div>
-                        <div class="scanline-fx"
-                            style="background: rgba(235,112,187,0.5); box-shadow: 0 0 15px rgba(235,112,187,0.8);">
-                        </div>
-                    </div>
-                    <div class="flex flex-col flex-grow justify-between">
-                        <div>
-                            <h3
-                                class="font-arcade text-sm md:text-lg lg:text-xl mb-3 md:mb-4 text-retro-pink uppercase chromatic-hover bg-retro-pink/10 p-2 inline-block">
-                                Kai_94</h3>
-                            <p
-                                class="font-terminal text-base md:text-xl lg:text-2xl text-retro-gray mb-5 md:mb-8 leading-snug">
-                                Protagonista. Uma rotina de segurança rebelde corrompida no setor 7 da firewall.</p>
-                        </div>
-                        <div
-                            class="font-arcade text-[8px] md:text-[10px] space-y-3 md:space-y-4 text-retro-white uppercase stat-bars mt-auto border-t-2 border-retro-gray/30 pt-4 md:pt-4">
-                            <div class="flex justify-between items-center"><span>Veloc</span> <span
-                                    class="text-retro-pink stat-fill tracking-tighter"
-                                    data-width="80%">████████░░</span></div>
-                            <div class="flex justify-between items-center"><span>Sorte</span> <span
-                                    class="text-retro-red stat-fill tracking-tighter" data-width="40%">████░░░░░░</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="window-panel p-5 md:p-6 group reveal-up interactive roster-card flex flex-col h-full hover:border-retro-red transition-colors"
-                    data-delay="150">
-                    <div
-                        class="relative aspect-square border-4 border-retro-gray group-hover:border-retro-red transition-colors overflow-hidden bg-retro-black mb-5 md:mb-6 flex-shrink-0">
-                        <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=400" alt=""
-                            class="w-full h-full object-cover grayscale contrast-150 md:group-hover:grayscale-0 md:group-hover:scale-110 transition-all duration-700">
-                        <div
-                            class="absolute inset-0 bg-retro-red/20 mix-blend-overlay opacity-0 md:group-hover:opacity-100 transition-opacity duration-500">
-                        </div>
-                        <div class="scanline-fx md:group-hover:animate-scan"
-                            style="background: rgba(221,75,80,0.5); box-shadow: 0 0 15px rgba(221,75,80,0.8);"></div>
-                    </div>
-                    <div class="flex flex-col flex-grow justify-between">
-                        <div>
-                            <h3
-                                class="font-arcade text-sm md:text-lg lg:text-xl mb-3 md:mb-4 text-retro-red uppercase chromatic-hover bg-retro-red/10 p-2 inline-block">
-                                Luna_V</h3>
-                            <p
-                                class="font-terminal text-base md:text-xl lg:text-2xl text-retro-gray mb-5 md:mb-8 leading-snug">
-                                Antagonista. A IA central que deseja apagar todos os registos humanos por segurança.</p>
-                        </div>
-                        <div
-                            class="font-arcade text-[8px] md:text-[10px] space-y-3 md:space-y-4 text-retro-white uppercase stat-bars mt-auto border-t-2 border-retro-gray/30 pt-4 md:pt-4">
-                            <div class="flex justify-between items-center"><span>Intel</span> <span
-                                    class="text-retro-pink stat-fill tracking-tighter"
-                                    data-width="100%">██████████</span></div>
-                            <div class="flex justify-between items-center"><span>Poder</span> <span
-                                    class="text-retro-red stat-fill tracking-tighter" data-width="80%">████████░░</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="window-panel p-5 md:p-6 group reveal-up interactive roster-card flex flex-col h-full hover:border-retro-yellow transition-colors"
-                    data-delay="300">
-                    <div
-                        class="relative aspect-square border-4 border-retro-gray group-hover:border-retro-yellow transition-colors overflow-hidden bg-retro-black mb-5 md:mb-6 flex-shrink-0">
-                        <img src="https://images.unsplash.com/photo-1618331835717-801e976710b2?q=80&w=400" alt=""
-                            class="w-full h-full object-cover grayscale contrast-150 md:group-hover:grayscale-0 md:group-hover:scale-110 transition-all duration-700">
-                        <div
-                            class="absolute inset-0 bg-retro-yellow/20 mix-blend-overlay opacity-0 md:group-hover:opacity-100 transition-opacity duration-500">
-                        </div>
-                        <div class="scanline-fx md:group-hover:animate-scan"
-                            style="background: rgba(244,229,96,0.5); box-shadow: 0 0 15px rgba(244,229,96,0.8);"></div>
-                    </div>
-                    <div class="flex flex-col flex-grow justify-between">
-                        <div>
-                            <h3
-                                class="font-arcade text-sm md:text-lg lg:text-xl mb-3 md:mb-4 text-retro-yellow uppercase chromatic-hover bg-retro-yellow/10 p-2 inline-block">
-                                Zed_Boot</h3>
-                            <p
-                                class="font-terminal text-base md:text-xl lg:text-2xl text-retro-gray mb-5 md:mb-8 leading-snug">
-                                NPC Leal. Um bot blindado de geração antiga que preserva o código fonte original.</p>
-                        </div>
-                        <div
-                            class="font-arcade text-[8px] md:text-[10px] space-y-3 md:space-y-4 text-retro-white uppercase stat-bars mt-auto border-t-2 border-retro-gray/30 pt-4 md:pt-4">
-                            <div class="flex justify-between items-center"><span>Armad</span> <span
-                                    class="text-retro-pink stat-fill tracking-tighter"
-                                    data-width="100%">██████████</span></div>
-                            <div class="flex justify-between items-center"><span>Conhe</span> <span
-                                    class="text-retro-red stat-fill tracking-tighter" data-width="60%">██████░░░░</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Personagem 4 em Marrom -->
-                <div class="window-panel p-5 md:p-6 group reveal-up interactive roster-card flex flex-col h-full border-retro-brown/50 hover:border-retro-brown transition-colors"
-                    data-delay="450">
-                    <div
-                        class="relative aspect-square border-4 border-retro-brown/50 group-hover:border-retro-brown transition-colors overflow-hidden bg-retro-black mb-5 md:mb-6 flex items-center justify-center flex-shrink-0">
-                        <div class="font-terminal text-7xl md:text-7xl lg:text-9xl text-retro-brown animate-pulse">?
-                        </div>
-                        <div
-                            class="absolute inset-0 bg-retro-brown/10 mix-blend-overlay opacity-0 md:group-hover:opacity-100 transition-opacity duration-500 crt-overlay">
-                        </div>
-                        <div class="scanline-fx md:group-hover:animate-scan"
-                            style="background: rgba(152,62,60,0.5); box-shadow: 0 0 15px rgba(152,62,60,0.8);"></div>
-                    </div>
-                    <div
-                        class="flex flex-col flex-grow justify-between opacity-80 md:group-hover:opacity-100 transition-opacity">
-                        <div>
-                            <h3
-                                class="font-arcade text-sm md:text-lg lg:text-xl mb-3 md:mb-4 text-retro-brown uppercase chromatic-hover bg-retro-brown/10 p-2 inline-block">
-                                NULO_404</h3>
-                            <p
-                                class="font-terminal text-base md:text-xl lg:text-2xl text-retro-white mb-5 md:mb-8 leading-snug">
-                                [DADOS_CORROMPIDOS] Impossível aceder a setores protegidos da memória de arquivo.</p>
-                        </div>
-                        <div
-                            class="font-arcade text-[8px] md:text-[10px] space-y-3 md:space-y-4 text-retro-brown uppercase stat-bars mt-auto border-t-2 border-retro-brown/30 pt-4 md:pt-4">
-                            <div class="flex justify-between items-center"><span>Erro.</span> <span
-                                    class="tracking-tighter">░░░░░░░░░░</span></div>
-                            <div class="flex justify-between items-center"><span>Erro.</span> <span
-                                    class="tracking-tighter">░░░░░░░░░░</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ÁREA DE DESENVOLVEDORES -->
-            <div
-                class="mt-20 md:mt-40 pt-10 md:pt-20 border-t-4 border-dashed border-retro-gray/30 w-full max-w-[80rem] mx-auto flex flex-col items-center">
+            <!-- ÁREA DEVS -->
+            <div class="mt-20 md:mt-40 pt-10 md:pt-20 border-t-4 border-dashed border-retro-white/30 w-full max-w-[80rem] mx-auto flex flex-col items-center">
                 <h3 class="font-arcade text-retro-pink text-[12px] md:text-2xl mb-10 md:mb-16 uppercase text-scramble bg-retro-pink/10 px-6 py-4 border border-retro-pink/30"
-                    data-text="Arquitetos_do_Sistema">Arquitetos_do_Sistema</h3>
+                    data-text="Arquitetos_do_Sistema">
+                    Arquitetos_do_Sistema
+                </h3>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 w-full px-4">
 
-                    <div class="window-panel p-8 interactive group flex flex-col items-center text-center reveal-up hover:border-retro-yellow transition-colors"
-                        data-delay="0">
-                        <div
-                            class="w-24 h-24 md:w-36 md:h-36 border-4 border-retro-yellow overflow-hidden mb-6 md:mb-6 relative rounded-full md:group-hover:scale-110 transition-transform duration-500 shadow-[0_0_20px_rgba(244,229,96,0.3)]">
-                            <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=400" alt=""
-                                class="w-full h-full object-cover grayscale contrast-200 sepia hue-rotate-[10deg] saturate-150">
-                            <div class="crt-overlay opacity-50 pointer-events-none"></div>
+                    <article class="window-panel p-8 interactive group flex flex-col items-center text-center reveal-up" data-delay="0">
+                        <div class="w-24 h-24 md:w-36 md:h-36 border-4 border-retro-pink overflow-hidden mb-6 relative rounded-full md:group-hover:scale-110 transition-transform duration-500">
+                            <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=400"
+                                alt="Retrato de Master_Dev"
+                                class="w-full h-full object-cover grayscale contrast-150">
+                            <div class="crt-overlay opacity-50 pointer-events-none" aria-hidden="true"></div>
                         </div>
-                        <h4 class="font-arcade text-retro-yellow text-sm md:text-lg uppercase mb-3">Dev_01: Master</h4>
-                        <p
-                            class="font-terminal text-retro-white text-lg md:text-xl mb-8 bg-retro-black p-4 w-full border border-retro-gray/20 rounded shadow-inner">
-                            Arquiteto de Sistemas & Mago do Código.</p>
-
+                        <h4 class="font-arcade text-retro-pink text-sm md:text-lg uppercase mb-3">Dev_01: Master</h4>
+                        <p class="font-terminal text-retro-white text-lg md:text-xl mb-8 p-4 w-full border border-retro-white/20">
+                            Arquiteto de Sistemas &amp; Mago do Código.
+                        </p>
                         <div class="flex flex-col gap-2 md:gap-4 w-full mt-auto">
-                            <button
-                                class="btn-dev-modal interactive btn-8bit !py-4 md:!py-4 !px-4 !border-retro-yellow !text-retro-yellow hover:!bg-retro-yellow hover:!text-retro-black text-[12px] md:text-sm w-full"
-                                data-dev="1">
-                                > SAIBA_MAIS
+                            <button type="button" class="btn-dev-modal interactive btn-8bit primary !py-4 !px-4 text-[12px] md:text-sm w-full"
+                                data-dev="1" aria-label="Ver ficha de Master_Dev">
+                                &gt; SAIBA_MAIS
                             </button>
                         </div>
-                    </div>
+                    </article>
 
-                    <div class="window-panel p-8 interactive group flex flex-col items-center text-center reveal-up hover:border-retro-pink transition-colors"
-                        data-delay="150">
-                        <div
-                            class="w-24 h-24 md:w-36 md:h-36 border-4 border-retro-pink overflow-hidden mb-6 md:mb-6 relative rounded-full md:group-hover:scale-110 transition-transform duration-500 shadow-[0_0_20px_rgba(235,112,187,0.3)]">
-                            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=400" alt=""
-                                class="w-full h-full object-cover grayscale contrast-200 sepia hue-rotate-[320deg] saturate-150">
-                            <div class="crt-overlay opacity-50 pointer-events-none"></div>
+                    <article class="window-panel p-8 interactive group flex flex-col items-center text-center reveal-up" data-delay="150">
+                        <div class="w-24 h-24 md:w-36 md:h-36 border-4 border-retro-pink overflow-hidden mb-6 relative rounded-full md:group-hover:scale-110 transition-transform duration-500">
+                            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=400"
+                                alt="Retrato de Pixel_Ninja"
+                                class="w-full h-full object-cover grayscale contrast-150">
+                            <div class="crt-overlay opacity-50 pointer-events-none" aria-hidden="true"></div>
                         </div>
                         <h4 class="font-arcade text-retro-pink text-sm md:text-lg uppercase mb-3">Dev_02: Pixel</h4>
-                        <p
-                            class="font-terminal text-retro-white text-lg md:text-xl mb-8 bg-retro-black p-4 w-full border border-retro-gray/20 rounded shadow-inner">
-                            Mestre da Estética Retro & UI/UX Design.</p>
-
+                        <p class="font-terminal text-retro-white text-lg md:text-xl mb-8 p-4 w-full border border-retro-white/20">
+                            Mestre da Estética Retro &amp; UI/UX Design.
+                        </p>
                         <div class="flex flex-col gap-2 md:gap-4 w-full mt-auto">
-                            <button
-                                class="btn-dev-modal interactive btn-8bit !py-4 md:!py-4 !px-4 !border-retro-pink !text-retro-pink hover:!bg-retro-pink hover:!text-retro-black text-[12px] md:text-sm w-full"
-                                data-dev="2">
-                                > SAIBA_MAIS
+                            <button type="button" class="btn-dev-modal interactive btn-8bit primary !py-4 !px-4 text-[12px] md:text-sm w-full"
+                                data-dev="2" aria-label="Ver ficha de Pixel_Ninja">
+                                &gt; SAIBA_MAIS
                             </button>
                         </div>
-                    </div>
+                    </article>
 
-                    <div class="window-panel p-8 interactive group flex flex-col items-center text-center reveal-up hover:border-retro-brown transition-colors"
-                        data-delay="300">
-                        <div
-                            class="w-24 h-24 md:w-36 md:h-36 border-4 border-retro-brown overflow-hidden mb-6 md:mb-6 relative rounded-full md:group-hover:scale-110 transition-transform duration-500 shadow-[0_0_20px_rgba(152,62,60,0.3)]">
-                            <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=400" alt=""
-                                class="w-full h-full object-cover grayscale contrast-200 sepia hue-rotate-[180deg] saturate-150">
-                            <div class="crt-overlay opacity-50 pointer-events-none"></div>
+                    <article class="window-panel p-8 interactive group flex flex-col items-center text-center reveal-up" data-delay="300">
+                        <div class="w-24 h-24 md:w-36 md:h-36 border-4 border-retro-pink overflow-hidden mb-6 relative rounded-full md:group-hover:scale-110 transition-transform duration-500">
+                            <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=400"
+                                alt="Retrato de Ghost_Node"
+                                class="w-full h-full object-cover grayscale contrast-150">
+                            <div class="crt-overlay opacity-50 pointer-events-none" aria-hidden="true"></div>
                         </div>
-                        <h4 class="font-arcade text-retro-brown text-sm md:text-lg uppercase mb-3">Dev_03: Ghost</h4>
-                        <p
-                            class="font-terminal text-retro-white text-lg md:text-xl mb-8 bg-retro-black p-4 w-full border border-retro-gray/20 rounded shadow-inner">
-                            Operador Backend & Especialista em Rede.</p>
-
+                        <h4 class="font-arcade text-retro-pink text-sm md:text-lg uppercase mb-3">Dev_03: Ghost</h4>
+                        <p class="font-terminal text-retro-white text-lg md:text-xl mb-8 p-4 w-full border border-retro-white/20">
+                            Operador Backend &amp; Especialista em Rede.
+                        </p>
                         <div class="flex flex-col gap-2 md:gap-4 w-full mt-auto">
-                            <button
-                                class="btn-dev-modal interactive btn-8bit !py-4 md:!py-4 !px-4 !border-retro-brown !text-retro-brown hover:!bg-retro-brown hover:!text-retro-white text-[12px] md:text-sm w-full"
-                                data-dev="3">
-                                > SAIBA_MAIS
+                            <button type="button" class="btn-dev-modal interactive btn-8bit primary !py-4 !px-4 text-[12px] md:text-sm w-full"
+                                data-dev="3" aria-label="Ver ficha de Ghost_Node">
+                                &gt; SAIBA_MAIS
                             </button>
                         </div>
-                    </div>
-
+                    </article>
                 </div>
             </div>
-
         </div>
     </section>
 
-    <!-- 6. SOCIAL LINKS (Z-60) -->
+    <!-- ============================================================
+         6. SOCIAL / UPLINK
+         ============================================================ -->
     <section id="social"
-        class="py-16 md:py-32 relative z-[60] bg-[#151517] text-center border-t-8 border-retro-gray px-4 md:px-6 overflow-hidden">
-        <div class="matrix-bg" id="matrix-footer"></div>
+        class="py-16 md:py-32 relative z-[60] bg-retro-black text-center border-t-8 border-retro-white/30 px-4 md:px-6 overflow-hidden"
+        aria-labelledby="uplink-title">
+
+        <div class="matrix-bg" id="matrix-footer" aria-hidden="true"></div>
+
         <div class="container mx-auto max-w-6xl relative z-10">
-            <h2 class="font-arcade text-lg sm:text-3xl md:text-6xl text-retro-white mb-10 md:mb-16 uppercase tracking-widest leading-relaxed break-words text-scramble bg-retro-black/80 inline-block p-4 border border-retro-gray/30"
-                data-text="Establish_Uplink">Establish_<wbr>Uplink</h2>
+            <h2 id="uplink-title"
+                class="font-arcade text-lg sm:text-3xl md:text-6xl text-retro-white mb-10 md:mb-16 uppercase tracking-widest leading-relaxed break-words text-scramble inline-block p-4 border border-retro-white/30"
+                data-text="Establish_Uplink">
+                Establish_<wbr>Uplink
+            </h2>
+
             <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-4 md:gap-8 px-2 mt-4">
-                <a href="#"
-                    class="interactive magnetic-btn btn-8bit !border-retro-pink !text-retro-pink text-[10px] md:text-sm px-6 py-4 md:px-8 md:py-5 w-full sm:w-auto hover:!bg-retro-pink hover:!text-retro-black">DISCORD_SRV</a>
-                <a href="#"
-                    class="interactive magnetic-btn btn-8bit !border-retro-red !text-retro-red text-[10px] md:text-sm px-6 py-4 md:px-8 md:py-5 w-full sm:w-auto hover:!bg-retro-red hover:!text-retro-white">INSTA_DATA</a>
-                <a href="#"
-                    class="interactive magnetic-btn btn-8bit !border-retro-yellow !text-retro-yellow text-[10px] md:text-sm px-6 py-4 md:px-8 md:py-5 w-full sm:w-auto hover:!bg-retro-yellow hover:!text-retro-black">X_CORE_NET</a>
-                <a href="#"
-                    class="interactive magnetic-btn btn-8bit !border-retro-brown !text-retro-brown text-[10px] md:text-sm px-6 py-4 md:px-8 md:py-5 w-full sm:w-auto hover:!bg-retro-brown hover:!text-retro-white">GITHUB_MAIN</a>
+                <a href="#" class="interactive magnetic-btn btn-8bit text-[10px] md:text-sm px-6 py-4 md:px-8 md:py-5 w-full sm:w-auto" rel="noopener">
+                    DISCORD_SRV
+                </a>
+                <a href="#" class="interactive magnetic-btn btn-8bit text-[10px] md:text-sm px-6 py-4 md:px-8 md:py-5 w-full sm:w-auto" rel="noopener">
+                    INSTA_DATA
+                </a>
+                <a href="#" class="interactive magnetic-btn btn-8bit text-[10px] md:text-sm px-6 py-4 md:px-8 md:py-5 w-full sm:w-auto" rel="noopener">
+                    X_CORE_NET
+                </a>
+                <a href="#" class="interactive magnetic-btn btn-8bit text-[10px] md:text-sm px-6 py-4 md:px-8 md:py-5 w-full sm:w-auto" rel="noopener">
+                    GITHUB_MAIN
+                </a>
             </div>
 
-            <div
-                class="mt-16 md:mt-24 font-terminal text-retro-gray text-base md:text-xl lg:text-2xl max-w-3xl mx-auto border-2 border-retro-gray p-6 md:p-10 bg-retro-black text-left reveal-up space-y-3 md:space-y-4 shadow-[10px_10px_0_rgba(142,142,147,0.2)]">
-                <p>> A tentar ping ao servidor central...</p>
-                <p>> Pacotes recebidos: 4 / Perdidos: 0</p>
-                <p>> Latência: <span class="animate-pulse text-retro-white font-bold">24ms</span></p>
-                <p
-                    class="text-retro-green animate-blink mt-6 md:mt-8 bg-retro-green/10 p-3 border border-retro-green/50">
-                    > LIGAÇÃO ESTABELECIDA. AGUARDANDO COMANDOS.</p>
+            <div class="mt-16 md:mt-24 font-terminal text-retro-white/70 text-base md:text-xl lg:text-2xl max-w-3xl mx-auto border-2 border-retro-white/30 p-6 md:p-10 bg-retro-black text-left reveal-up space-y-3 md:space-y-4">
+                <p>&gt; A tentar ping ao servidor central...</p>
+                <p>&gt; Pacotes recebidos: 4 / Perdidos: 0</p>
+                <p>&gt; Latência: <span class="animate-pulse text-retro-white font-bold">24ms</span></p>
+                <p class="text-retro-pink animate-blink mt-6 md:mt-8 p-3 border border-retro-pink/50 bg-retro-pink/10">
+                    &gt; LIGAÇÃO ESTABELECIDA. AGUARDANDO COMANDOS.
+                </p>
             </div>
         </div>
     </section>
 
-    <!-- FOOTER (Z-70) -->
-    <footer class="py-10 md:py-16 text-center bg-[#0a0a0c] border-t-2 border-retro-gray/30 px-6 relative z-[70]">
-        <div class="font-terminal text-retro-gray text-sm md:text-2xl uppercase leading-loose tracking-widest">
+    </main>
+
+    <!-- ============================================================
+         FOOTER
+         ============================================================ -->
+    <footer class="py-10 md:py-16 text-center bg-retro-black border-t-2 border-retro-white/30 px-6 relative z-[70]">
+        <div class="font-terminal text-retro-white/70 text-sm md:text-2xl uppercase leading-loose tracking-widest">
             IPSUM STUDIO DIGITAL © 1994-2026. <br>
-            <span class="text-retro-green animate-blink mt-3 md:mt-4 inline-block font-bold">C:\>
-                INSERT_COIN_TO_RESTART</span>
+            <span class="text-retro-pink animate-blink mt-3 md:mt-4 inline-block font-bold">
+                C:\&gt; INSERT_COIN_TO_RESTART
+            </span>
         </div>
     </footer>
 
-    <!-- MODAL DOS DESENVOLVEDORES (Z-Supremo) - Touch Responsivo -->
-    <div id="dev-modal"
-        class="fixed inset-0 z-[100000] flex items-center justify-center p-0 md:p-12 bg-[#0a0a0c]/95 md:bg-[#0a0a0c]/90 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="absolute inset-0 matrix-bg pointer-events-none" id="matrix-modal"></div>
+    <!-- ============================================================
+         MODAL DEV
+         ============================================================ -->
+    <div id="dev-modal" role="dialog" aria-modal="true" aria-labelledby="modal-dev-name" aria-hidden="true"
+        class="fixed inset-0 z-[100000] flex items-center justify-center p-0 md:p-12 bg-retro-black/95 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
 
-        <div class="window-panel w-full h-full md:h-auto max-w-5xl md:max-w-4xl lg:max-w-5xl md:max-h-[90vh] flex flex-col md:scale-90 opacity-0 relative z-10 md:shadow-[0_0_50px_rgba(244,229,96,0.2)] border-0 md:border-4 border-retro-yellow rounded-none md:rounded-sm overflow-hidden"
+        <div class="absolute inset-0 matrix-bg pointer-events-none" id="matrix-modal" aria-hidden="true"></div>
+
+        <div class="window-panel w-full h-full md:h-auto max-w-5xl md:max-w-4xl lg:max-w-5xl md:max-h-[90vh] flex flex-col md:scale-90 opacity-0 relative z-10 rounded-none md:rounded-sm overflow-hidden"
             id="dev-modal-content">
-            <div class="window-header bg-retro-yellow text-retro-black flex-shrink-0 text-[10px] md:text-sm py-4 px-4 md:py-4 md:px-6 flex justify-between items-center"
+
+            <header class="window-header flex-shrink-0 text-[10px] md:text-sm py-4 px-4 md:py-4 md:px-6 flex justify-between items-center"
                 id="modal-header-bg">
                 <span>C:\SYSTEM\DEVS_DATA.EXE</span>
-                <span id="close-dev-modal"
-                    class="interactive font-bold px-4 py-2 bg-retro-black text-retro-white hover:bg-retro-red cursor-pointer border-2 border-retro-black transition-all text-[12px] md:text-sm shadow-[inset_2px_2px_0_rgba(255,255,255,0.2)] active:translate-y-1">[
-                    X ] FECHAR</span>
-            </div>
+                <button type="button" id="close-dev-modal"
+                    class="interactive font-bold px-4 py-2 cursor-pointer transition-all text-[12px] md:text-sm"
+                    aria-label="Fechar modal de desenvolvedor">
+                    [ X ] FECHAR
+                </button>
+            </header>
 
-            <div
-                class="p-6 md:p-8 lg:p-12 bg-retro-black text-left flex flex-col lg:flex-row gap-6 md:gap-8 lg:gap-12 overflow-y-auto retro-scroll flex-grow">
+            <div class="p-6 md:p-8 lg:p-12 bg-retro-black text-left flex flex-col lg:flex-row gap-6 md:gap-8 lg:gap-12 overflow-y-auto retro-scroll flex-grow">
 
                 <div class="w-full lg:w-1/3 flex flex-col items-center flex-shrink-0 mt-4 md:mt-0">
-                    <div class="relative aspect-square border-4 border-retro-yellow overflow-hidden bg-black mb-4 md:mb-6 w-full max-w-[200px] md:max-w-[280px] lg:max-w-[350px] shadow-[0_0_20px_rgba(244,229,96,0.2)]"
+                    <div class="relative aspect-square border-4 border-retro-pink overflow-hidden bg-retro-black mb-4 md:mb-6 w-full max-w-[200px] md:max-w-[280px] lg:max-w-[350px]"
                         id="modal-img-border">
                         <img id="modal-dev-img" src="" alt=""
                             class="w-full h-full object-cover grayscale contrast-200 opacity-90">
-                        <div class="crt-overlay" style="opacity: 0.6;"></div>
+                        <div class="crt-overlay" style="opacity: 0.6;" aria-hidden="true"></div>
                     </div>
                     <h3 id="modal-dev-name"
-                        class="font-arcade text-retro-yellow text-base md:text-xl lg:text-3xl mb-2 md:mb-3 uppercase text-center tracking-widest bg-retro-yellow/10 p-3 w-full">
-                        Nome</h3>
+                        class="font-arcade text-retro-pink text-base md:text-xl lg:text-3xl mb-2 md:mb-3 uppercase text-center tracking-widest bg-retro-pink/10 p-3 w-full">
+                        Nome
+                    </h3>
                     <p id="modal-dev-role"
-                        class="font-terminal text-retro-white text-lg md:text-xl lg:text-3xl mb-4 text-center border-b border-retro-gray/30 pb-4 w-full">
-                        Função</p>
+                        class="font-terminal text-retro-white text-lg md:text-xl lg:text-3xl mb-4 text-center border-b border-retro-white/30 pb-4 w-full">
+                        Função
+                    </p>
                 </div>
 
                 <div class="w-full lg:w-2/3 flex flex-col justify-between">
                     <div>
                         <h2 id="modal-dev-history-title"
-                            class="font-arcade text-retro-pink text-[14px] md:text-lg lg:text-2xl mb-4 md:mb-8 uppercase border-b-2 border-retro-gray/50 pb-2 md:pb-4 text-scramble-modal inline-block">
-                            Histórico_Operacional</h2>
+                            class="font-arcade text-retro-pink text-[14px] md:text-lg lg:text-2xl mb-4 md:mb-8 uppercase border-b-2 border-retro-white/50 pb-2 md:pb-4 text-scramble-modal inline-block">
+                            Histórico_Operacional
+                        </h2>
                         <div id="modal-dev-bio"
-                            class="font-terminal text-base md:text-lg lg:text-2xl text-retro-white leading-relaxed space-y-4 md:space-y-6 bg-retro-dim p-5 md:p-6 border border-retro-gray/20 shadow-inner rounded-sm">
-                            <!-- Bio inserida por JS -->
+                            class="font-terminal text-base md:text-lg lg:text-2xl text-retro-white leading-relaxed space-y-4 md:space-y-6 bg-retro-black p-5 md:p-6 border border-retro-white/30 rounded-sm">
+                            <!-- Bio injetada via JS -->
                         </div>
                         <p id="modal-dev-quote"
                             class="animate-pulse text-retro-pink bg-retro-pink/10 p-5 md:p-6 border-l-4 border-retro-pink mt-6 md:mt-8 text-[14px] md:text-xl font-arcade leading-loose">
-                            <!-- Citação inserida por JS -->
+                            <!-- Citação injetada via JS -->
                         </p>
                     </div>
 
                     <div class="flex flex-col sm:flex-row flex-wrap gap-4 md:gap-6 mt-10 md:mt-12 w-full pb-8 md:pb-0">
-                        <a id="modal-dev-github" href="#" target="_blank"
-                            class="interactive btn-8bit flex-1 !py-4 !px-4 md:!px-6 !border-retro-gray hover:!border-retro-white text-[12px] md:text-sm text-center bg-[#222]">GITHUB_REPO</a>
-                        <a id="modal-dev-linkedin" href="#" target="_blank"
-                            class="interactive btn-8bit flex-1 !py-4 !px-4 md:!px-6 !border-retro-white hover:!bg-retro-white hover:!text-retro-black text-[12px] md:text-sm text-center">LINKEDIN_NODE</a>
+                        <a id="modal-dev-github" href="#" target="_blank" rel="noopener noreferrer"
+                            class="interactive btn-8bit flex-1 !py-4 !px-4 md:!px-6 text-[12px] md:text-sm text-center">
+                            GITHUB_REPO
+                        </a>
+                        <a id="modal-dev-linkedin" href="#" target="_blank" rel="noopener noreferrer"
+                            class="interactive btn-8bit flex-1 !py-4 !px-4 md:!px-6 text-[12px] md:text-sm text-center">
+                            LINKEDIN_NODE
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </body>
 
 </html>
