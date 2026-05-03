@@ -10,9 +10,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
   
-  <!-- GSAP & ScrollTrigger -->
+  <!-- GSAP & ScrollTrigger (Apenas para Scroll/Parallax) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <!-- Anime.js (Para entradas, interações e loops) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 
   <style>
     /* --- Paleta de Cores Premium --- */
@@ -45,14 +48,17 @@
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; overflow-x: hidden; }
+    
+    /* CORREÇÃO DO BUG DE SCROLL: Removido overflow-x: hidden daqui */
+    html { scroll-behavior: smooth; }
 
     body { 
       background: var(--sky); 
       color: var(--text);
       font-family: 'Inter', sans-serif;
-      overflow-x: hidden;
+      overflow-x: hidden; /* Mantido apenas no body para evitar scroll horizontal */
       line-height: 1.6;
+      position: relative;
       cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23FFFFFF" stroke="%23451A03" stroke-width="2" d="M3 3l7 18 3-7 7-3z"/></svg>') 4 4, auto;
     }
 
@@ -77,6 +83,8 @@
     /* Layout & Espaçamentos Base */
     .container { max-width: 1200px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 40px); position: relative; z-index: 10; }
     
+    section { padding: clamp(80px, 12vw, 160px) 0; position: relative; border-bottom: 8px solid var(--brown-dark); overflow: hidden; }
+
     .section-title { 
       font-size: clamp(28px, 5vw, 48px); color: #FFFFFF; margin-bottom: 15px; text-align: center; 
       text-shadow: 0 5px 0 var(--brown-dark), 0 8px 0 rgba(0,0,0,0.2); letter-spacing: -1px; position: relative;
@@ -85,16 +93,6 @@
       font-size: clamp(14px, 3vw, 20px); color: var(--text); text-align: center; margin-bottom: clamp(40px, 8vw, 80px); 
       font-weight: 900; text-transform: uppercase; letter-spacing: 2px; opacity: 0.85;
     }
-    section { padding: clamp(80px, 12vw, 160px) 0; position: relative; border-bottom: 8px solid var(--brown-dark); overflow: hidden; }
-
-    /* Animações Globais */
-    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-    @keyframes float-slow { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-20px) rotate(2deg); } }
-    @keyframes spin-coin { 0% { transform: rotateY(0deg) scale(1); } 50% { transform: rotateY(180deg) scale(1.1); } 100% { transform: rotateY(360deg) scale(1); } }
-    @keyframes bounce-down { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(12px); } }
-    
-    .floating { animation: float 4s ease-in-out infinite; }
-    .floating-slow { animation: float-slow 6s ease-in-out infinite; }
 
     /* --- BOTÕES 3D PREMIUM --- */
     .btn-3d {
@@ -119,6 +117,8 @@
     .btn-secondary { background: #FFF; color: var(--brown-dark); box-shadow: inset 0 4px 0 rgba(255,255,255,0.8), inset 0 -4px 0 rgba(0,0,0,0.1), 0 6px 0 #D1D5DB, 0 10px 0 var(--brown-dark); }
     .btn-secondary:hover { background: #F9FAFB; box-shadow: inset 0 4px 0 rgba(255,255,255,0.9), inset 0 -4px 0 rgba(0,0,0,0.1), 0 8px 0 #D1D5DB, 0 12px 0 var(--brown-dark); }
     .btn-secondary:active { box-shadow: inset 0 4px 0 rgba(255,255,255,0.1), inset 0 -2px 0 rgba(0,0,0,0.1), 0 0 0 #D1D5DB, 0 4px 0 var(--brown-dark); }
+    
+    .btn-3d.full { width: 100%; display: flex; justify-content: center; }
 
     /* --- NAVEGAÇÃO DESKTOP --- */
     .nav-wrapper { position: fixed; top: 20px; left: 0; width: 100%; z-index: 100; display: flex; justify-content: center; pointer-events: none; padding: 0 15px; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
@@ -135,6 +135,7 @@
     .nav-links { display: flex; gap: 20px; align-items: center; }
     .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 800; transition: all 0.3s; padding: 8px 12px; border-radius: 20px; white-space: nowrap; }
     .nav-links a:hover { color: var(--brown-dark); background: rgba(0,0,0,0.05); transform: translateY(-2px); }
+    .mobile-btn-nav { display: none; }
 
     /* --- EASTER EGG (Moedas) --- */
     .coin-wrapper { position: absolute; z-index: 5; cursor: pointer; display: flex; justify-content: center; align-items: center; }
@@ -142,37 +143,41 @@
       width: clamp(24px, 4vw, 36px); height: clamp(24px, 4vw, 36px); background: var(--gold); 
       border: 4px solid var(--brown-dark); border-radius: 50%; 
       box-shadow: inset -4px -4px 0 #D97706, inset 4px 4px 0 #FEF08A; 
-      animation: spin-coin 2.5s linear infinite; position: relative;
+      position: relative;
       transition: filter 0.3s;
     }
     .coin::after { content: ''; position: absolute; top: 20%; left: 35%; width: 4px; height: 12px; background: var(--brown-dark); border-radius: 2px; }
-    .coin-wrapper:hover .coin { filter: brightness(1.2) drop-shadow(0 0 10px var(--gold)); animation-duration: 1s; }
+    .coin-wrapper:hover .coin { filter: brightness(1.2) drop-shadow(0 0 10px var(--gold)); }
     .score-popup { position: absolute; color: var(--gold-light); font-family: 'Press Start 2P', monospace; font-size: 20px; text-shadow: 2px 2px 0 var(--brown-dark), -2px -2px 0 var(--brown-dark), 2px -2px 0 var(--brown-dark), -2px 2px 0 var(--brown-dark); pointer-events: none; z-index: 100; opacity: 0; }
 
     /* --- HERO --- */
     #hero { 
       min-height: 100vh; min-height: 100svh; 
-      display: flex; flex-direction: column; align-items: center; justify-content: center; /* Flex-direction: column é fundamental para não sobrepor o topo */
+      display: flex; flex-direction: column; align-items: center; justify-content: center; 
       background: radial-gradient(circle at center, var(--sky-light) 0%, var(--sky) 100%); 
-      /* Padding-top generoso e dinâmico para garantir o espaço com a navbar de desktop */
       padding: clamp(160px, 22vh, 240px) 20px 80px 20px; 
       perspective: 1000px; 
+      position: relative;
     }
+    
+    #anime-particles { position: absolute; inset: 0; overflow: hidden; z-index: 1; pointer-events: none; }
+    .anime-particle { position: absolute; width: 15px; height: 15px; border: 3px solid var(--brown-dark); border-radius: 4px; opacity: 0; }
+
     .hero-content { 
       text-align: center; z-index: 10; transform-style: preserve-3d; 
-      margin: auto; /* Mantém o bloco inteiro o mais centrado possível mas sempre respeitando o padding */
-      width: 100%; max-width: 1200px; 
+      margin: auto; width: 100%; max-width: 1200px; 
     }
     .hero-badge { display: inline-block; background: #FFF; border: 4px solid var(--brown-dark); color: var(--brown-dark); font-size: clamp(10px, 2vw, 12px); font-weight: 900; padding: 12px 28px; border-radius: 30px; margin-bottom: clamp(20px, 4vw, 35px); box-shadow: 4px 4px 0 var(--brown-dark); text-transform: uppercase; letter-spacing: 1.5px; }
-    #hero h1 { font-size: clamp(32px, 8vw, 96px); color: #FFF; text-shadow: 0 clamp(4px, 1vw, 8px) 0 var(--sky-dark), 0 clamp(6px, 1.5vw, 14px) 0 var(--brown-dark); margin-bottom: 30px; letter-spacing: -2px; display: inline-block; line-height: 1.1; }
-    .char { display: inline-block; transition: color 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-    .char:hover { color: var(--gold); transform: translateY(-20px) scale(1.15) rotate(8deg) !important; text-shadow: 0 20px 0 var(--brown-dark); }
+    #hero h1 { font-size: clamp(32px, 8vw, 96px); color: #FFF; text-shadow: 0 clamp(4px, 1vw, 8px) 0 var(--sky-dark), 0 clamp(6px, 1.5vw, 14px) 0 var(--brown-dark); margin-bottom: 30px; letter-spacing: -2px; display: inline-block; line-height: 1.1; perspective: 500px; }
+    .char { display: inline-block; transform-origin: bottom center; }
+    .char:hover { color: var(--gold); }
+    
     #hero p { font-size: clamp(15px, 4vw, 22px); color: var(--brown-dark); max-width: 700px; margin: 0 auto clamp(30px, 6vw, 50px); font-weight: 800; background: var(--bg-panel); padding: clamp(20px, 4vw, 30px); border-radius: 24px; border: 4px solid var(--brown-dark); box-shadow: inset 0 0 0 4px #FFF, 8px 8px 0 rgba(69, 26, 3, 0.15); position: relative; line-height: 1.6; }
     #hero p::after { content: ''; position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); border-width: 20px 20px 0; border-style: solid; border-color: var(--brown-dark) transparent transparent transparent; }
     #hero p::before { content: ''; position: absolute; bottom: -13px; left: 50%; transform: translateX(-50%); border-width: 15px 15px 0; border-style: solid; border-color: var(--bg-panel) transparent transparent transparent; z-index: 1; }
     
     .hero-ctas { display: flex; gap: 20px; justify-content: center; align-items: center; flex-wrap: wrap; }
-    .scroll-down { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); color: var(--brown-dark); font-size: clamp(20px, 4vw, 28px); animation: bounce-down 2s infinite; opacity: 0.7; z-index: 10; cursor: pointer;}
+    .scroll-down { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); color: var(--brown-dark); font-size: clamp(20px, 4vw, 28px); opacity: 0.7; z-index: 10; cursor: pointer;}
     .cloud { position: absolute; background: #FFF; border-radius: 50px; border: 4px solid var(--brown-dark); opacity: 0.95; z-index: 1;}
     .cloud::before { content:''; position:absolute; top:-40%; left:15%; width:40%; height:80%; background:#FFF; border-radius:50%; border:4px solid var(--brown-dark); border-bottom: none;}
     .cloud::after { content:''; position:absolute; top:-25%; right:20%; width:30%; height:60%; background:#FFF; border-radius:50%; border:4px solid var(--brown-dark); border-bottom: none;}
@@ -181,6 +186,9 @@
     #gameplay { background: var(--sky-dark); }
     .video-wrapper { position: relative; max-width: 1000px; margin: 0 auto; background: var(--bg-panel); padding: clamp(12px, 3vw, 20px); border-radius: 28px; border: 6px solid var(--brown-dark); box-shadow: inset 0 0 0 4px #FFF, clamp(8px, 2vw, 20px) clamp(8px, 2vw, 20px) 0 rgba(0,0,0,0.5); }
     .video-inner { aspect-ratio: 16/9; background: #111; border-radius: 16px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; border: 4px solid var(--brown-dark); cursor: pointer; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    
+    .video-thumbnail-bg { position: absolute; inset: -20%; width: 140%; height: 140%; background: linear-gradient(135deg, var(--brown-dark) 0%, #111 100%); opacity: 0.8; z-index: 0; }
+    .video-hills { position: absolute; bottom: -20%; left: -10%; width: 120%; height: 60%; background: var(--grass-dark); border-top: 6px solid #000; border-radius: 50% 50% 0 0; z-index: 0; transform: scale(1.5); opacity: 0.4; }
     .video-inner:hover { transform: scale(1.03); }
     .scanlines { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(255,255,255,0.06) 4px, rgba(255,255,255,0.06) 8px); pointer-events: none; z-index: 1; }
 
@@ -188,33 +196,95 @@
     .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: clamp(40px, 8vw, 80px); align-items: center; }
     .about-text h2 { color: #FFF; font-size: clamp(28px, 5vw, 42px); margin-bottom: 20px; text-shadow: 0 4px 0 var(--brown-dark); line-height: 1.2; text-align: left;}
     .about-text p { margin-bottom: 20px; font-size: clamp(15px, 3vw, 18px); color: var(--brown-dark); font-weight: 700; line-height: 1.8; }
-    .about-list { list-style: none; margin-top: 30px;}
-    .about-list li { margin-bottom: 20px; padding-left: 55px; position: relative; font-weight: 800; color: #FFF; font-size: clamp(14px, 3vw, 16px); text-shadow: 1px 1px 0 var(--brown-dark); display: flex; align-items: center;}
-    .about-list li::before { content: ''; position: absolute; left: 0; width: 32px; height: 32px; background: var(--gold); border: 4px solid var(--brown-dark); border-radius: 8px; box-shadow: inset -2px -2px 0 #D97706; transition: transform 0.3s;}
-    .about-image { width: 100%; height: clamp(250px, 40vw, 450px); background: var(--sky-light); border: 8px solid var(--brown-dark); border-radius: 28px; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: inset 0 0 0 8px #FFF, clamp(8px, 2vw, 20px) clamp(8px, 2vw, 20px) 0 rgba(69, 26, 3, 0.25); overflow: hidden; transition: transform 0.4s; }
+    
+    .feature-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-top: 30px; }
+    .feature-card { background: rgba(255,255,255,0.25); border: 4px solid var(--brown-dark); border-radius: 16px; padding: 20px 15px; text-align: center; box-shadow: 0 6px 0 rgba(0,0,0,0.1); transition: transform 0.3s; }
+    .feature-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.4); }
+    .feature-card .icon { color: var(--brown-dark); margin-bottom: 10px; display: flex; justify-content: center; filter: drop-shadow(0 2px 0 rgba(255,255,255,0.6)); }
+    .feature-card span { font-weight: 900; color: #FFF; font-size: clamp(12px, 1.5vw, 14px); text-shadow: 1px 1px 0 var(--brown-dark); text-transform: uppercase;}
 
-    #characters { background: var(--brown); padding: 0; }
-    .char-container-wrapper { position: relative; width: 100%; }
-    .chars-header { position: absolute; top: clamp(30px, 5vw, 8%); width: 100%; text-align: center; z-index: 20; pointer-events: none;}
-    .chars-header p { color: var(--brown-light); font-weight: 800; margin-top: 15px; font-size: clamp(13px, 3vw, 16px);}
-    .pin-wrap { height: 100vh; height: 100svh; display: flex; flex-direction: column; overflow: hidden; position: relative; }
-    .horizontal-container { display: flex; height: 100%; width: fit-content; will-change: transform; }
-    .char-panel { width: 100vw; height: 100%; display: flex; align-items: center; justify-content: center; padding: 0 20px; position: relative; perspective: 1000px;}
-    .char-card { background: var(--bg-panel); border: 6px solid var(--brown-dark); padding: clamp(30px, 6vw, 50px) clamp(20px, 4vw, 40px); border-radius: 36px; max-width: 650px; width: 100%; max-height: 85vh; overflow-y: auto; display: flex; flex-direction: column; align-items: center; text-align: center; box-shadow: inset 0 0 0 8px #FFF, 0 clamp(10px, 3vw, 20px) 0 rgba(0,0,0,0.4); transition: transform 0.3s; }
-    .char-avatar { width: clamp(100px, 20vw, 140px); height: clamp(100px, 20vw, 140px); background: #FFF; border: 6px solid var(--brown-dark); margin-bottom: 25px; display: flex; align-items: center; justify-content: center; border-radius: 24px; flex-shrink: 0; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.1), 8px 8px 0 var(--brown-dark); transition: all 0.4s; }
+    .about-image { 
+      width: 100%; 
+      height: clamp(300px, 40vw, 450px); 
+      background-color: var(--sky-light); 
+      background-size: cover;
+      background-position: center;
+      border: 8px solid var(--brown-dark); 
+      border-radius: 28px; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center; 
+      position: relative; 
+      box-shadow: inset 0 0 0 8px #FFF, clamp(8px, 2vw, 20px) clamp(8px, 2vw, 20px) 0 rgba(69, 26, 3, 0.25); 
+      overflow: hidden; 
+      transition: transform 0.4s; 
+    }
+    .about-image-placeholder {
+      font-family: 'Press Start 2P';
+      color: rgba(69, 26, 3, 0.3);
+      font-size: clamp(14px, 2vw, 20px);
+      text-align: center;
+      padding: 20px;
+    }
+
+    /* --- CHARACTERS SECTION --- */
+    #characters { background: var(--brown); }
+    .chars-header { text-align: center; margin-bottom: clamp(40px, 8vw, 60px); }
+    .chars-header h2 { color: #FFF; text-shadow: 0 5px 0 var(--brown-dark), 0 8px 0 rgba(0,0,0,0.2); font-size: clamp(28px, 5vw, 48px); }
+    .chars-header p { color: var(--gold-light); font-weight: 800; margin-top: 15px; font-size: clamp(13px, 3vw, 16px); }
+    
+    .chars-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+      gap: clamp(30px, 4vw, 40px); 
+    }
+    
+    .char-card { 
+      background: var(--bg-panel); 
+      border: 6px solid var(--brown-dark); 
+      padding: clamp(30px, 5vw, 40px) clamp(20px, 4vw, 30px); 
+      border-radius: 36px; 
+      width: 100%; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      text-align: center; 
+      box-shadow: inset 0 0 0 8px #FFF, 0 clamp(8px, 2vw, 15px) 0 rgba(0,0,0,0.4); 
+      transition: transform 0.3s; 
+    }
+    
+    .char-avatar { width: clamp(80px, 15vw, 120px); height: clamp(80px, 15vw, 120px); background: #FFF; border: 6px solid var(--brown-dark); margin-bottom: 25px; display: flex; align-items: center; justify-content: center; border-radius: 24px; flex-shrink: 0; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.1), 8px 8px 0 var(--brown-dark); transition: all 0.4s; }
     .char-card:hover .char-avatar { transform: scale(1.1) translateY(-10px) rotate(5deg); box-shadow: inset -4px -4px 0 rgba(0,0,0,0.1), 12px 12px 0 var(--brown-dark);}
-    .char-card h3 { font-size: clamp(24px, 5vw, 32px); color: var(--accent); margin-bottom: 12px; text-shadow: 0 4px 0 var(--brown-dark); }
+    .char-card h3 { font-size: clamp(24px, 5vw, 32px); margin-bottom: 12px; text-shadow: 0 4px 0 var(--brown-dark); }
     .char-card .char-class { font-family: 'Press Start 2P'; font-size: clamp(8px, 2vw, 10px); color: var(--brown-dark); margin-bottom: 20px; background: #E5E7EB; padding: 8px 16px; border: 4px solid var(--brown-dark); border-radius: 12px; box-shadow: inset 0 -3px 0 rgba(0,0,0,0.1); }
     .char-quote { font-style: italic; color: var(--text-muted); font-size: clamp(14px, 3vw, 16px); margin-bottom: 25px; font-weight: 800; background: rgba(0,0,0,0.04); padding: 15px; border-radius: 16px; border-left: 4px solid var(--accent);}
     .char-lore { border-top: 4px dashed var(--stone); padding-top: 25px; text-align: left; font-size: clamp(14px, 3vw, 16px); color: var(--text); line-height: 1.8; width: 100%; font-weight: 600;}
-    .scroll-indicator { position: absolute; bottom: clamp(20px, 5vw, 8%); left: 50%; transform: translateX(-50%); display: flex; gap: 15px; z-index: 20; }
-    .dot { width: 16px; height: 16px; background: var(--brown-dark); border: 4px solid #FFF; border-radius: 8px; opacity: 0.5; transition: all 0.4s; }
-    .dot.active { background: var(--gold); transform: scale(1.6); opacity: 1; border-radius: 50%; box-shadow: 0 4px 0 rgba(0,0,0,0.2);}
 
-    #gallery .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 50px; }
-    .gallery-item { aspect-ratio: 4/3; background: var(--sky-light); border: 6px solid var(--brown-dark); border-radius: 20px; position: relative; overflow: hidden; box-shadow: 8px 8px 0 rgba(0,0,0,0.2); cursor: pointer; transition: all 0.4s; }
-    .gallery-item:hover { transform: scale(1.05) translateY(-5px) rotate(2deg); box-shadow: 12px 16px 0 var(--brown-dark); z-index: 2; }
+    /* --- GALERIA COM SCROLL HORIZONTAL --- */
+    #gallery { padding-bottom: clamp(60px, 10vw, 100px); }
+    .gallery-pin-wrapper { overflow: hidden; padding-top: 20px; }
+    
+    .horizontal-scroll-container { display: flex; gap: 30px; padding: 20px clamp(20px, 5vw, 40px); width: max-content; }
+    .gallery-item { 
+      width: clamp(280px, 45vw, 600px); aspect-ratio: 16/9; border: 6px solid var(--brown-dark); 
+      border-radius: 20px; position: relative; overflow: hidden; box-shadow: 8px 8px 0 rgba(0,0,0,0.2); 
+      cursor: pointer; transition: all 0.4s; display: flex; flex-direction: column; justify-content: flex-end; flex-shrink: 0;
+    }
+    .gallery-item:hover { transform: scale(1.02) translateY(-5px); box-shadow: 12px 16px 0 var(--brown-dark); z-index: 2; }
+    .gallery-content { padding: 25px; background: linear-gradient(to top, rgba(69,26,3,0.95) 0%, rgba(69,26,3,0.6) 60%, transparent 100%); transform: translateY(30px); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .gallery-item:hover .gallery-content { transform: translateY(0); }
+    .gallery-content h3 { font-size: clamp(14px, 2vw, 18px); color: #FFF; margin-bottom: 8px; text-shadow: 2px 2px 0 #000; }
+    .gallery-content p { font-size: clamp(12px, 1.5vw, 14px); color: var(--gold-light); font-weight: 800; font-family: 'Inter'; opacity: 0; transition: opacity 0.4s; }
+    .gallery-item:hover .gallery-content p { opacity: 1; }
 
+    .bg-forest { background: linear-gradient(to bottom, var(--sky-dark) 40%, var(--grass-dark) 40%); }
+    .bg-ruins { background: linear-gradient(to bottom, var(--brown) 50%, var(--stone-dark) 50%); }
+    .bg-clouds { background: linear-gradient(to bottom, var(--sky-light) 60%, #FFF 60%); }
+    .bg-boss { background: linear-gradient(to bottom, var(--accent-shadow) 50%, var(--brown-dark) 50%); }
+    .gallery-bg { position: absolute; top: -20%; left: -20%; width: 140%; height: 140%; z-index: -1; background-size: cover; background-position: center; opacity: 0.8;}
+
+    /* --- ROADMAP --- */
     #roadmap .roadmap-container { max-width: 800px; margin: 0 auto; position: relative; padding-left: clamp(30px, 6vw, 50px); margin-top: 50px;}
     .roadmap-container::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 8px; background: var(--brown-dark); border-radius: 4px; }
     .milestone { position: relative; margin-bottom: clamp(40px, 8vw, 60px); padding: clamp(25px, 5vw, 35px); background: var(--bg-panel); border: 6px solid var(--brown-dark); border-radius: 24px; box-shadow: inset 0 0 0 6px #FFF, 8px 8px 0 rgba(69,26,3,0.15); transition: transform 0.3s;}
@@ -223,27 +293,37 @@
     .milestone.active::before { border-color: var(--brown-dark); background: var(--accent); box-shadow: 0 0 0 6px var(--bg-panel); transform: scale(1.2);}
     .milestone-date { font-family: 'Press Start 2P'; font-size: 10px; color: var(--accent); margin-bottom: 12px; display: inline-block; background: #FEE2E2; padding: 6px 12px; border-radius: 8px; border: 3px solid var(--accent); }
 
+    /* --- AVALIAÇÃO --- */
     #avaliacao .avaliacao-box { background: var(--bg-panel); border: 8px solid var(--brown-dark); padding: clamp(30px, 6vw, 60px); max-width: 800px; margin: 0 auto; box-shadow: inset 0 0 0 8px #FFF, clamp(8px, 3vw, 20px) clamp(8px, 3vw, 20px) 0 rgba(69,26,3,0.3); border-radius: 36px; text-align: center;}
     .form-group { display: flex; gap: 15px; flex-direction: column; align-items: center; width: 100%;}
     .form-group textarea { width: 100%; max-width: 600px; min-height: 140px; padding: 20px; background: #FFF; border: 5px solid var(--brown-dark); border-radius: 16px; color: var(--text); font-family: 'Inter'; font-weight: 600; font-size: 16px; outline: none; transition: all 0.3s; box-shadow: inset 0 6px 0 rgba(0,0,0,0.05); resize: vertical;}
     .form-group textarea:focus { border-color: var(--accent); transform: scale(1.02); }
 
-    #faq .faq-container { max-width: 800px; margin: 0 auto; }
+    /* --- FAQ & SOBRE O PROJETO GRID --- */
+    #faq .about-project-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 6vw, 60px); align-items: start; }
     .faq-item { border-bottom: 4px dashed var(--stone); padding: 25px; border-radius: 16px; margin-bottom: 10px; cursor: pointer; transition: all 0.3s;}
     .faq-question { display: flex; justify-content: space-between; align-items: center; font-weight: 800; color: var(--brown-dark); font-size: clamp(15px, 4vw, 18px); gap: 15px;}
     .faq-icon { font-family: 'Press Start 2P'; font-size: 14px; color: #FFF; background: var(--accent); width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 10px; border: 4px solid var(--brown-dark); box-shadow: 0 4px 0 var(--brown-dark); transition: all 0.4s; }
     .faq-answer { display: none; padding-top: 20px; color: var(--brown-dark); font-size: clamp(14px, 3vw, 16px); font-weight: 600; line-height: 1.8; }
     .faq-item.active { background: rgba(255,255,255,0.6); border-bottom-color: transparent; box-shadow: 0 8px 25px rgba(0,0,0,0.05);}
-    .faq-item.active .faq-answer { display: block; animation: fade-in-down 0.4s ease; }
+    .faq-item.active .faq-answer { display: block; }
     .faq-item.active .faq-icon { transform: rotate(135deg) translateY(-4px); background: var(--grass-dark); box-shadow: 0 0 0 var(--brown-dark); }
-    @keyframes fade-in-down { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-    #devs .dev-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(40px, 6vw, 60px); margin-top: clamp(60px, 10vw, 80px); }
-    .dev-card { background: var(--bg-panel); border: 6px solid var(--brown-dark); padding: 50px 25px 25px; border-radius: 28px; text-align: center; position: relative; box-shadow: inset 0 0 0 6px #FFF, 8px 8px 0 rgba(0,0,0,0.25); transition: all 0.4s; }
-    .dev-card:hover { transform: translateY(-10px); box-shadow: inset 0 0 0 6px #FFF, 12px 16px 0 var(--brown-dark); }
-    .dev-avatar { width: clamp(80px, 15vw, 100px); height: clamp(80px, 15vw, 100px); position: absolute; top: clamp(-40px, -7vw, -50px); left: 50%; transform: translateX(-50%); background: var(--sky-light); border-radius: 20px; border: 6px solid var(--brown-dark); display: flex; align-items: center; justify-content: center; font-family: 'Press Start 2P'; font-size: 32px; color: var(--brown-dark); box-shadow: inset -4px -4px 0 rgba(0,0,0,0.1), 0 8px 0 rgba(0,0,0,0.2); transition: all 0.4s; }
-    .dev-card:hover .dev-avatar { transform: translateX(-50%) scale(1.1) rotate(5deg); background: var(--gold); }
     
+    .project-media-box { background: var(--bg-panel); border: 6px solid var(--brown-dark); padding: 25px; border-radius: 28px; box-shadow: inset 0 0 0 6px #FFF, 8px 8px 0 rgba(0,0,0,0.25); }
+    .project-cover { background-color: var(--sky-light); height: clamp(200px, 30vw, 250px); border: 6px solid var(--brown-dark); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; background-size: cover; background-position: center; box-shadow: inset 0 0 0 6px rgba(255,255,255,0.5); overflow: hidden; transition: transform 0.3s; }
+    .project-cover:hover { transform: scale(1.02); }
+
+    /* --- DEVS SECTION --- */
+    #devs .dev-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(40px, 6vw, 60px); margin-top: clamp(60px, 10vw, 80px); }
+    .dev-card { background: var(--bg-panel); border: 6px solid var(--brown-dark); padding: 60px 25px 25px; border-radius: 28px; text-align: center; position: relative; box-shadow: inset 0 0 0 6px #FFF, 8px 8px 0 rgba(0,0,0,0.25); transition: all 0.4s; }
+    .dev-card:hover { transform: translateY(-10px); box-shadow: inset 0 0 0 6px #FFF, 12px 16px 0 var(--brown-dark); }
+    
+    .dev-avatar { width: clamp(90px, 15vw, 110px); height: clamp(90px, 15vw, 110px); position: absolute; top: clamp(-45px, -7vw, -55px); left: 50%; transform: translateX(-50%); background-color: var(--sky-light); background-size: cover; background-position: center; border-radius: 24px; border: 6px solid var(--brown-dark); display: flex; align-items: center; justify-content: center; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.1), 0 8px 0 rgba(0,0,0,0.2); transition: all 0.4s; }
+    .dev-avatar svg { width: 50%; height: 50%; fill: var(--brown-dark); opacity: 0.5; }
+    .dev-card:hover .dev-avatar { transform: translateX(-50%) scale(1.1) rotate(5deg); background-color: var(--gold); }
+    .dev-card:hover .dev-avatar svg { opacity: 0.8; fill: var(--accent); }
+
+    /* --- FOOTER --- */
     footer { background: var(--brown-dark); padding: 100px 0 40px; color: #FFF; position: relative; }
     .big-wishlist { text-align: center; padding: clamp(30px, 6vw, 60px); background: rgba(0,0,0,0.25); border: 4px dashed rgba(255,255,255,0.2); border-radius: 32px; margin-bottom: 60px; transition: all 0.4s;}
     .big-wishlist:hover { transform: scale(1.02); border-color: var(--grass); background: rgba(0,0,0,0.35); }
@@ -254,92 +334,37 @@
     .footer-col ul li a { color: #D1D5DB; text-decoration: none; font-size: 15px; transition: color 0.2s; }
     .footer-col ul li a:hover { color: var(--accent); }
 
-    /* =========================================================
-       RESPONSIVIDADE EXTREMA (MOBILES E TABLETS)
-       Design 100% diferente e adaptado para ecrãs menores
-       ========================================================= */
+    /* --- RESPONSIVIDADE --- */
     @media (max-width: 900px) {
-      
-      /* Redução de Paddings Globais */
       section { padding: 80px 0; border-bottom-width: 6px;}
       .container { padding: 0 20px; }
       
-      /* --- NAVBAR MOBILE (DOCK INFERIOR) --- */
-      .nav-wrapper {
-        top: auto; 
-        bottom: 20px; 
-        padding: 0 10px;
-        z-index: 999;
-      }
-      nav {
-        flex-direction: column;
-        padding: 12px;
-        border-radius: 20px;
-        box-shadow: 0 -5px 25px rgba(69, 26, 3, 0.3);
-        gap: 0;
-      }
-      .nav-top-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-      }
+      .nav-wrapper { top: auto; bottom: 20px; padding: 0 10px; z-index: 999; }
+      nav { flex-direction: column; padding: 12px; border-radius: 20px; box-shadow: 0 -5px 25px rgba(69, 26, 3, 0.3); gap: 0; }
+      .nav-top-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
       .nav-top-row .logo { margin-left: 10px; font-size: 14px; }
-      
-      .nav-top-row .btn-3d { 
-        padding: 10px 16px; 
-        font-size: 9px;
-        margin-bottom: 0;
-        border-width: 3px;
-        box-shadow: 0 4px 0 var(--brown-dark);
-      }
+      .nav-top-row .mobile-btn-nav { display: inline-flex; }
+      .nav-top-row .btn-3d { padding: 10px 16px; font-size: 9px; margin-bottom: 0; border-width: 3px; box-shadow: 0 4px 0 var(--brown-dark); }
       .nav-top-row .btn-3d:active { transform: translateY(4px); box-shadow: 0 0 0 var(--brown-dark); }
       
-      .nav-links {
-        width: 100%;
-        overflow-x: auto;
-        justify-content: flex-start;
-        padding-top: 12px;
-        margin-top: 10px;
-        border-top: 2px dashed rgba(0,0,0,0.1);
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-        gap: 15px;
-      }
+      .nav-links { width: 100%; overflow-x: auto; justify-content: flex-start; padding-top: 12px; margin-top: 10px; border-top: 2px dashed rgba(0,0,0,0.1); -ms-overflow-style: none; scrollbar-width: none; gap: 15px; }
       .nav-links::-webkit-scrollbar { display: none; }
       .nav-links a { font-size: 13px; padding: 5px 8px; }
 
-      /* --- AJUSTES DE GRID (FORÇAR 1 COLUNA) --- */
-      .about-grid, .gallery-grid, .dev-grid, .footer-grid {
-        grid-template-columns: 1fr;
-        gap: 40px;
-      }
+      .about-grid, .dev-grid, .footer-grid, .chars-grid { grid-template-columns: 1fr; gap: 40px; }
+      #faq .about-project-grid { grid-template-columns: 1fr; gap: 40px; }
       
-      /* --- HERO SECTION MOBILE --- */
-      /* Garantimos espaço superior livre e espaço inferior suficiente para a dock navbar não se sobrepor */
+      .horizontal-scroll-container { padding: 20px; width: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 20px; scrollbar-width: none; }
+      .horizontal-scroll-container::-webkit-scrollbar { display: none; }
+      .gallery-item { scroll-snap-align: start; width: 85vw; max-width: 400px;}
+      
       #hero { padding: 100px 20px 160px 20px; } 
       #hero h1 { font-size: 14vw; margin-bottom: 20px;}
       .hero-ctas { flex-direction: column; gap: 15px; }
       .hero-ctas a { width: 100%; justify-content: center; max-width: 300px;}
       #hero p { font-size: 14px; padding: 20px; }
-
-      /* --- PERSONAGENS MOBILE --- */
-      .pin-wrap { height: auto !important; display: block; border: none; padding-top: 80px;}
-      .chars-header { position: relative; top: 0; padding-bottom: 30px; }
-      .horizontal-container { display: flex; flex-direction: column; width: 100% !important; height: auto; gap: 40px;}
-      .char-panel { width: 100%; height: auto; padding: 0; perspective: none;}
-      .scroll-indicator { display: none; } 
-      #characters { padding: 80px 0; border-bottom: 8px solid var(--brown-dark); }
       
-      .char-card { 
-        max-height: none; 
-        padding: 30px 20px; 
-        border-radius: 24px;
-        box-shadow: inset 0 0 0 6px #FFF, 0 8px 0 rgba(0,0,0,0.3);
-      }
-      .char-avatar { width: 90px; height: 90px; margin-bottom: 20px; }
-      .char-card h3 { font-size: 24px; }
-      
+      .char-card { padding: 30px 20px; border-radius: 24px; box-shadow: inset 0 0 0 6px #FFF, 0 8px 0 rgba(0,0,0,0.3); }
       .form-group button { max-width: 100%; }
       .faq-question { font-size: 14px; }
       .faq-icon { width: 30px; height: 30px; font-size: 10px; }
@@ -353,7 +378,7 @@
     <nav id="navbar">
       <div class="nav-top-row">
         <a href="#" class="logo">ECOS<span>.</span></a>
-        <a href="URL_DO_SEU_JOGO_AQUI" target="_blank" class="btn-3d pulse-btn mobile-btn-nav" style="padding: 10px 15px; font-size: 10px;">
+        <a href="#play" class="btn-3d pulse-btn mobile-btn-nav" style="padding: 10px 15px; font-size: 10px;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
           JOGAR
         </a>
@@ -371,23 +396,26 @@
 
   <!-- HERO SECTION -->
   <section id="hero">
+    <div id="anime-particles"></div>
+
     <div class="hero-content parallax-hero">
       <div class="hero-badge reveal-hero floating">PROJETO ACADÊMICO - CONSTRUCT 3</div>
       <h1 id="hero-title">Ecos do Andarilho</h1>
       <p class="reveal-hero">Um jogo de plataformas e ritmo desenvolvido integralmente na engine Construct 3. Sincronize os seus saltos com a música!</p>
       
       <div class="hero-ctas reveal-hero">
-        <a href="URL_DO_SEU_JOGO_AQUI" target="_blank" class="btn-3d pulse-btn" style="font-size: clamp(11px, 2vw, 14px); padding: 20px 30px;">
+        <a href="#play" class="btn-3d pulse-btn" style="font-size: clamp(11px, 2vw, 14px); padding: 20px 30px;">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>
           JOGAR NO BROWSER
         </a>
-        <a href="LINK_DO_ARQUIVO_AQUI.zip" download class="btn-3d btn-secondary" style="font-size: clamp(11px, 2vw, 14px); padding: 20px 30px;">
+        <a href="#download" class="btn-3d btn-secondary" style="font-size: clamp(11px, 2vw, 14px); padding: 20px 30px;">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
           BAIXAR JOGO
         </a>
       </div>
     </div>
-    <div class="scroll-down pixel-font" onclick="document.getElementById('gameplay').scrollIntoView();">v</div>
+    
+    <div class="scroll-down pixel-font scroll-arrow" onclick="document.getElementById('gameplay').scrollIntoView();">v</div>
     <div id="clouds-container"></div>
   </section>
 
@@ -398,10 +426,14 @@
       <p class="section-subtitle gs-pop">Assista à gravação da gameplay do protótipo</p>
       
       <div class="gs-elastic-box video-wrapper">
-        <div class="video-inner" onclick="alert('Coloque o link ou iframe do seu vídeo aqui!');">
+        <div class="video-inner" onclick="alert('Vídeo de demonstração estará disponível na apresentação final!');">
+          <div class="video-thumbnail-bg vertical-parallax" data-speed="0.2"></div>
+          <div class="video-hills vertical-parallax" data-speed="-0.1"></div>
           <div class="scanlines"></div>
-          <span style="position: absolute; top: 20px; left: 20px; font-family: 'Press Start 2P'; font-size: 10px; color: #FFF; z-index: 2; opacity: 0.8; text-shadow: 2px 2px 0 #000;">REC •</span>
-          <div class="btn-3d pulse-btn" style="position: relative; z-index: 2; border-radius: 50%; width: clamp(60px, 15vw, 80px); height: clamp(60px, 15vw, 80px); padding: 0;">
+          
+          <span style="position: absolute; top: 20px; left: 20px; font-family: 'Press Start 2P'; font-size: 10px; color: #EF4444; z-index: 2; opacity: 0.9; text-shadow: 2px 2px 0 #000;">REC •</span>
+          
+          <div class="btn-3d pulse-btn anime-pulse-btn" style="position: relative; z-index: 2; border-radius: 50%; width: clamp(60px, 15vw, 80px); height: clamp(60px, 15vw, 80px); padding: 0;">
             <svg width="35" height="35" viewBox="0 0 24 24" fill="#fff" style="margin-left: 5px;"><path d="M8 5v14l11-7z"/></svg>
           </div>
         </div>
@@ -417,71 +449,120 @@
         <p>Desenvolvemos um mundo cheio de cores, blocos misteriosos e ruínas antigas totalmente programadas através do sistema de eventos do Construct 3.</p>
         <p><strong>A intermitência é a chave:</strong> Derrote criaturas engraçadas e ative templos de pedra apenas durante os "Ecos" — os momentos onde a batida da música dita as regras das variáveis globais.</p>
         
-        <ul class="about-list list-stagger">
-          <li>Física de salto personalizada e responsiva</li>
-          <li>Colisões e *Tilemaps* desenhados à mão</li>
-          <li>Lógica de *Spawn* baseada no ritmo</li>
-        </ul>
+        <div class="feature-cards gs-stagger-up">
+          <div class="feature-card">
+            <span class="icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            </span>
+            <span>Física<br>Custom</span>
+          </div>
+          <div class="feature-card">
+            <span class="icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+            </span>
+            <span>Tilemaps<br>Ricos</span>
+          </div>
+          <div class="feature-card">
+            <span class="icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+            </span>
+            <span>Eventos<br>Rítmicos</span>
+          </div>
+        </div>
       </div>
-      <div class="about-image gs-reveal-right floating"></div>
+      
+      <div class="about-image gs-reveal-right vertical-parallax" data-speed="0.15" style="/* background-image: url('sua-imagem-aqui.jpg'); */">
+        <span class="about-image-placeholder">IMAGEM<br>AQUI</span>
+      </div>
     </div>
   </section>
 
   <!-- CHARACTERS SECTION -->
   <section id="characters">
-    <div class="char-container-wrapper">
-      <div class="pin-wrap" id="pin-wrap">
-        <div class="chars-header">
-          <h2 class="pixel-font gs-pop">Os Heróis</h2>
-          <p class="gs-pop">Sprites animados frame a frame no estilo clássico</p>
-        </div>
+    <div class="container">
+      <div class="chars-header gs-pop">
+        <h2 class="pixel-font">Os Heróis</h2>
+        <p>Sprites animados frame a frame no estilo clássico</p>
+      </div>
 
-        <div class="horizontal-container" id="horizontal-container">
-          <!-- Herói 1 -->
-          <div class="char-panel">
-            <div class="char-card">
-              <div class="char-avatar" style="border-color: var(--accent);"><svg width="60" height="60" viewBox="0 0 24 24" fill="var(--accent)"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
-              <h3 class="pixel-font" style="color: var(--accent);">Kaelen</h3>
-              <div class="char-class" style="color: var(--accent); border-color: var(--accent);">O SALTEADOR</div>
-              <p class="char-quote">"Saltar em cima dos inimigos no ritmo certo? Deixa comigo!"</p>
-              <div class="char-lore">
-                <p>Personagem base focado na mecânica do *Platformer* clássico. A programação do seu comportamento exigiu o ajuste fino das variáveis de <strong>Gravity</strong> e <strong>Jump Strength</strong> diretamente no *Behavior Platform* do Construct 3, permitindo uma resposta ágil aos controlos.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Herói 2 -->
-          <div class="char-panel">
-            <div class="char-card">
-              <div class="char-avatar" style="border-color: var(--sky-dark);"><svg width="60" height="60" viewBox="0 0 24 24" fill="var(--sky-dark)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg></div>
-              <h3 class="pixel-font" style="color: var(--sky-dark);">Lyra</h3>
-              <div class="char-class" style="color: var(--sky-dark); border-color: var(--sky-dark);">TECELÃ DAS NUVENS</div>
-              <p class="char-quote">"O vento sopra sempre no andamento perfeito da música."</p>
-              <div class="char-lore">
-                <p>Personagem alternativo que manipula as leis da física da engine. Quando a sua habilidade especial é ativada, uma função anula temporariamente a força da gravidade (*Set Gravity to 0*). Usada para testar e demonstrar habilidades secundárias e troca de personagens dinâmicas no jogo.</p>
-              </div>
-            </div>
+      <div class="chars-grid">
+        <!-- Herói 1 -->
+        <div class="char-card gs-stagger-up vertical-parallax" data-speed="0.05">
+          <div class="char-avatar anime-avatar" style="border-color: var(--accent);"><svg width="60" height="60" viewBox="0 0 24 24" fill="var(--accent)"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
+          <h3 class="pixel-font" style="color: var(--accent);">Kaelen</h3>
+          <div class="char-class" style="color: var(--accent); border-color: var(--accent);">O SALTEADOR</div>
+          <p class="char-quote">"Saltar em cima dos inimigos no ritmo certo? Deixa comigo!"</p>
+          <div class="char-lore">
+            <p>Personagem base focado na mecânica do *Platformer* clássico. A programação do seu comportamento exigiu o ajuste fino das variáveis de <strong>Gravity</strong> e <strong>Jump Strength</strong>.</p>
           </div>
         </div>
 
-        <div class="scroll-indicator" id="scroll-dots">
-          <div class="dot active"></div>
-          <div class="dot"></div>
+        <!-- Herói 2 -->
+        <div class="char-card gs-stagger-up vertical-parallax" data-speed="0.1">
+          <div class="char-avatar anime-avatar" style="border-color: var(--sky-dark);"><svg width="60" height="60" viewBox="0 0 24 24" fill="var(--sky-dark)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg></div>
+          <h3 class="pixel-font" style="color: var(--sky-dark);">Lyra</h3>
+          <div class="char-class" style="color: var(--sky-dark); border-color: var(--sky-dark);">TECELÃ DAS NUVENS</div>
+          <p class="char-quote">"O vento sopra sempre no andamento perfeito da música."</p>
+          <div class="char-lore">
+            <p>Personagem alternativo que manipula as leis da física da engine. Quando a sua habilidade especial é ativada, uma função anula temporariamente a força da gravidade (*Set Gravity to 0*).</p>
+          </div>
+        </div>
+
+        <!-- Herói 3 -->
+        <div class="char-card gs-stagger-up vertical-parallax" data-speed="0.15">
+          <div class="char-avatar anime-avatar" style="border-color: var(--grass-dark);"><svg width="60" height="60" viewBox="0 0 24 24" fill="var(--grass-dark)"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V8.11l7-3.11v7.99z"/></svg></div>
+          <h3 class="pixel-font" style="color: var(--grass-dark);">Grom</h3>
+          <div class="char-class" style="color: var(--grass-dark); border-color: var(--grass-dark);">O GUARDIÃO DE PEDRA</div>
+          <p class="char-quote">"As montanhas não recuam e eu também não!"</p>
+          <div class="char-lore">
+            <p>O "Tank" do grupo. Grom possui uma variável booleana de <strong>Shield</strong> que absorve um golpe. Quando danificado, a sua *Animation* transita para um estado enfraquecido.</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- GALERIA DE ECOS -->
+  <!-- GALERIA DE ECOS COM ROLAGEM HORIZONTAL MÁGICA -->
   <section id="gallery" class="pattern-stripes">
     <div class="container">
       <h2 class="section-title pixel-font gs-pop">Galeria de Níveis</h2>
       <p class="section-subtitle gs-pop" style="color: #FFF;">Imagens dos *Layouts* construídos</p>
-      
-      <div class="gallery-grid">
-        <div class="gallery-item gs-stagger-up"></div>
-        <div class="gallery-item gs-stagger-up"></div>
-        <div class="gallery-item gs-stagger-up"></div>
+    </div>
+    
+    <div class="gallery-pin-wrapper">
+      <div class="horizontal-scroll-container">
+        <!-- Card 1 -->
+        <div class="gallery-item bg-forest">
+          <div class="gallery-bg vertical-parallax" data-speed="0.1"></div>
+          <div class="gallery-content">
+            <h3 class="pixel-font">Mundo 1: A Floresta</h3>
+            <p>O layout introdutório. Ensina os controlos básicos e apresenta os primeiros inimigos sincronizados.</p>
+          </div>
+        </div>
+        <!-- Card 2 -->
+        <div class="gallery-item bg-ruins">
+          <div class="gallery-bg vertical-parallax" data-speed="0.15"></div>
+          <div class="gallery-content">
+            <h3 class="pixel-font">Mundo 2: Ruínas</h3>
+            <p>Foco na exploração vertical e utilização intensiva do behavior "Jump-thru" em plataformas antigas.</p>
+          </div>
+        </div>
+        <!-- Card 3 -->
+        <div class="gallery-item bg-clouds">
+          <div class="gallery-bg vertical-parallax" data-speed="0.1"></div>
+          <div class="gallery-content">
+            <h3 class="pixel-font">Mundo 3: Nuvens</h3>
+            <p>O nível mais difícil, requerendo saltos precisos. Utiliza plataformas móveis através do behavior "Sine".</p>
+          </div>
+        </div>
+        <!-- Card 4 -->
+        <div class="gallery-item bg-boss">
+          <div class="gallery-bg vertical-parallax" data-speed="0.2"></div>
+          <div class="gallery-content">
+            <h3 class="pixel-font">Mundo 4: Covil</h3>
+            <p>A batalha final. O ritmo da música acelera e os perigos do cenário respondem à batida intensa.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -493,20 +574,25 @@
       <p class="section-subtitle gs-pop">As fases do projeto para a faculdade</p>
       
       <div class="roadmap-container">
-        <div class="milestone active milestone-stagger">
+        <div class="milestone active milestone-stagger vertical-parallax" data-speed="0.05">
           <div class="milestone-date">FASE 1</div>
           <h3>Conceito e Game Design Document</h3>
-          <p>Definição da paleta de cores, criação dos *sprites* iniciais e validação da lógica de ritmo associada ao salto do personagem principal. Planejamento arquitetônico da estrutura de Event Sheets.</p>
+          <p>Definição da paleta de cores, criação dos *sprites* iniciais e validação da lógica de ritmo associada ao salto do personagem principal.</p>
         </div>
-        <div class="milestone active milestone-stagger">
+        <div class="milestone active milestone-stagger vertical-parallax" data-speed="0.08">
           <div class="milestone-date">FASE 2</div>
           <h3>Protótipo no Construct 3</h3>
-          <p>Implementação dos behaviors nativos (*Platform*, *Solid*, *Sine*), configuração detalhada das Folhas de Eventos e testes intensivos de colisão no Nível 1.</p>
+          <p>Implementação dos behaviors nativos (*Platform*, *Solid*, *Sine*), configuração detalhada das Folhas de Eventos e testes intensivos de colisão.</p>
         </div>
-        <div class="milestone milestone-stagger">
+        <div class="milestone active milestone-stagger vertical-parallax" data-speed="0.11">
           <div class="milestone-date">FASE 3</div>
           <h3>Entrega Final & Polimento</h3>
-          <p>Adição de som, correção de bugs (*Quality Assurance*), exportação em formato HTML5 para o navegador e criação desta Landing Page interativa.</p>
+          <p>Adição de som, correção de bugs (*Quality Assurance*), exportação em formato HTML5 para o navegador e criação desta Landing Page.</p>
+        </div>
+        <div class="milestone milestone-stagger vertical-parallax" data-speed="0.14">
+          <div class="milestone-date">FASE 4</div>
+          <h3>Apresentação & Avaliação</h3>
+          <p>Submissão formal aos docentes, defesa oral do código gerado no Construct e demonstração ao vivo para a comunidade acadêmica.</p>
         </div>
       </div>
     </div>
@@ -520,59 +606,105 @@
         <p>Professor, deixe aqui o seu feedback técnico e a nota final para o protótipo jogável.</p>
         <form class="form-group" onsubmit="event.preventDefault(); alert('Feedback enviado com sucesso! Muito obrigado pela avaliação.');">
           <textarea placeholder="Deixe os seus comentários detalhados sobre a programação (Construct 3), game design, interatividade e arte..." required></textarea>
-          <button type="submit" class="btn-3d pulse-btn" style="font-size: 13px;">ENVIAR AVALIAÇÃO</button>
+          <button type="submit" class="btn-3d pulse-btn anime-pulse-btn" style="font-size: 13px;">ENVIAR AVALIAÇÃO</button>
         </form>
       </div>
     </div>
   </section>
 
-  <!-- FAQ ACADÊMICO -->
+  <!-- FAQ ACADÊMICO E SOBRE O PROJETO COM GRELHA NOVA -->
   <section id="faq">
-    <div class="container faq-container">
+    <div class="container">
       <h2 class="section-title pixel-font gs-pop" style="color: var(--brown-dark); text-shadow: none;">Sobre o Projeto</h2>
-      <p class="section-subtitle gs-pop" style="margin-bottom: 40px;">Detalhes técnicos do desenvolvimento</p>
+      <p class="section-subtitle gs-pop" style="margin-bottom: 40px;">Detalhes e Links Oficiais</p>
       
-      <div class="faq-item active gs-stagger-up">
-        <div class="faq-question">Qual a Engine utilizada? <span class="faq-icon">+</span></div>
-        <div class="faq-answer">Todo o jogo foi desenvolvido utilizando o <strong>Construct 3</strong>. Escolhemos o C3 pela facilidade em iterar rapidamente através do sistema de Eventos visuais e por oferecer suporte excelente e otimizado para mecânicas de *Platformer* 2D em HTML5.</div>
-      </div>
-      
-      <div class="faq-item gs-stagger-up">
-        <div class="faq-question">Este jogo será lançado comercialmente? <span class="faq-icon">+</span></div>
-        <div class="faq-answer">Não. "Ecos do Andarilho" é estritamente um projeto acadêmico desenvolvido para a faculdade. Servirá exclusivamente como prova de conceito para avaliação.</div>
-      </div>
-      
-      <div class="faq-item gs-stagger-up">
-        <div class="faq-question">Como posso testar e avaliar? <span class="faq-icon">+</span></div>
-        <div class="faq-answer">Pode clicar no botão "JOGAR NO BROWSER" no topo da página para jogar a exportação HTML5 diretamente, ou clicar em "BAIXAR JOGO" para obter os ficheiros locais e jogar offline.</div>
+      <div class="about-project-grid">
+        
+        <!-- Lado Esquerdo: Acordeão de FAQ -->
+        <div class="faq-container">
+          <div class="faq-item active gs-stagger-up">
+            <div class="faq-question">Qual a Engine utilizada? <span class="faq-icon">+</span></div>
+            <div class="faq-answer">Todo o jogo foi desenvolvido utilizando o <strong>Construct 3</strong>. Escolhemos o C3 pela facilidade em iterar rapidamente através do sistema de Eventos visuais e por oferecer suporte excelente para HTML5.</div>
+          </div>
+          
+          <div class="faq-item gs-stagger-up">
+            <div class="faq-question">Quais foram os maiores desafios? <span class="faq-icon">+</span></div>
+            <div class="faq-answer">Sincronizar a lógica dos pulos e o surgimento dos inimigos com as batidas da música exigiu o uso avançado do plugin de Áudio do Construct 3, mapeando o tempo exato (em segundos) de cada compasso.</div>
+          </div>
+
+          <div class="faq-item gs-stagger-up">
+            <div class="faq-question">Este jogo será lançado comercialmente? <span class="faq-icon">+</span></div>
+            <div class="faq-answer">Não. "Ecos do Andarilho" é estritamente um projeto acadêmico desenvolvido para a faculdade. Servirá exclusivamente como prova de conceito.</div>
+          </div>
+
+          <div class="faq-item gs-stagger-up">
+            <div class="faq-question">Como foi tratada a otimização mobile? <span class="faq-icon">+</span></div>
+            <div class="faq-answer">O Construct 3 permite controlos por toque (*Touch Plugin*). Inserimos botões semi-transparentes na interface do jogo (HUD) que invocam funções análogas às setas do teclado apenas quando é detetado um ecrã tátil.</div>
+          </div>
+          
+          <div class="faq-item gs-stagger-up">
+            <div class="faq-question">Como posso testar e avaliar? <span class="faq-icon">+</span></div>
+            <div class="faq-answer">Pode clicar no botão "JOGAR NO BROWSER" no topo da página para jogar a exportação HTML5 diretamente, ou baixar os ficheiros locais e abrir o ficheiro <em>index.html</em> no seu computador.</div>
+          </div>
+        </div>
+
+        <!-- Lado Direito: Poster e Links do Projeto -->
+        <div class="project-media-box gs-stagger-up">
+          
+          <!-- Remover os /* */ de background-image para colocar o poster principal -->
+          <div class="project-cover" style="/* background-image: url('poster-projeto.jpg'); */">
+            <span class="pixel-font" style="color: rgba(69,26,3,0.3); text-align: center; font-size: clamp(10px, 1.5vw, 14px); line-height: 1.8;">IMAGEM DO<br>PROJETO</span>
+          </div>
+
+          <div class="project-links" style="display: flex; flex-direction: column; gap: 12px;">
+            <a href="SEU_LINK_GDD_AQUI" target="_blank" class="btn-3d btn-secondary full" style="margin-bottom: 0;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>
+              DOCUMENTAÇÃO (GDD)
+            </a>
+            <a href="SEU_LINK_GITHUB_AQUI" target="_blank" class="btn-3d btn-secondary full" style="margin-bottom: 0;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+              REPOSITÓRIO
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- DEVS SECTION -->
+  <!-- DEVS SECTION (CRIADORES) COM AVATARES SVG -->
   <section id="devs" style="background: var(--stone); border-bottom: 8px solid var(--stone-dark);">
     <div class="container">
       <h2 class="section-title pixel-font gs-pop">Os Criadores</h2>
       <p class="section-subtitle gs-pop" style="color: var(--bg-panel);">Os estudantes por trás do código e da arte</p>
       
       <div class="dev-grid">
+        <!-- Dev 1 -->
         <div class="dev-card gs-stagger-up">
-          <div class="dev-avatar">A</div>
+          <!-- Tire os /* */ de background-image para colocar a foto -->
+          <div class="dev-avatar anime-avatar-dev" style="/* background-image: url('sua-foto-alexandre.jpg'); */">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          </div>
           <h4 class="pixel-font">Alexandre</h4>
           <span>Programação Visual (C3)</span>
           <p>Responsável pelas folhas de eventos, lógica dos *Behaviors* e por garantir que o jogo roda no navegador sem quebras de frame rate (*lag*).</p>
-          <div class="dev-links">
-            <a href="#" class="btn-3d btn-secondary full">PORTFÓLIO ACADÊMICO</a>
+          <div class="dev-links" style="display: flex; gap: 10px; flex-direction: column; margin-top: 25px;">
+            <a href="SEU_LINK_PORTFOLIO_AQUI" target="_blank" class="btn-3d btn-secondary full" style="margin-bottom: 0; padding: 10px;">PORTFÓLIO</a>
+            <a href="SEU_LINK_GITHUB_AQUI" target="_blank" class="btn-3d btn-secondary full" style="margin-bottom: 0; padding: 10px;">GITHUB</a>
           </div>
         </div>
 
+        <!-- Dev 2 -->
         <div class="dev-card gs-stagger-up">
-          <div class="dev-avatar">M</div>
+          <!-- Tire os /* */ de background-image para colocar a foto -->
+          <div class="dev-avatar anime-avatar-dev" style="/* background-image: url('sua-foto-marina.jpg'); */">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          </div>
           <h4 class="pixel-font">Marina</h4>
           <span>Pixel Art & UI</span>
           <p>Criadora dos Sprites e dos complexos Tilemaps do jogo, além de construir o design responsivo desta Landing Page moderna.</p>
-          <div class="dev-links">
-            <a href="#" class="btn-3d btn-secondary full">LINKEDIN</a>
+          <div class="dev-links" style="display: flex; gap: 10px; flex-direction: column; margin-top: 25px;">
+            <a href="SEU_LINK_LINKEDIN_AQUI" target="_blank" class="btn-3d btn-secondary full" style="margin-bottom: 0; padding: 10px;">LINKEDIN</a>
+            <a href="SEU_LINK_BEHANCE_AQUI" target="_blank" class="btn-3d btn-secondary full" style="margin-bottom: 0; padding: 10px;">BEHANCE</a>
           </div>
         </div>
       </div>
@@ -585,7 +717,7 @@
       <div class="big-wishlist gs-elastic-box">
         <h2 class="pixel-font">HORA DE AVALIAR!</h2>
         <p style="color: var(--sky-light); margin-bottom: 30px; font-weight: 600; font-size: 15px;">Jogue a demonstração diretamente no seu navegador.</p>
-        <a href="URL_DO_SEU_JOGO_AQUI" target="_blank" class="btn-3d pulse-btn" style="font-size: 13px; padding: 22px 40px; background: var(--grass); box-shadow: inset 0 4px 0 rgba(255,255,255,0.3), inset 0 -4px 0 rgba(0,0,0,0.2), 0 8px 0 var(--grass-dark), 0 12px 0 var(--brown-dark);">
+        <a href="#play" class="btn-3d pulse-btn anime-pulse-btn" style="font-size: 13px; padding: 22px 40px; background: var(--grass); box-shadow: inset 0 4px 0 rgba(255,255,255,0.3), inset 0 -4px 0 rgba(0,0,0,0.2), 0 8px 0 var(--grass-dark), 0 12px 0 var(--brown-dark);">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>
           JOGAR AGORA
         </a>
@@ -606,7 +738,7 @@
           </ul>
         </div>
       </div>
-      <div class="copyright">
+      <div class="copyright" style="text-align: center; font-size: 12px; border-top: 2px dashed rgba(255,255,255,0.1); padding-top: 20px;">
         © 2026 Ecos do Andarilho. Trabalho Acadêmico desenvolvido no Construct 3.<br>
         <span style="opacity: 0.5;">Dica: Existem moedas escondidas pela página. Consegue encontrá-las?</span>
       </div>
@@ -625,38 +757,26 @@
     function playMarioCoinSound() {
       if (!audioCtx) audioCtx = new AudioContext();
       if (audioCtx.state === 'suspended') audioCtx.resume();
-
       const oscillator = audioCtx.createOscillator();
       const gainNode = audioCtx.createGain();
-
-      oscillator.type = 'square'; // Som clássico 8-bit
-      
-      // Frequências exatas da moeda do Super Mario (B5 e E6)
+      oscillator.type = 'square'; 
       const now = audioCtx.currentTime;
-      oscillator.frequency.setValueAtTime(987.77, now); // Nota B5
-      oscillator.frequency.setValueAtTime(1318.51, now + 0.1); // Salta para E6 após 0.1s
-
-      // Envelope de volume para fazer o "fade out" perfeito e não estalar
+      oscillator.frequency.setValueAtTime(987.77, now); 
+      oscillator.frequency.setValueAtTime(1318.51, now + 0.1); 
       gainNode.gain.setValueAtTime(0, now);
-      gainNode.gain.linearRampToValueAtTime(0.1, now + 0.05); // Attack
-      gainNode.gain.setValueAtTime(0.1, now + 0.1); // Sustain
-      gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.5); // Decay/Release suave
-
+      gainNode.gain.linearRampToValueAtTime(0.1, now + 0.05); 
+      gainNode.gain.setValueAtTime(0.1, now + 0.1); 
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.5); 
       oscillator.connect(gainNode);
       gainNode.connect(audioCtx.destination);
-
       oscillator.start(now);
       oscillator.stop(now + 0.5);
     }
 
     function collectCoin(e, coinWrapper) {
-      // Tocar o som
       playMarioCoinSound();
-
-      // Desativar novos cliques
       coinWrapper.style.pointerEvents = 'none';
 
-      // Criar texto flutuante de "+100"
       const score = document.createElement('div');
       score.className = 'score-popup';
       score.innerText = '100';
@@ -664,23 +784,56 @@
       score.style.top = e.clientY + 'px';
       document.body.appendChild(score);
 
-      // Animar e remover a moeda
-      gsap.to(coinWrapper, {
-        y: "-=100", scale: 1.5, opacity: 0, rotation: 360, duration: 0.5, ease: "power2.out",
-        onComplete: () => coinWrapper.remove()
+      anime({
+        targets: coinWrapper.querySelector('.coin'),
+        translateY: -100,
+        scale: 1.5,
+        opacity: 0,
+        rotate: '1turn',
+        duration: 800,
+        easing: 'easeOutExpo',
+        complete: () => coinWrapper.remove()
       });
 
-      // Animar texto de pontuação
-      gsap.fromTo(score, 
-        { y: 0, opacity: 1, scale: 0.5 }, 
-        { y: -80, opacity: 0, scale: 1.5, duration: 1, ease: "power1.out", onComplete: () => score.remove() }
-      );
+      anime({
+        targets: score,
+        translateY: -80,
+        scale: [0.5, 1.5],
+        opacity: [1, 0],
+        duration: 1000,
+        easing: 'easeOutCubic',
+        complete: () => score.remove()
+      });
     }
-
 
     document.addEventListener("DOMContentLoaded", () => {
       
-      // Título animado (Letra a letra com Bounce)
+      // ========================================================
+      // 1. ANIMAÇÕES ANIME.JS
+      // ========================================================
+      const particleContainer = document.getElementById('anime-particles');
+      const colors = ['#FCD34D', '#A5D6FF', '#34D399', '#EF4444', '#FFFFFF'];
+      for (let i = 0; i < 35; i++) {
+        let p = document.createElement('div');
+        p.className = 'anime-particle';
+        p.style.left = anime.random(0, 100) + 'vw';
+        p.style.top = anime.random(0, 100) + 'vh';
+        p.style.backgroundColor = colors[anime.random(0, colors.length - 1)];
+        particleContainer.appendChild(p);
+      }
+      anime({
+        targets: '.anime-particle',
+        translateX: () => anime.random(-200, 200),
+        translateY: () => anime.random(-200, 200),
+        scale: () => anime.random(0.2, 1.5),
+        rotate: () => anime.random(-360, 360),
+        opacity: [0, 0.5, 0],
+        duration: () => anime.random(3000, 8000),
+        easing: 'easeInOutSine',
+        loop: true,
+        direction: 'alternate'
+      });
+
       const heroTitle = document.getElementById('hero-title');
       const text = heroTitle.innerText;
       heroTitle.innerHTML = '';
@@ -691,129 +844,46 @@
         heroTitle.appendChild(span);
       });
 
-      const tlHero = gsap.timeline();
-      tlHero.from(".char", { 
-        y: -120, opacity: 0, rotation: 45, scale: 0.5,
-        duration: 1.5, stagger: 0.05, ease: "elastic.out(1, 0.3)", delay: 0.2 
+      let heroTimeline = anime.timeline({ easing: 'easeOutElastic(1, .5)' });
+      heroTimeline.add({
+        targets: '.char',
+        translateY: [-100, 0],
+        opacity: [0, 1],
+        rotateZ: [45, 0],
+        scale: [0.5, 1],
+        duration: 1200,
+        delay: anime.stagger(60) 
       })
-      .from(".reveal-hero", { 
-        y: 60, opacity: 0, duration: 1.2, stagger: 0.2, ease: "back.out(1.5)" 
-      }, "-=1.2");
+      .add({
+        targets: '.reveal-hero',
+        translateY: [60, 0],
+        opacity: [0, 1],
+        duration: 1000,
+        easing: 'easeOutExpo',
+        delay: anime.stagger(200)
+      }, '-=800');
 
-      // Parallax Mouse (Apenas Desktop)
-      if(window.innerWidth > 900) {
-        document.addEventListener("mousemove", (e) => {
-          const x = (window.innerWidth / 2 - e.pageX) * 0.02;
-          const y = (window.innerHeight / 2 - e.pageY) * 0.02;
-          gsap.to(".parallax-hero", { x: x, y: y, duration: 0.8, ease: "power2.out" });
-        });
-      }
-
-      // Elementos Pop Clássico
-      gsap.utils.toArray('.gs-pop').forEach(element => {
-        gsap.from(element, {
-          scrollTrigger: { trigger: element, start: "top 85%" },
-          scale: 0.7, opacity: 0, y: 30, duration: 1.2, ease: "elastic.out(1, 0.4)"
-        });
+      anime({
+        targets: '.scroll-arrow',
+        translateY: 15,
+        direction: 'alternate',
+        loop: true,
+        easing: 'easeInOutQuad',
+        duration: 800
       });
 
-      // Animação Sequencial Aprimorada (Stagger) para Cards e Galeria
-      gsap.utils.toArray('.gallery-grid, .faq-container, .dev-grid').forEach(container => {
-        const items = container.querySelectorAll('.gs-stagger-up');
-        if(items.length > 0) {
-          gsap.from(items, {
-            scrollTrigger: { trigger: container, start: "top 80%" },
-            y: 80, opacity: 0, duration: 0.8, stagger: 0.15, ease: "back.out(1.5)"
-          });
-        }
+      anime({
+        targets: '.feature-card .icon',
+        translateY: -8,
+        direction: 'alternate',
+        loop: true,
+        easing: 'easeInOutSine',
+        duration: 1200,
+        delay: anime.stagger(200)
       });
 
-      // Roadmap Sequencial
-      gsap.from(".milestone-stagger", {
-        scrollTrigger: { trigger: ".roadmap-container", start: "top 80%" },
-        x: -50, opacity: 0, duration: 0.8, stagger: 0.2, ease: "back.out(1.2)"
-      });
-
-      // Elementos Reveal Lateral (Sobre o Jogo)
-      gsap.from(".gs-reveal-left", { scrollTrigger: { trigger: "#about", start: "top 75%" }, x: -100, opacity: 0, duration: 1.2, ease: "power3.out" });
-      gsap.from(".gs-reveal-right", { scrollTrigger: { trigger: "#about", start: "top 75%" }, x: 100, scale: 0.9, opacity: 0, duration: 1.2, ease: "back.out(1.2)" });
-
-      // Listas Stagger
-      gsap.from(".list-stagger li", {
-        scrollTrigger: { trigger: ".list-stagger", start: "top 85%" },
-        x: -50, opacity: 0, duration: 0.8, stagger: 0.15, ease: "back.out(2)"
-      });
-
-      // Caixas Elastic
-      gsap.utils.toArray('.gs-elastic-box').forEach(box => {
-        gsap.from(box, {
-          scrollTrigger: { trigger: box, start: "top 85%" },
-          scale: 0.85, y: 60, duration: 1.4, stagger: 0.1, ease: "elastic.out(1, 0.4)"
-        });
-      });
-
-      /* ==========================================================
-         LÓGICA RESPONSIVA PARA A SECÇÃO DOS PERSONAGENS
-         ========================================================== */
-      let mm = gsap.matchMedia();
-
-      mm.add("(min-width: 901px)", () => {
-        // DESKTOP: ROLAGEM HORIZONTAL
-        const pinContainer = document.querySelector("#pin-wrap");
-        const horizontalContainer = document.querySelector("#horizontal-container");
-        const panels = gsap.utils.toArray(".char-panel");
-        const dots = document.querySelectorAll(".dot");
-
-        // Oculta botão Mobile na navbar de Desktop
-        gsap.set(".mobile-btn-nav", { display: "none" });
-
-        if(pinContainer && horizontalContainer && panels.length > 1) {
-          const horizontalTween = gsap.to(panels, {
-            xPercent: -100 * (panels.length - 1),
-            ease: "none",
-            scrollTrigger: {
-              trigger: pinContainer, pin: true, scrub: 1, snap: 1 / (panels.length - 1),
-              end: () => "+=" + horizontalContainer.offsetWidth,
-              onUpdate: (self) => {
-                const progress = self.progress;
-                const activeIndex = Math.round(progress * (panels.length - 1));
-                dots.forEach((dot, index) => {
-                  if (index === activeIndex) dot.classList.add("active");
-                  else dot.classList.remove("active");
-                });
-              }
-            }
-          });
-
-          panels.forEach((panel) => {
-            const avatar = panel.querySelector(".char-avatar");
-            if(avatar) {
-               gsap.from(avatar, {
-                y: -60, scale: 0.4, rotation: -20, duration: 1.2, ease: "elastic.out(1, 0.3)",
-                scrollTrigger: {
-                  trigger: panel, containerAnimation: horizontalTween, start: "left center",
-                  toggleActions: "restart none none reverse"
-                }
-              });
-            }
-          });
-        }
-      });
-
-      mm.add("(max-width: 900px)", () => {
-        // MOBILE: FADE VERTICAL
-        const cards = gsap.utils.toArray(".char-card");
-        cards.forEach((card) => {
-          gsap.from(card, {
-            scrollTrigger: { trigger: card, start: "top 85%" },
-            y: 60, scale: 0.95, opacity: 0, duration: 0.8, ease: "power3.out"
-          });
-        });
-      });
-
-      // Nuvens Animadas com movimento Y
       const cloudsContainer = document.getElementById('clouds-container');
-      for(let i=0; i<5; i++){
+      for(let i=0; i<6; i++){
         let cloud = document.createElement('div');
         cloud.className = 'cloud';
         let size = 80 + Math.random() * 120;
@@ -822,33 +892,153 @@
         cloud.style.top = (5 + Math.random() * 70) + 'vh';
         cloudsContainer.appendChild(cloud);
         
-        // Movimento horizontal
-        gsap.fromTo(cloud, 
-          { x: '-20vw' }, 
-          { x: '120vw', duration: 30 + Math.random() * 40, repeat: -1, ease: "none", delay: Math.random() * -50 }
-        );
-        
-        // Movimento flutuante vertical independente
-        gsap.to(cloud, {
-          y: "-=30", duration: 3 + Math.random() * 2, yoyo: true, repeat: -1, ease: "sine.inOut"
+        anime({
+          targets: cloud,
+          translateX: ['-20vw', '120vw'],
+          duration: () => anime.random(25000, 45000),
+          easing: 'linear',
+          loop: true,
+          delay: () => anime.random(-20000, 0)
         });
-
-        // Efeito parallax ao scrollar
-        gsap.to(cloud, {
-          yPercent: -150, ease: "none",
-          scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: true }
+        
+        anime({
+          targets: cloud,
+          translateY: -25,
+          duration: () => anime.random(2000, 4000),
+          direction: 'alternate',
+          loop: true,
+          easing: 'easeInOutSine'
         });
       }
 
-      // Geração das Moedas (Easter Egg)
+      anime({
+        targets: '.anime-pulse-btn',
+        scale: [1, 1.05, 1],
+        duration: 2000,
+        easing: 'easeInOutSine',
+        loop: true
+      });
+
+      document.querySelectorAll('.char-card, .dev-card').forEach(card => {
+        card.addEventListener('mouseenter', () => {
+          anime({
+            targets: card.querySelector('.anime-avatar, .anime-avatar-dev'),
+            translateY: -10,
+            scale: 1.15,
+            rotate: 5,
+            duration: 400,
+            easing: 'easeOutElastic(1, .6)'
+          });
+        });
+        card.addEventListener('mouseleave', () => {
+          anime({
+            targets: card.querySelector('.anime-avatar, .anime-avatar-dev'),
+            translateY: 0,
+            scale: 1,
+            rotate: 0,
+            duration: 600,
+            easing: 'easeOutElastic(1, .6)'
+          });
+        });
+      });
+
+      // ========================================================
+      // 2. GSAP SCROLLTRIGGER (Totalmente revisto à prova de bugs)
+      // ========================================================
+
+      if(window.innerWidth > 900) {
+        document.addEventListener("mousemove", (e) => {
+          const x = (window.innerWidth / 2 - e.pageX) * 0.02;
+          const y = (window.innerHeight / 2 - e.pageY) * 0.02;
+          gsap.to(".parallax-hero", { x: x, y: y, duration: 0.8, ease: "power2.out" });
+        });
+      }
+
+      // Configuração base de Scroll seguro
+      const safeScrollConfig = (el) => ({
+        trigger: el,
+        start: "top 95%",
+        toggleActions: "play none none none"
+      });
+
+      // Substituição de from() por fromTo() e autoAlpha para lidar com a visibilidade de forma agressiva
+      gsap.utils.toArray('.gs-pop').forEach(element => {
+        gsap.fromTo(element, 
+          { scale: 0.7, autoAlpha: 0, y: 30 },
+          { scrollTrigger: safeScrollConfig(element), scale: 1, autoAlpha: 1, y: 0, duration: 1.2, ease: "elastic.out(1, 0.4)" }
+        );
+      });
+
+      gsap.utils.toArray('.gs-stagger-up').forEach(element => {
+        gsap.fromTo(element, 
+          { y: 50, autoAlpha: 0 },
+          { scrollTrigger: safeScrollConfig(element), y: 0, autoAlpha: 1, duration: 0.8, ease: "back.out(1.5)" }
+        );
+      });
+
+      gsap.utils.toArray('.milestone-stagger').forEach(element => {
+        gsap.fromTo(element, 
+          { x: -50, autoAlpha: 0 },
+          { scrollTrigger: safeScrollConfig(element), x: 0, autoAlpha: 1, duration: 0.8, ease: "back.out(1.2)" }
+        );
+      });
+
+      gsap.fromTo(".gs-reveal-left", 
+        { x: -100, autoAlpha: 0 },
+        { scrollTrigger: { trigger: "#about", start: "top 85%" }, x: 0, autoAlpha: 1, duration: 1.2, ease: "power3.out" }
+      );
+
+      gsap.fromTo(".gs-reveal-right", 
+        { x: 100, scale: 0.9, autoAlpha: 0 },
+        { scrollTrigger: { trigger: "#about", start: "top 85%" }, x: 0, scale: 1, autoAlpha: 1, duration: 1.2, ease: "back.out(1.2)" }
+      );
+
+      gsap.utils.toArray('.gs-elastic-box').forEach(box => {
+        gsap.fromTo(box, 
+          { scale: 0.85, y: 60, autoAlpha: 0 },
+          { scrollTrigger: safeScrollConfig(box), scale: 1, y: 0, autoAlpha: 1, duration: 1.4, ease: "elastic.out(1, 0.4)" }
+        );
+      });
+
+      // Parallax Vertical
+      gsap.utils.toArray('.vertical-parallax').forEach(element => {
+        const speed = parseFloat(element.getAttribute('data-speed') || "0.1");
+        gsap.to(element, {
+          y: () => (window.innerHeight * speed),
+          ease: "none",
+          scrollTrigger: { trigger: element.parentElement, start: "top bottom", end: "bottom top", scrub: true }
+        });
+      });
+
+      // Pin Horizontal
+      let mm = gsap.matchMedia();
+      mm.add("(min-width: 901px)", () => {
+        const galleryPinWrap = document.querySelector('.gallery-pin-wrapper');
+        const galleryScrollCont = document.querySelector('.horizontal-scroll-container');
+        if(galleryPinWrap && galleryScrollCont) {
+          let getToValue = () => -(galleryScrollCont.scrollWidth - window.innerWidth + 40);
+          gsap.to(galleryScrollCont, {
+            x: getToValue, ease: "none",
+            scrollTrigger: { trigger: galleryPinWrap, start: "top 100px", end: () => "+=" + (galleryScrollCont.scrollWidth - window.innerWidth), pin: true, scrub: 1, invalidateOnRefresh: true }
+          });
+        }
+      });
+
+      // Forçar atualização do GSAP após renderização total
+      window.addEventListener('load', () => ScrollTrigger.refresh());
+
+      // ========================================================
+      // 3. LÓGICAS COMUNS
+      // ========================================================
       const sectionsForCoins = ['#about', '#roadmap', '#avaliacao', '#gameplay'];
       sectionsForCoins.forEach(selector => {
         const section = document.querySelector(selector);
         if(section) {
-          let coinCount = window.innerWidth < 900 ? 1 : 2; // Menos em mobile
+          let coinCount = window.innerWidth < 900 ? 1 : 2; 
           for(let i=0; i<coinCount; i++) {
             let coinWrapper = document.createElement('div');
-            coinWrapper.className = 'coin-wrapper';
+            coinWrapper.className = 'coin-wrapper vertical-parallax'; 
+            coinWrapper.setAttribute('data-speed', -0.15); 
             coinWrapper.style.left = (15 + Math.random() * 70) + '%';
             coinWrapper.style.top = (15 + Math.random() * 70) + '%';
             
@@ -858,48 +1048,48 @@
             coinWrapper.appendChild(coin);
             section.appendChild(coinWrapper);
 
-            // Adiciona Evento de Clique para o Easter Egg
             coinWrapper.addEventListener('click', (e) => collectCoin(e, coinWrapper));
-
-            // Parallax Scroll
-            gsap.to(coinWrapper, {
-              y: -120 * (Math.random() + 0.5), ease: "none",
-              scrollTrigger: { trigger: section, start: "top bottom", end: "bottom top", scrub: 1 }
-            });
           }
         }
       });
 
-      // FAQ Acordeão
       const faqItems = document.querySelectorAll('.faq-item');
       faqItems.forEach(item => {
         item.addEventListener('click', () => {
           const isActive = item.classList.contains('active');
-          faqItems.forEach(faq => faq.classList.remove('active'));
+          const answer = item.querySelector('.faq-answer');
+          
+          faqItems.forEach(faq => {
+            faq.classList.remove('active');
+            faq.querySelector('.faq-answer').style.display = 'none';
+          });
+
           if(!isActive) {
             item.classList.add('active');
-            gsap.fromTo(item.querySelector('.faq-answer'), { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" });
+            answer.style.display = 'block';
+            anime({
+              targets: answer,
+              translateY: [-15, 0],
+              opacity: [0, 1],
+              duration: 400,
+              easing: 'easeOutCubic'
+            });
           }
         });
       });
       
-      // Navbar Inteligente ao fazer Scroll (Adaptada para Mobile vs Desktop)
       let lastScroll = 0;
       const navWrapper = document.querySelector('.nav-wrapper');
       window.addEventListener('scroll', () => {
         const currentScroll = window.pageYOffset;
         const isMobile = window.innerWidth <= 900;
-        
         if (currentScroll > 150 && currentScroll > lastScroll) {
-          // A descer - Esconde (Se Mobile, esconde para BAIXO. Se Desktop, esconde para CIMA)
           navWrapper.style.transform = isMobile ? 'translateY(150%)' : 'translateY(-150%)'; 
         } else {
-          // A subir - Mostra
           navWrapper.style.transform = 'translateY(0)'; 
         }
         lastScroll = currentScroll;
       });
-
     });
   </script>
 </body>
