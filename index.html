@@ -1,527 +1,790 @@
 <!DOCTYPE html>
-<html lang="pt-PT" class="dark bg-retro-black">
-
+<html lang="pt-PT">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#1D1A36">
-    <meta name="description"
-        content="IPSUM — Cyber Quest RPG. Uma simulação brutalista de 1994. Entra no núcleo da rede esquecida e reescreve o código da realidade.">
-    <meta name="author" content="IPSUM Studio Digital">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ecos do Andarilho — Projeto Acadêmico</title>
+  
+  <!-- Fontes do Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+  
+  <!-- GSAP & ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="IPSUM | Cyber Quest RPG">
-    <meta property="og:description" content="Combate 16-bits. Danos afetam a CPU. Risco de permadeath térmico.">
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="pt_PT">
+  <style>
+    /* --- Paleta de Cores Premium (Vibe Plataformas 2D) --- */
+    :root {
+      --sky: #4BA3E3;
+      --sky-light: #A5D6FF;
+      --sky-dark: #2B7CBF;
+      
+      --grass: #34D399;
+      --grass-light: #6EE7B7;
+      --grass-dark: #059669;
+      
+      --stone: #9CA3AF;
+      --stone-dark: #374151;
+      
+      --brown: #B45309;
+      --brown-light: #D97706;
+      --brown-dark: #451A03;
+      
+      --bg-panel: #FFFAF0;
+      
+      --accent: #EF4444;
+      --accent-hover: #F87171;
+      --accent-shadow: #991B1B;
+      
+      --text: #291C14;
+      --text-muted: #78716C;
+      --gold: #FCD34D;
+    }
 
-    <title>IPSUM | Cyber Quest RPG</title>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
 
-    <!-- Fontes -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    /* Cursor Pixel Art */
+    body { 
+      background: var(--sky); 
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23FFFFFF" stroke="%23451A03" stroke-width="2" d="M3 3l7 18 3-7 7-3z"/></svg>') 4 4, auto;
+    }
 
-    <!-- Tailwind + Config -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    /* Textura de Ruído */
+    body::after {
+      content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.04; z-index: 9999; pointer-events: none;
+    }
 
-    <!-- Libs -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <script src="https://unpkg.com/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
+    /* Padrões */
+    .pattern-dots { background-color: var(--gold); background-image: radial-gradient(rgba(69, 26, 3, 0.15) 15%, transparent 16%); background-size: 24px 24px; }
+    .pattern-stripes { background: repeating-linear-gradient(-45deg, var(--sky-dark), var(--sky-dark) 20px, var(--sky) 20px, var(--sky) 40px); }
+    .pattern-checkers { background-color: var(--bg-panel); background-image: linear-gradient(45deg, rgba(0,0,0,0.03) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.03) 75%, rgba(0,0,0,0.03)), linear-gradient(45deg, rgba(0,0,0,0.03) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.03) 75%, rgba(0,0,0,0.03)); background-size: 40px 40px; background-position: 0 0, 20px 20px; }
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    ::-webkit-scrollbar { width: 12px; }
+    ::-webkit-scrollbar-track { background: var(--sky-light); border-left: 3px solid var(--brown-dark); }
+    ::-webkit-scrollbar-thumb { background: var(--grass); border: 3px solid var(--brown-dark); border-radius: 6px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--grass-light); }
 
-    <!-- Config tailwind -->
-    <script src="assets/config/tailwind_config.js"></script>
+    h1, h2, h3, h4, .pixel-font { font-family: 'Press Start 2P', monospace; text-transform: uppercase; line-height: 1.4; }
 
-    <!-- Script -->
-    <script src="assets/js/script.js"></script>
+    /* Utilitários Flexíveis */
+    .container { max-width: 1150px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 10; }
+    
+    /* Tipografia Fluida (Clamp ajusta automaticamente entre o min e o max dependendo do ecrã) */
+    .section-title { 
+      font-size: clamp(24px, 5vw, 42px); color: #FFFFFF; margin-bottom: 15px; text-align: center; 
+      text-shadow: 0 4px 0 var(--brown-dark), 0 6px 0 rgba(0,0,0,0.2); letter-spacing: -1px; position: relative;
+    }
+    .section-subtitle { 
+      font-size: clamp(12px, 3vw, 18px); color: var(--text); text-align: center; margin-bottom: clamp(40px, 8vw, 70px); 
+      font-weight: 900; text-transform: uppercase; letter-spacing: 2px; opacity: 0.85;
+    }
+    section { padding: clamp(80px, 12vw, 140px) 0; position: relative; border-bottom: 8px solid var(--brown-dark); overflow: hidden; }
+
+    /* Animações Globais */
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+    @keyframes float-slow { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-20px) rotate(2deg); } }
+    @keyframes spin-coin { 0% { transform: rotateY(0deg) scale(1); } 50% { transform: rotateY(180deg) scale(1.1); } 100% { transform: rotateY(360deg) scale(1); } }
+    @keyframes bounce-down { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(10px); } }
+    .floating { animation: float 4s ease-in-out infinite; }
+    .floating-slow { animation: float-slow 6s ease-in-out infinite; }
+    
+    .coin { position: absolute; width: clamp(20px, 4vw, 32px); height: clamp(20px, 4vw, 32px); background: var(--gold); border: 4px solid var(--brown-dark); border-radius: 50%; box-shadow: inset -4px -4px 0 #D97706, inset 4px 4px 0 #FEF08A; z-index: 1; animation: spin-coin 2s linear infinite; }
+    .coin::after { content: ''; position: absolute; top: 20%; left: 35%; width: 4px; height: 12px; background: var(--brown-dark); border-radius: 2px; }
+
+    /* --- Navbar Flutuante Fluida --- */
+    .nav-wrapper { position: fixed; top: 15px; left: 0; width: 100%; z-index: 100; display: flex; justify-content: center; pointer-events: none; padding: 0 10px; }
+    nav {
+      background: var(--bg-panel); border: 4px solid var(--brown-dark); padding: 10px 15px 10px 20px;
+      border-radius: 50px; box-shadow: inset 0 -4px 0 rgba(0,0,0,0.1), 0 8px 0 rgba(69, 26, 3, 0.2); 
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      pointer-events: auto; display: inline-flex; justify-content: space-between; align-items: center; gap: clamp(10px, 3vw, 40px);
+      width: 100%; max-width: 1100px;
+    }
+    .logo { font-family: 'Press Start 2P'; font-size: clamp(12px, 2vw, 16px); color: var(--brown-dark); text-decoration: none; transition: transform 0.2s; white-space: nowrap; }
+    .logo:hover { transform: scale(1.05) rotate(-3deg); }
+    .logo span { color: var(--accent); }
+    
+    .nav-links { display: flex; gap: clamp(10px, 2vw, 24px); align-items: center; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 800; transition: all 0.2s; position: relative; padding: 5px 10px; border-radius: 20px; white-space: nowrap; }
+    .nav-links a:hover { color: var(--brown-dark); background: rgba(0,0,0,0.05); transform: translateY(-2px); }
+    
+    /* Botões Premium 3D Arcade */
+    .btn-3d {
+      background: var(--grass); color: #fff; font-family: 'Press Start 2P'; font-size: clamp(8px, 1.5vw, 10px);
+      padding: clamp(10px, 2vw, 14px) clamp(16px, 3vw, 24px); border: 4px solid var(--brown-dark); border-radius: 12px;
+      box-shadow: inset 0 4px 0 rgba(255,255,255,0.4), inset 0 -4px 0 rgba(0,0,0,0.2), 0 6px 0 var(--grass-dark), 0 10px 0 var(--brown-dark);
+      text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      transition: all 0.1s; cursor: pointer; text-align: center; line-height: 1.4; white-space: nowrap;
+    }
+    .btn-3d:hover { background: var(--grass-light); transform: translateY(-2px); box-shadow: inset 0 4px 0 rgba(255,255,255,0.5), inset 0 -4px 0 rgba(0,0,0,0.2), 0 8px 0 var(--grass-dark), 0 12px 0 var(--brown-dark); color: var(--brown-dark); }
+    .btn-3d:active { transform: translateY(6px); box-shadow: inset 0 4px 0 rgba(255,255,255,0.1), inset 0 -2px 0 rgba(0,0,0,0.1), 0 0 0 var(--grass-dark), 0 4px 0 var(--brown-dark); }
+    
+    .btn-secondary { background: #FFF; color: var(--brown-dark); box-shadow: inset 0 4px 0 rgba(255,255,255,0.8), inset 0 -4px 0 rgba(0,0,0,0.1), 0 6px 0 #D1D5DB, 0 10px 0 var(--brown-dark); }
+    .btn-secondary:hover { background: #F9FAFB; box-shadow: inset 0 4px 0 rgba(255,255,255,0.9), inset 0 -4px 0 rgba(0,0,0,0.1), 0 8px 0 #D1D5DB, 0 12px 0 var(--brown-dark); }
+    .btn-secondary:active { transform: translateY(6px); box-shadow: inset 0 4px 0 rgba(255,255,255,0.1), inset 0 -2px 0 rgba(0,0,0,0.1), 0 0 0 #D1D5DB, 0 4px 0 var(--brown-dark); }
+
+    /* --- Seção Hero --- */
+    #hero {
+      height: 100vh; height: 100svh; display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(circle at center, var(--sky-light) 0%, var(--sky) 100%); padding: 0; perspective: 1000px;
+    }
+    .hero-content { text-align: center; z-index: 10; padding: 0 20px; transform-style: preserve-3d; margin-top: 60px;}
+    .hero-badge {
+      display: inline-block; background: #FFF; border: 4px solid var(--brown-dark); color: var(--brown-dark);
+      font-size: clamp(9px, 2vw, 11px); font-weight: 900; padding: 10px 24px; border-radius: 30px; margin-bottom: clamp(20px, 4vw, 30px);
+      box-shadow: 4px 4px 0 var(--brown-dark); text-transform: uppercase; letter-spacing: 1px;
+    }
+    #hero h1 { 
+      font-size: clamp(32px, 8vw, 84px); color: #FFF; text-shadow: 0 clamp(4px, 1vw, 8px) 0 var(--sky-dark), 0 clamp(6px, 1.5vw, 12px) 0 var(--brown-dark); 
+      margin-bottom: 24px; letter-spacing: -3px; display: inline-block; line-height: 1.1;
+    }
+    .char { display: inline-block; transition: color 0.2s; }
+    .char:hover { color: var(--gold); transform: translateY(-15px) scale(1.1) rotate(5deg) !important; text-shadow: 0 15px 0 var(--brown-dark); }
+
+    #hero p { 
+      font-size: clamp(14px, 4vw, 22px); color: var(--brown-dark); max-width: 650px; margin: 0 auto clamp(30px, 6vw, 50px); font-weight: 800; 
+      background: var(--bg-panel); padding: clamp(15px, 4vw, 25px); border-radius: 24px; 
+      border: 4px solid var(--brown-dark); box-shadow: inset 0 0 0 4px #FFF, 8px 8px 0 rgba(69, 26, 3, 0.15); position: relative; line-height: 1.5;
+    }
+    #hero p::after { content: ''; position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); border-width: 18px 18px 0; border-style: solid; border-color: var(--brown-dark) transparent transparent transparent; }
+    #hero p::before { content: ''; position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%); border-width: 14px 14px 0; border-style: solid; border-color: var(--bg-panel) transparent transparent transparent; z-index: 1; }
+    
+    .hero-ctas { display: flex; gap: 20px; justify-content: center; align-items: center; flex-wrap: wrap; }
+    .scroll-down { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: var(--brown-dark); font-size: clamp(18px, 4vw, 24px); animation: bounce-down 2s infinite; opacity: 0.6; }
+
+    .cloud { position: absolute; background: #FFF; border-radius: 50px; border: 4px solid var(--brown-dark); opacity: 0.95; z-index: 1;}
+    .cloud::before { content:''; position:absolute; top:-40%; left:15%; width:40%; height:80%; background:#FFF; border-radius:50%; border:4px solid var(--brown-dark); border-bottom: none;}
+    .cloud::after { content:''; position:absolute; top:-25%; right:20%; width:30%; height:60%; background:#FFF; border-radius:50%; border:4px solid var(--brown-dark); border-bottom: none;}
+
+    /* --- GAMEPLAY SECTION --- */
+    #gameplay { background: var(--sky-dark); border-bottom: 8px solid var(--brown-dark); }
+    .video-wrapper { position: relative; max-width: 900px; margin: 0 auto; background: var(--bg-panel); padding: clamp(10px, 3vw, 15px); border-radius: 24px; border: 6px solid var(--brown-dark); box-shadow: inset 0 0 0 4px #FFF, clamp(6px, 2vw, 16px) clamp(6px, 2vw, 16px) 0 rgba(0,0,0,0.4); }
+    .video-inner { aspect-ratio: 16/9; background: #111; border-radius: 12px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; border: 4px solid var(--brown-dark); cursor: pointer; transition: transform 0.4s ease; }
+    .video-inner:hover { transform: scale(1.02); }
+    .scanlines { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(255,255,255,0.05) 4px, rgba(255,255,255,0.05) 8px); pointer-events: none; z-index: 1; }
+
+    /* --- ABOUT SECTION --- */
+    #about { background: var(--grass); border-bottom: 8px solid var(--grass-dark); }
+    .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(40px, 8vw, 80px); align-items: center; }
+    .about-text h2 { color: #FFF; font-size: clamp(24px, 5vw, 42px); margin-bottom: 24px; text-shadow: 0 4px 0 var(--brown-dark); line-height: 1.1; text-align: left;}
+    .about-text p { margin-bottom: 24px; font-size: clamp(15px, 3vw, 18px); color: var(--brown-dark); font-weight: 700; line-height: 1.7; }
+    .about-list { list-style: none; }
+    .about-list li { margin-bottom: 16px; padding-left: 45px; position: relative; font-weight: 800; color: #FFF; font-size: clamp(14px, 3vw, 16px); text-shadow: 1px 1px 0 var(--brown-dark); }
+    .about-list li::before { content: ''; position: absolute; left: 0; top: -2px; width: 28px; height: 28px; background: var(--gold); border: 4px solid var(--brown-dark); border-radius: 8px; box-shadow: inset -2px -2px 0 #D97706; }
+    .about-image { width: 100%; height: clamp(250px, 40vw, 450px); background: var(--sky-light); border: 8px solid var(--brown-dark); border-radius: 24px; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: inset 0 0 0 8px #FFF, clamp(8px, 2vw, 16px) clamp(8px, 2vw, 16px) 0 rgba(69, 26, 3, 0.2); overflow: hidden; transition: transform 0.4s; }
+    .about-image:hover { transform: scale(1.03) rotate(2deg); }
+    .about-image::after { content: 'MUNDO IN-GAME'; font-family: 'Press Start 2P', monospace; font-size: clamp(8px, 2vw, 12px); color: var(--sky-dark); text-align: center; padding: 20px; }
+
+    /* --- POWER-UPS --- */
+    #powerups { border-bottom: 8px solid var(--brown-dark); }
+    .power-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(30px, 6vw, 40px); margin-top: clamp(50px, 10vw, 80px); }
+    .power-card { background: var(--bg-panel); border: 6px solid var(--brown-dark); border-radius: 24px; padding: 50px 24px 24px; text-align: center; position: relative; box-shadow: inset 0 0 0 4px #FFF, 8px 8px 0 rgba(0,0,0,0.15); transition: transform 0.3s ease; }
+    .power-card:hover { transform: translateY(-10px); box-shadow: inset 0 0 0 4px #FFF, 12px 12px 0 var(--brown-dark); }
+    .power-icon { position: absolute; top: -45px; left: 50%; transform: translateX(-50%); width: 80px; height: 80px; background: var(--grass); border: 5px solid var(--brown-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.1), 0 8px 0 rgba(0,0,0,0.2); }
+    .power-card h3 { font-family: 'Press Start 2P'; font-size: clamp(12px, 3vw, 16px); color: var(--accent); margin-bottom: 12px; text-shadow: 0 2px 0 var(--brown-dark); line-height: 1.4; }
+    .power-card p { font-size: clamp(14px, 3vw, 15px); color: var(--text-muted); font-weight: 600; line-height: 1.6; }
+
+    /* --- CHARACTERS --- */
+    #characters { background: var(--brown); padding: 0; }
+    
+    /* Responsive Wrapper para Characters */
+    .char-container-wrapper { position: relative; width: 100%; }
+    .chars-header { position: absolute; top: clamp(20px, 5vw, 8%); width: 100%; text-align: center; z-index: 20; pointer-events: none;}
+    .chars-header p { color: var(--brown-light); font-weight: 800; margin-top: 10px; }
+    
+    /* Configuração padrão (Desktop/Horizontal) */
+    .pin-wrap { height: 100vh; height: 100svh; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+    .horizontal-container { display: flex; height: 100%; width: fit-content; will-change: transform; }
+    .char-panel { width: 100vw; height: 100%; display: flex; align-items: center; justify-content: center; padding: 0 20px; position: relative; perspective: 1000px;}
+    
+    .char-card {
+      background: var(--bg-panel); border: 6px solid var(--brown-dark); padding: clamp(30px, 6vw, 50px) clamp(20px, 4vw, 40px); border-radius: 32px;
+      max-width: 650px; width: 100%; max-height: 80vh; overflow-y: auto;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      box-shadow: inset 0 0 0 6px #FFF, 0 clamp(10px, 3vw, 20px) 0 rgba(0,0,0,0.3); will-change: transform; 
+    }
+    .char-avatar {
+      width: clamp(100px, 20vw, 140px); height: clamp(100px, 20vw, 140px); background: #FFF; border: 6px solid var(--brown-dark); margin-bottom: 24px;
+      display: flex; align-items: center; justify-content: center; border-radius: 20px; flex-shrink: 0;
+      box-shadow: inset -4px -4px 0 rgba(0,0,0,0.1), 8px 8px 0 var(--brown-dark); transition: transform 0.3s ease;
+    }
+    .char-card:hover .char-avatar { transform: scale(1.1) translateY(-5px); }
+    .char-card h3 { font-size: clamp(24px, 5vw, 28px); color: var(--accent); margin-bottom: 8px; text-shadow: 0 4px 0 var(--brown-dark); }
+    .char-card .char-class { font-family: 'Press Start 2P'; font-size: clamp(8px, 2vw, 10px); color: var(--brown-dark); margin-bottom: 20px; background: #E5E7EB; padding: 8px 16px; border: 3px solid var(--brown-dark); border-radius: 12px; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.1); }
+    .char-quote { font-style: italic; color: var(--text-muted); font-size: clamp(14px, 3vw, 16px); margin-bottom: 24px; font-weight: 800; background: rgba(0,0,0,0.03); padding: 15px; border-radius: 12px;}
+    .char-lore { border-top: 3px dashed var(--stone); padding-top: 24px; text-align: left; font-size: clamp(14px, 3vw, 16px); color: var(--text); line-height: 1.7; width: 100%;}
+    .scroll-indicator { position: absolute; bottom: clamp(20px, 5vw, 8%); left: 50%; transform: translateX(-50%); display: flex; gap: 16px; z-index: 20; }
+    .dot { width: 16px; height: 16px; background: var(--brown-dark); border: 3px solid #FFF; transition: all 0.3s ease; border-radius: 8px; opacity: 0.5; }
+    .dot.active { background: var(--gold); border-color: var(--brown-dark); transform: scale(1.6); opacity: 1; border-radius: 50%; }
+
+    /* --- GALERIA DE ECOS --- */
+    #gallery { border-bottom: 8px solid var(--brown-dark); }
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin-top: 50px; }
+    .gallery-item { aspect-ratio: 4/3; background: var(--sky-light); border: 6px solid var(--brown-dark); border-radius: 16px; position: relative; overflow: hidden; box-shadow: 8px 8px 0 rgba(0,0,0,0.15); cursor: pointer; transition: transform 0.4s ease, box-shadow 0.4s; }
+    .gallery-item:hover { transform: scale(1.05) rotate(2deg); box-shadow: 12px 16px 0 var(--brown-dark); z-index: 2; }
+    .gallery-item::after { content: '📸 SCREENSHOT'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'Press Start 2P'; font-size: 12px; color: var(--sky-dark); }
+    .gallery-item:nth-child(even):hover { transform: scale(1.05) rotate(-2deg); }
+
+    /* --- DESENVOLVIMENTO --- */
+    #roadmap { background: var(--sky-light); border-bottom: 8px solid var(--sky-dark); }
+    .roadmap-container { max-width: 800px; margin: 0 auto; position: relative; padding-left: clamp(20px, 5vw, 40px); }
+    .roadmap-container::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 8px; background: var(--brown-dark); border-radius: 4px; }
+    .milestone { position: relative; margin-bottom: clamp(40px, 8vw, 60px); padding: clamp(20px, 4vw, 30px); background: var(--bg-panel); border: 5px solid var(--brown-dark); border-radius: 20px; box-shadow: inset 0 0 0 4px #FFF, 8px 8px 0 rgba(69,26,3,0.15); }
+    .milestone::before { content: ''; position: absolute; left: clamp(-38px, -8vw, -58px); top: 30px; width: clamp(20px, 5vw, 28px); height: clamp(20px, 5vw, 28px); background: var(--stone); border: 4px solid var(--brown-dark); border-radius: 50%; transition: all 0.4s ease; }
+    .milestone.active { border-color: var(--accent); box-shadow: inset 0 0 0 4px #FFF, 8px 8px 0 var(--brown-dark); }
+    .milestone.active::before { border-color: var(--brown-dark); background: var(--accent); box-shadow: 0 0 0 4px var(--bg-panel); }
+    .milestone-date { font-family: 'Press Start 2P'; font-size: 10px; color: var(--accent); margin-bottom: 12px; display: inline-block; background: #FEE2E2; padding: 6px 12px; border-radius: 8px; border: 2px solid var(--accent); }
+    .milestone h3 { font-size: clamp(16px, 4vw, 20px); margin-bottom: 12px; color: var(--brown-dark); font-weight: 900; line-height: 1.3;}
+    .milestone p { font-size: clamp(14px, 3vw, 16px); color: var(--text-muted); font-weight: 600; line-height: 1.6;}
+
+    /* --- DEVS SECTION --- */
+    #devs { background: var(--stone); border-bottom: 8px solid var(--stone-dark); }
+    .dev-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(30px, 6vw, 40px); margin-top: clamp(60px, 10vw, 80px); }
+    .dev-card { background: var(--bg-panel); border: 6px solid var(--brown-dark); padding: 50px 24px 24px; border-radius: 24px; text-align: center; position: relative; box-shadow: inset 0 0 0 4px #FFF, 8px 8px 0 rgba(0,0,0,0.2); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .dev-card:hover { transform: translateY(-5px); box-shadow: inset 0 0 0 4px #FFF, 12px 12px 0 var(--brown-dark); }
+    .dev-avatar { width: clamp(80px, 15vw, 100px); height: clamp(80px, 15vw, 100px); position: absolute; top: clamp(-40px, -7vw, -50px); left: 50%; transform: translateX(-50%); background: var(--sky-light); border-radius: 20px; border: 5px solid var(--brown-dark); display: flex; align-items: center; justify-content: center; font-family: 'Press Start 2P'; font-size: 32px; color: var(--brown-dark); box-shadow: inset -4px -4px 0 rgba(0,0,0,0.1), 0 8px 0 rgba(0,0,0,0.2); transition: transform 0.3s ease, background 0.3s; }
+    .dev-card:hover .dev-avatar { transform: translateX(-50%) scale(1.1); background: var(--gold); }
+    .dev-card h4 { font-size: 18px; color: var(--accent); margin-bottom: 8px; text-shadow: 0 2px 0 var(--brown-dark);}
+    .dev-card span { font-size: 10px; font-family: 'Press Start 2P'; color: var(--brown-dark); display: block; margin-bottom: 24px; line-height: 1.5; }
+    .dev-card p { font-size: 14px; color: var(--text-muted); font-weight: 600; line-height: 1.6; margin-bottom: 30px; }
+    .dev-links { display: grid; grid-template-columns: 1fr; gap: 12px; } /* Ajustado para 1 coluna nos devs para não apertar */
+    .dev-btn { padding: 14px 5px; font-family: 'Press Start 2P'; font-size: 9px; text-decoration: none; border-radius: 8px; border: 3px solid var(--brown-dark); color: var(--brown-dark); transition: all 0.1s; background: #FFF; box-shadow: inset 0 3px 0 rgba(255,255,255,0.8), 0 4px 0 var(--brown-dark); text-align: center; }
+    .dev-btn.full { background: #E5E7EB; }
+    .dev-btn:hover { background: var(--sky-light); transform: translateY(-2px); box-shadow: inset 0 3px 0 rgba(255,255,255,0.9), 0 6px 0 var(--brown-dark); }
+    .dev-btn:active { transform: translateY(4px); box-shadow: inset 0 0 0 rgba(255,255,255,0), 0 0 0 var(--brown-dark); }
+
+    /* --- AVALIAÇÃO DO PROFESSOR --- */
+    #avaliacao { background: var(--grass); border-bottom: 8px solid var(--grass-dark); }
+    .avaliacao-box { background: var(--bg-panel); border: 8px solid var(--brown-dark); padding: clamp(30px, 6vw, 60px); max-width: 800px; margin: 0 auto; box-shadow: inset 0 0 0 6px #FFF, clamp(8px, 2vw, 16px) clamp(8px, 2vw, 16px) 0 rgba(69,26,3,0.3); border-radius: 32px; text-align: center; }
+    .avaliacao-box h2 { font-size: clamp(20px, 4vw, 24px); margin-bottom: 16px; color: var(--accent); text-shadow: 0 2px 0 var(--brown-dark);}
+    .avaliacao-box p { margin-bottom: 40px; color: var(--brown-dark); font-weight: 800; font-size: clamp(14px, 3vw, 18px);}
+    .form-group { display: flex; gap: 16px; justify-content: center; flex-direction: column; align-items: center; width: 100%;}
+    .form-group textarea { width: 100%; max-width: 600px; min-height: 120px; padding: 20px; background: #FFF; border: 4px solid var(--brown-dark); border-radius: 12px; color: var(--text); font-family: 'Inter'; font-weight: 600; font-size: 16px; outline: none; transition: transform 0.2s; box-shadow: inset 0 4px 0 rgba(0,0,0,0.05); resize: vertical;}
+    .form-group textarea:focus { border-color: var(--accent); transform: scale(1.02); }
+    .form-group button { padding: 15px 40px; font-size: 12px; margin-top: 10px; width: 100%; max-width: 300px;}
+
+    /* --- FAQ --- */
+    #faq { background: var(--sky-light); border-bottom: 8px solid var(--sky-dark);}
+    .faq-item { border-bottom: 4px dashed var(--stone); padding: clamp(15px, 4vw, 24px) 0; cursor: pointer; transition: background 0.3s; padding: 24px; border-radius: 16px;}
+    .faq-item:hover { background: rgba(255,255,255,0.3); }
+    .faq-question { display: flex; justify-content: space-between; align-items: center; font-weight: 800; color: var(--brown-dark); font-size: clamp(15px, 4vw, 18px); gap: 15px;}
+    .faq-icon { font-family: 'Press Start 2P'; font-size: 14px; color: #FFF; background: var(--accent); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 8px; border: 3px solid var(--brown-dark); box-shadow: 0 4px 0 var(--brown-dark); transition: all 0.4s ease; }
+    .faq-answer { display: none; padding-top: 20px; color: var(--brown-dark); font-size: clamp(14px, 3vw, 16px); font-weight: 600; line-height: 1.7; }
+    .faq-item.active .faq-answer { display: block; animation: fade-in-down 0.4s ease; }
+    .faq-item.active .faq-icon { transform: rotate(135deg) translateY(-4px); background: var(--grass-dark); box-shadow: 0 0 0 var(--brown-dark); }
+    
+    /* --- Footer --- */
+    footer { background: var(--brown-dark); padding: 100px 0 40px; color: #FFF; position: relative; overflow: hidden; }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 80px; position: relative; z-index: 2; }
+    .footer-col h4 { font-size: 14px; color: var(--sky-light); margin-bottom: 24px; text-shadow: 0 2px 0 #000; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 12px; transition: transform 0.2s; }
+    .footer-col ul li:hover { transform: translateX(5px); }
+    .footer-col ul li a { color: #D1D5DB; text-decoration: none; font-size: 15px; font-weight: 600; transition: color 0.2s; }
+    .footer-col ul li a:hover { color: var(--accent); }
+    .big-wishlist { text-align: center; padding: clamp(30px, 6vw, 50px); background: rgba(0,0,0,0.2); border: 4px dashed rgba(255,255,255,0.2); border-radius: 24px; margin-bottom: 60px; position: relative; z-index: 2; transition: transform 0.3s ease;}
+    .big-wishlist:hover { transform: scale(1.02); border-color: var(--grass); background: rgba(0,0,0,0.3); }
+    .big-wishlist h2 { font-size: clamp(20px, 5vw, 24px); color: #fff; margin-bottom: 20px; text-shadow: 0 4px 0 #000; }
+    .copyright { text-align: center; font-size: 10px; color: rgba(255,255,255,0.4); font-family: 'Press Start 2P'; margin-top: 40px; padding-top: 30px; border-top: 2px dashed rgba(255,255,255,0.1); position: relative; z-index: 2;}
+
+    /* --- RESPONSIVIDADE EXTREMA (MOBILES E TABLETS) --- */
+    @media (max-width: 900px) {
+      /* Navbar torna-se um menu scrollável horizontalmente */
+      nav { padding: 10px; gap: 10px; }
+      .nav-links { overflow-x: auto; max-width: 50vw; padding-bottom: 5px; scrollbar-width: none; }
+      .nav-links::-webkit-scrollbar { display: none; } /* Oculta a barra nativa mas permite deslizar o dedo */
+      
+      .hero-ctas { flex-direction: column; width: 100%; gap: 15px; }
+      .hero-ctas a { width: 100%; max-width: 350px; }
+      
+      /* IMPORTANTE: Desativar comportamento fixo horizontal em telas pequenas para UX perfeito */
+      .pin-wrap { height: auto !important; display: block; border: none; padding-top: 80px;}
+      .chars-header { position: relative; top: 0; padding-bottom: 30px; }
+      .horizontal-container { display: flex; flex-direction: column; width: 100% !important; height: auto; gap: 40px;}
+      .char-panel { width: 100%; height: auto; padding: 0; }
+      .scroll-indicator { display: none; } /* Ocultar os pontos porque agora faz scroll normal vertical */
+      #characters { padding: 80px 0; border-bottom: 8px solid var(--brown-dark); }
+      .char-card { max-height: none; }
+    }
+  </style>
 </head>
+<body>
 
-<body class="antialiased font-terminal text-retro-white text-lg md:text-xl overflow-x-hidden selection:bg-retro-pink selection:text-retro-black">
-
-    <a href="#inicio" class="absolute -top-40 left-0 bg-retro-pink text-retro-black p-4 z-[999999] focus:top-0 font-arcade text-xs">Saltar para o conteúdo principal</a>
-
-    <!-- Cursores Desktop -->
-    <div id="cursor-dot" aria-hidden="true"></div>
-    <div id="cursor-ring" aria-hidden="true"></div>
-
-    <!-- BOOT SCREEN -->
-    <div id="boot-screen" class="fixed inset-0 z-[100000] flex flex-col pt-12 px-8 md:px-24 font-terminal text-retro-green text-lg md:text-2xl overflow-hidden">
-        <div id="boot-log" class="whitespace-pre-wrap leading-relaxed text-retro-yellow"></div>
-        <div id="boot-cursor" class="w-3 h-6 bg-retro-yellow animate-blink mt-2"></div>
-    </div>
-
-    <div class="crt-overlay" aria-hidden="true"></div>
-    <div class="noise-overlay" aria-hidden="true"></div>
-    <div class="vignette-overlay hidden md:block" aria-hidden="true"></div>
-
-    <!-- NAVBAR -->
-    <nav id="navbar" class="fixed top-0 left-0 w-full z-[1000] py-4 px-6 lg:px-8 flex justify-between items-center opacity-0 -translate-y-full">
-        <div class="flex flex-col cursor-pointer interactive" onclick="window.scrollTo(0,0)">
-            <div class="font-arcade text-retro-pink text-[10px] md:text-[12px] uppercase tracking-tighter">Kernel_Core</div>
-            <div class="font-arcade text-retro-white text-[10px] md:text-xs uppercase mt-1">v3.8.5</div>
-        </div>
-
-        <div class="hidden lg:flex items-center gap-6 xl:gap-10 font-arcade text-[10px] xl:text-[12px] text-retro-white">
-            <a href="#inicio" class="interactive hover:text-retro-pink transition-colors uppercase tracking-widest relative group">Início<span class="absolute -bottom-2 left-0 w-0 h-[2px] bg-retro-pink transition-all group-hover:w-full"></span></a>
-            <a href="#sobre" class="interactive hover:text-retro-pink transition-colors uppercase tracking-widest relative group">Lore<span class="absolute -bottom-2 left-0 w-0 h-[2px] bg-retro-pink transition-all group-hover:w-full"></span></a>
-            <a href="#mecanicas" class="interactive hover:text-retro-pink transition-colors uppercase tracking-widest relative group">Mecânicas<span class="absolute -bottom-2 left-0 w-0 h-[2px] bg-retro-pink transition-all group-hover:w-full"></span></a>
-            <a href="#gameplay" class="interactive hover:text-retro-pink transition-colors uppercase tracking-widest relative group">Protocolos<span class="absolute -bottom-2 left-0 w-0 h-[2px] bg-retro-pink transition-all group-hover:w-full"></span></a>
-            <a href="#personagens" class="interactive hover:text-retro-pink transition-colors uppercase tracking-widest relative group">Agentes<span class="absolute -bottom-2 left-0 w-0 h-[2px] bg-retro-pink transition-all group-hover:w-full"></span></a>
-            <a href="#arsenal" class="interactive hover:text-retro-pink transition-colors uppercase tracking-widest relative group">Arsenal<span class="absolute -bottom-2 left-0 w-0 h-[2px] bg-retro-pink transition-all group-hover:w-full"></span></a>
-            <a href="#roadmap" class="interactive hover:text-retro-pink transition-colors uppercase tracking-widest relative group">Roadmap<span class="absolute -bottom-2 left-0 w-0 h-[2px] bg-retro-pink transition-all group-hover:w-full"></span></a>
-        </div>
-
-        <div class="flex gap-4 items-center">
-            <div class="hidden md:block font-arcade text-retro-pink text-xs tracking-widest bg-retro-pink/10 px-4 py-2 border border-retro-pink/30 shadow-[0_0_10px_rgba(229,109,177,0.2)]">
-                PTS: <span id="score-counter" class="text-retro-white">000000</span>
-            </div>
-            <button id="mobile-btn" class="lg:hidden btn-8bit !py-2 !px-4 text-[10px] interactive" aria-label="Menu">MENU</button>
-        </div>
+  <!-- NAVBAR FLUIDA -->
+  <div class="nav-wrapper">
+    <nav id="navbar">
+      <a href="#" class="logo">ECOS<span>.</span></a>
+      <!-- No mobile pode deslizar estes links com o dedo (swipe) -->
+      <div class="nav-links">
+        <a href="#gameplay">Gameplay</a>
+        <a href="#about">Mundo</a>
+        <a href="#characters">Heróis</a>
+        <a href="#roadmap">Acadêmico</a>
+        <a href="#avaliacao">Avaliar</a>
+      </div>
+      <a href="URL_DO_SEU_JOGO_AQUI" target="_blank" class="btn-3d pulse-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        JOGAR
+      </a>
     </nav>
+  </div>
 
-    <!-- MENU MOBILE -->
-    <div id="mobile-menu" class="fixed inset-0 z-[9999] bg-retro-black/98 flex flex-col items-center justify-center p-4 lg:hidden opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-md">
-        <div class="window-panel w-full max-w-[340px] p-1 scale-90 transition-transform duration-300" id="mobile-menu-window">
-            <div class="window-header">
-                <span>C:\SYSTEM\NAV</span>
-                <span id="close-menu-header" class="px-4 py-2 font-bold cursor-pointer text-xs interactive">[X]</span>
-            </div>
-            <div class="p-6 flex flex-col gap-2 font-arcade text-xs bg-retro-black h-full overflow-y-auto">
-                <a href="#inicio" class="mobile-link py-4 border-b border-retro-white/20 interactive">> Home_Dir</a>
-                <a href="#sobre" class="mobile-link py-4 border-b border-retro-white/20 interactive">> Sistema_Lore</a>
-                <a href="#mecanicas" class="mobile-link py-4 border-b border-retro-white/20 interactive">> Mecânicas</a>
-                <a href="#gameplay" class="mobile-link py-4 border-b border-retro-white/20 interactive">> Protocolos</a>
-                <a href="#personagens" class="mobile-link py-4 border-b border-retro-white/20 interactive">> Agentes</a>
-                <a href="#arsenal" class="mobile-link py-4 border-b border-retro-white/20 interactive">> Arsenal</a>
-                <a href="#roadmap" class="mobile-link py-4 border-b border-retro-white/20 interactive">> Sys_Roadmap</a>
-                <a href="#terminal" class="mobile-link py-4 border-b border-retro-white/20 interactive">> Terminal_FAQ</a>
-                <button id="close-menu-btn" class="mt-4 text-retro-pink animate-blink uppercase font-bold text-sm py-4 text-center w-full interactive">[ Fechar Menu ]</button>
-            </div>
-        </div>
+  <!-- HERO SECTION -->
+  <section id="hero">
+    <div class="hero-content parallax-hero">
+      <div class="hero-badge reveal-hero floating">PROJETO ACADÊMICO - CONSTRUCT 3</div>
+      <h1 id="hero-title">Ecos do Andarilho</h1>
+      <p class="reveal-hero">Um jogo de plataformas e ritmo desenvolvido integralmente na engine Construct 3. Sincronize os seus saltos com a música!</p>
+      
+      <div class="hero-ctas reveal-hero">
+        <a href="URL_DO_SEU_JOGO_AQUI" target="_blank" class="btn-3d pulse-btn" style="font-size: clamp(11px, 2vw, 14px); padding: 18px 30px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>
+          JOGAR NO NAVEGADOR
+        </a>
+        <a href="LINK_DO_ARQUIVO_AQUI.zip" download class="btn-3d btn-secondary" style="font-size: clamp(11px, 2vw, 14px); padding: 18px 30px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+          BAIXAR JOGO
+        </a>
+      </div>
     </div>
+    <div class="scroll-down pixel-font">v</div>
+    <div id="clouds-container"></div>
+    <div id="coins-container"></div>
+  </section>
 
-    <main>
-        <!-- HERO -->
-        <section id="inicio" class="relative min-h-[100dvh] flex flex-col items-center justify-center text-center px-4 md:px-6 z-10 pt-20 overflow-hidden">
-            <div class="matrix-bg absolute inset-0 opacity-[0.05] pointer-events-none" id="matrix-hero" aria-hidden="true"></div>
+  <!-- GAMEPLAY SECTION -->
+  <section id="gameplay" class="pattern-checkers">
+    <div class="container">
+      <h2 class="section-title pixel-font gs-pop" style="color: var(--brown-dark); text-shadow: 0 4px 0 #FFF;">Em Ação</h2>
+      <p class="section-subtitle gs-pop">Assista à gravação da gameplay do protótipo</p>
+      
+      <div class="gs-elastic-box video-wrapper">
+        <div class="video-inner" onclick="alert('Coloque o link ou iframe do seu vídeo aqui!');">
+          <div class="scanlines"></div>
+          <span style="position: absolute; top: 15px; left: 15px; font-family: 'Press Start 2P'; font-size: 10px; color: #FFF; z-index: 2; opacity: 0.8; text-shadow: 2px 2px 0 #000;">REC •</span>
+          <div class="btn-3d pulse-btn" style="position: relative; z-index: 2; border-radius: 50%; width: clamp(60px, 15vw, 90px); height: clamp(60px, 15vw, 90px); padding: 0;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="#fff" style="margin-left: 8px;"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-            <!-- Geometria Animada por AnimeJS -->
-            <div class="absolute inset-0 pointer-events-none flex items-center justify-center z-0 opacity-60 md:opacity-100" id="hero-geometry">
-                <div class="hero-shape bg-retro-pink/20 rounded-full blur-[80px] absolute w-64 h-64 md:w-96 md:h-96"></div>
-                <div class="hero-ring border-2 border-dashed border-retro-white/20 rounded-full absolute w-80 h-80 md:w-[500px] md:h-[500px]"></div>
-                <div class="hero-ring-inner border border-retro-pink/30 rounded-full absolute w-60 h-60 md:w-[350px] md:h-[350px]"></div>
-            </div>
+  <!-- ABOUT SECTION -->
+  <section id="about" style="background: var(--grass);">
+    <div class="container about-grid">
+      <div class="about-text gs-reveal-left">
+        <h2 class="pixel-font">O Reino Vibrante</h2>
+        <p>Desenvolvemos um mundo cheio de cores, blocos misteriosos e ruínas antigas totalmente programadas através do sistema de eventos do Construct 3.</p>
+        <p><strong>A intermitência é a chave:</strong> Derrote criaturas engraçadas e ative templos de pedra apenas durante os "Ecos" — os momentos onde a batida da música dita as regras das variáveis globais.</p>
+        <br>
+        <ul class="about-list list-stagger">
+          <li>Física de salto personalizada e responsiva</li>
+          <li>Colisões e *Tilemaps* desenhados à mão</li>
+          <li>Lógica de *Spawn* de inimigos baseada no ritmo</li>
+        </ul>
+      </div>
+      <div class="about-image gs-reveal-right floating"></div>
+    </div>
+  </section>
 
-            <div class="relative z-10 w-full max-w-5xl" id="hero-content">
-                <div class="font-arcade text-[10px] md:text-xs mb-8 bg-retro-black text-retro-white px-6 py-3 border border-retro-white/50 uppercase tracking-widest inline-block shadow-[4px_4px_0_rgba(203,168,122,0.5)]">
-                    System_Boot_OK
-                </div>
-
-                <h1 class="font-arcade text-retro-white mb-6" id="massive-title">
-                    <!-- Gerado dinamicamente no JS para animar letra a letra -->
-                </h1>
-
-                <p class="font-terminal text-xl md:text-3xl text-retro-pink mb-12 max-w-3xl mx-auto leading-relaxed bg-retro-black/90 px-6 py-5 border-l-4 border-r-4 border-retro-pink backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
-                    ENTRA NO NÚCLEO DA REDE ESQUECIDA. <br>
-                    <span class="text-retro-white font-bold block mt-3 drop-shadow-[2px_2px_0_rgba(229,109,177,0.5)]">Reescreve o código da realidade.</span>
-                </p>
-
-                <div class="flex flex-col sm:flex-row gap-6 justify-center items-center w-full">
-                    <a href="#download-section" class="interactive btn-8bit primary w-full sm:w-auto text-sm md:text-base">DESCARREGAR</a>
-                    <a href="#sobre" class="interactive btn-8bit w-full sm:w-auto text-sm md:text-base">SISTEMA_LORE</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- AVISO DO SISTEMA (Marquee) -->
-        <div class="bg-retro-pink text-retro-black font-arcade text-[10px] md:text-sm py-4 border-y-4 border-retro-white/20 marquee-container relative z-30 shadow-[0_0_20px_rgba(229,109,177,0.3)]">
-            <div class="marquee-content gap-8 md:gap-16 px-4">
-                <span>>>> ALERTA DE SISTEMA: SOBREAQUECIMENTO NO SETOR 7 <<<</span>
-                <span>[ ERRO CRÍTICO NA FIREWALL ]</span>
-                <span>>>> PROTOCOLO DE PURGA INICIADO <<<</span>
-                <span>[ INVASÃO DETETADA ]</span>
-                <!-- Cópia para loop perfeito -->
-                <span>>>> ALERTA DE SISTEMA: SOBREAQUECIMENTO NO SETOR 7 <<<</span>
-                <span>[ ERRO CRÍTICO NA FIREWALL ]</span>
-                <span>>>> PROTOCOLO DE PURGA INICIADO <<<</span>
-                <span>[ INVASÃO DETETADA ]</span>
-            </div>
+  <!-- CHARACTERS SECTION (Adaptativo) -->
+  <section id="characters">
+    <div class="char-container-wrapper">
+      <div class="pin-wrap" id="pin-wrap">
+        <div class="chars-header">
+          <h2 class="pixel-font gs-pop">Os Heróis</h2>
+          <p class="gs-pop">Sprites animados frame a frame</p>
         </div>
 
-        <!-- MECÂNICAS DO JOGO -->
-        <section id="mecanicas" class="py-24 md:py-32 relative z-20 bg-retro-black border-t-2 border-retro-white/20">
-            <div class="container mx-auto px-4 md:px-8 max-w-7xl">
-                <header class="text-center mb-16">
-                    <h2 class="font-arcade text-2xl md:text-5xl text-retro-white mb-6 uppercase text-scramble" data-text="Core_Features">Core_Features</h2>
-                    <p class="font-terminal text-retro-pink text-xl md:text-2xl inline-block border-b border-retro-pink pb-2">> Módulos do Sistema de Combate</p>
-                </header>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Feature 1 -->
-                    <article class="window-panel p-8 group reveal-elem interactive" data-delay="0">
-                        <div class="text-retro-pink mb-6 overflow-hidden">
-                            <pre class="font-terminal text-[8px] md:text-xs leading-none group-hover:animate-pulse transition-all">
-  /$$$$$$  /$$   /$$
- /$$__  $$| $$  | $$
-| $$  \__/| $$  | $$
-| $$      | $$  | $$
-| $$      | $$  | $$
-|  $$$$$$/|  $$$$$$/
- \______/  \______/ 
-                            </pre>
-                        </div>
-                        <h3 class="font-arcade text-retro-white text-lg mb-4 uppercase group-hover:text-retro-pink transition-colors">Combate Tático</h3>
-                        <p class="font-terminal text-xl text-retro-white/80 leading-relaxed">Ações baseadas em ciclos de relógio (Clock Cycles). Cada ataque gasta RAM; gere os teus recursos para não sofreres um <i>buffer overflow</i> durante a retaliação inimiga.</p>
-                    </article>
-
-                    <!-- Feature 2 -->
-                    <article class="window-panel p-8 group reveal-elem interactive" data-delay="150">
-                        <div class="text-retro-pink mb-6 overflow-hidden">
-                            <pre class="font-terminal text-[8px] md:text-xs leading-none group-hover:animate-pulse transition-all">
- /$$$$$$$  /$$$$$$$$
-| $$__  $$| $$_____/
-| $$  \ $$| $$      
-| $$$$$$$/| $$$$$   
-| $$____/ | $$__/   
-| $$      | $$      
-| $$      | $$$$$$$$
-|__/      |________/
-                            </pre>
-                        </div>
-                        <h3 class="font-arcade text-retro-white text-lg mb-4 uppercase group-hover:text-retro-pink transition-colors">Permadeath Térmico</h3>
-                        <p class="font-terminal text-xl text-retro-white/80 leading-relaxed">Se o teu núcleo atingir 100°C, a tua BIOS corrompe-se permanentemente. O save é formatado e precisas de reiniciar o teu firmware do zero.</p>
-                    </article>
-
-                    <!-- Feature 3 -->
-                    <article class="window-panel p-8 group reveal-elem interactive" data-delay="300">
-                        <div class="text-retro-pink mb-6 overflow-hidden">
-                            <pre class="font-terminal text-[8px] md:text-xs leading-none group-hover:animate-pulse transition-all">
- /$$$$$$$  /$$   /$$
-| $$__  $$| $$  | $$
-| $$  \ $$|  $$/$$/
-| $$$$$$$/ \  $$$/ 
-| $$__  $$  >$$  $$ 
-| $$  \ $$ /$$/\  $$
-| $$  | $$| $$  \ $$
-|__/  |__/|__/  |__/
-                            </pre>
-                        </div>
-                        <h3 class="font-arcade text-retro-white text-lg mb-4 uppercase group-hover:text-retro-pink transition-colors">Crafting de Código</h3>
-                        <p class="font-terminal text-xl text-retro-white/80 leading-relaxed">Extrai fragmentos de scripts de pacotes de dados e inimigos derrotados para compilar novas habilidades em terminais seguros espalhados pela rede.</p>
-                    </article>
-                </div>
+        <div class="horizontal-container" id="horizontal-container">
+          <!-- Herói 1 -->
+          <div class="char-panel">
+            <div class="char-card">
+              <div class="char-avatar" style="border-color: var(--accent);"><svg width="60" height="60" viewBox="0 0 24 24" fill="var(--accent)"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
+              <h3 class="pixel-font" style="color: var(--accent);">Kaelen</h3>
+              <div class="char-class" style="color: var(--accent); border-color: var(--accent);">O SALTEADOR</div>
+              <p class="char-quote">"Saltar em cima dos inimigos no ritmo certo? Deixa comigo!"</p>
+              <div class="char-lore">
+                <p>Personagem base focado na mecânica do *Platformer* clássico. A programação do seu comportamento exigiu o ajuste fino da variável Gravity e Jump Strength no Construct 3.</p>
+              </div>
             </div>
-        </section>
+          </div>
 
-        <!-- PROTOCOLOS (Scroll Horizontal) -->
-        <section id="gameplay" class="relative z-30 bg-retro-black h-auto md:h-[300vh]">
-            <div class="md:sticky md:top-0 md:h-[100dvh] w-full flex flex-col justify-center overflow-hidden py-16 px-4 md:px-0">
-                
-                <div class="container mx-auto md:px-12 mb-10 shrink-0 text-center md:text-left">
-                    <h2 class="font-arcade text-2xl md:text-5xl text-retro-white uppercase text-scramble" data-text="Manual_Operador">Manual_Operador</h2>
-                    <p class="font-terminal text-retro-pink text-xl mt-4 animate-pulse">> PROTOCOLOS_DE_COMBATE</p>
-                </div>
-
-                <div class="flex flex-col md:flex-row items-center gap-8 md:gap-16 md:px-12 w-full md:w-max will-change-transform" id="protocols-track">
-                    
-                    <article class="window-panel border-l-[12px] border-retro-pink p-8 w-full md:w-[600px] shrink-0 min-h-[320px] flex flex-col interactive group">
-                        <div class="absolute top-6 right-6 w-12 h-12 bg-retro-pink/10 flex items-center justify-center font-arcade text-retro-pink text-xl border border-retro-pink/30 group-hover:scale-110 transition-transform">01</div>
-                        <h3 class="font-arcade text-retro-pink mb-6 text-lg uppercase border-b border-retro-white/20 pb-4 pr-16 group-hover:text-retro-white transition-colors">01_Hacking_Core</h3>
-                        <p class="font-terminal text-2xl text-retro-white/90 leading-relaxed flex-grow">Invade o buffer de memória dos inimigos para causar erros críticos através de injeção de código. Neutraliza defesas em 3 turnos.</p>
-                        <div class="font-arcade text-retro-pink text-[10px] bg-retro-pink/10 p-3 mt-8 w-fit border border-retro-pink/30 shadow-[0_0_10px_rgba(229,109,177,0.2)]">ESTADO: OPERACIONAL</div>
-                    </article>
-
-                    <article class="window-panel border-l-[12px] border-retro-pink p-8 w-full md:w-[600px] shrink-0 min-h-[320px] flex flex-col interactive group">
-                        <div class="absolute top-6 right-6 w-12 h-12 bg-retro-pink/10 flex items-center justify-center font-arcade text-retro-pink text-xl border border-retro-pink/30 group-hover:scale-110 transition-transform">02</div>
-                        <h3 class="font-arcade text-retro-pink mb-6 text-lg uppercase border-b border-retro-white/20 pb-4 pr-16 group-hover:text-retro-white transition-colors">02_Overclock_Max</h3>
-                        <p class="font-terminal text-2xl text-retro-white/90 leading-relaxed flex-grow">Força o processador ao limite para dobrar o dano e a velocidade. Consome 15% da vida por turno ativo. Cuidado com o Throttling térmico.</p>
-                        <div class="font-arcade text-retro-pink text-[10px] bg-retro-pink/10 p-3 mt-8 w-fit border border-retro-pink/30 shadow-[0_0_10px_rgba(229,109,177,0.2)]">ESTADO: ALTA_VOLTAGEM</div>
-                    </article>
-
-                    <article class="window-panel border-l-[12px] border-retro-pink p-8 w-full md:w-[600px] shrink-0 min-h-[320px] flex flex-col interactive group">
-                        <div class="absolute top-6 right-6 w-12 h-12 bg-retro-pink/10 flex items-center justify-center font-arcade text-retro-pink text-xl border border-retro-pink/30 group-hover:scale-110 transition-transform">03</div>
-                        <h3 class="font-arcade text-retro-pink mb-6 text-lg uppercase border-b border-retro-white/20 pb-4 pr-16 group-hover:text-retro-white transition-colors">03_Uplink_Node</h3>
-                        <p class="font-terminal text-2xl text-retro-white/90 leading-relaxed flex-grow">Conecta-te a terminais centrais espalhados pela arena para reprogramar bots hostis e transformá-los em aliados temporários.</p>
-                        <div class="font-arcade text-retro-pink text-[10px] bg-retro-pink/10 p-3 mt-8 w-fit border border-retro-pink/30 shadow-[0_0_10px_rgba(229,109,177,0.2)]">ESTADO: CONECTADO</div>
-                    </article>
-
-                    <div class="hidden md:block w-[10vw] shrink-0" aria-hidden="true"></div>
-                </div>
+          <!-- Herói 2 -->
+          <div class="char-panel">
+            <div class="char-card">
+              <div class="char-avatar" style="border-color: var(--sky-dark);"><svg width="60" height="60" viewBox="0 0 24 24" fill="var(--sky-dark)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg></div>
+              <h3 class="pixel-font" style="color: var(--sky-dark);">Lyra</h3>
+              <div class="char-class" style="color: var(--sky-dark); border-color: var(--sky-dark);">TECELÃ DAS NUVENS</div>
+              <p class="char-quote">"O vento sopra sempre no andamento perfeito da música."</p>
+              <div class="char-lore">
+                <p>Personagem alternativo que anula temporariamente a força da gravidade (*Set Gravity to 0*). Usada para testar e demonstrar habilidades secundárias e troca de personagens no jogo.</p>
+              </div>
             </div>
-        </section>
-
-        <!-- AGENTES -->
-        <section id="personagens" class="py-24 md:py-32 relative z-40 bg-retro-black border-t-2 border-retro-white/20">
-            <div class="container mx-auto px-4 md:px-8 max-w-7xl">
-                <header class="text-center mb-20">
-                    <h2 class="font-arcade text-2xl md:text-5xl text-retro-white mb-6 uppercase text-scramble" data-text="Roster_de_Dados">Roster_de_Dados</h2>
-                    <p class="font-terminal text-retro-pink text-xl md:text-2xl inline-block border-b border-retro-pink pb-2">> Sistemas Operacionais Detetados</p>
-                </header>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                    
-                    <article class="window-panel p-6 group reveal-elem flex flex-col interactive" data-delay="0">
-                        <div class="relative aspect-square border-2 border-retro-white/30 overflow-hidden mb-6 bg-retro-black">
-                            <img src="https://images.unsplash.com/photo-1535295972055-1c762f4483e5?q=80&w=400" alt="Kai_94" class="w-full h-full object-cover grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-110 transition-transform duration-700">
-                            <div class="absolute inset-0 bg-retro-pink/30 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                            <div class="absolute top-0 left-0 w-full h-[2px] bg-retro-white/50 opacity-0 group-hover:opacity-100 group-hover:animate-[crt-sweep_3s_linear_infinite]"></div>
-                        </div>
-                        <h3 class="font-arcade text-retro-pink text-lg mb-4 bg-retro-pink/10 p-2 text-center uppercase group-hover:bg-retro-pink group-hover:text-retro-black transition-colors">Kai_94</h3>
-                        <p class="font-terminal text-xl text-retro-white/80 mb-6 flex-grow">Protagonista. Uma rotina de segurança rebelde corrompida no setor 7 da firewall.</p>
-                        <div class="font-arcade text-[10px] space-y-3 text-retro-white border-t border-retro-white/10 pt-4">
-                            <div class="flex justify-between"><span class="text-retro-pink">VEL</span> <span>████████░░</span></div>
-                            <div class="flex justify-between"><span class="text-retro-pink">SOR</span> <span>████░░░░░░</span></div>
-                        </div>
-                    </article>
-
-                    <article class="window-panel p-6 group reveal-elem flex flex-col interactive" data-delay="150">
-                        <div class="relative aspect-square border-2 border-retro-white/30 overflow-hidden mb-6 bg-retro-black">
-                            <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=400" alt="Luna_V" class="w-full h-full object-cover grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-110 transition-transform duration-700">
-                            <div class="absolute inset-0 bg-retro-pink/30 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                            <div class="absolute top-0 left-0 w-full h-[2px] bg-retro-white/50 opacity-0 group-hover:opacity-100 group-hover:animate-[crt-sweep_3s_linear_infinite]"></div>
-                        </div>
-                        <h3 class="font-arcade text-retro-pink text-lg mb-4 bg-retro-pink/10 p-2 text-center uppercase group-hover:bg-retro-pink group-hover:text-retro-black transition-colors">Luna_V</h3>
-                        <p class="font-terminal text-xl text-retro-white/80 mb-6 flex-grow">Antagonista. A IA central que deseja apagar todos os registos humanos por segurança.</p>
-                        <div class="font-arcade text-[10px] space-y-3 text-retro-white border-t border-retro-white/10 pt-4">
-                            <div class="flex justify-between"><span class="text-retro-pink">INT</span> <span>██████████</span></div>
-                            <div class="flex justify-between"><span class="text-retro-pink">POD</span> <span>████████░░</span></div>
-                        </div>
-                    </article>
-
-                    <article class="window-panel p-6 group reveal-elem flex flex-col interactive" data-delay="300">
-                        <div class="relative aspect-square border-2 border-retro-white/30 overflow-hidden mb-6 bg-retro-black">
-                            <img src="https://images.unsplash.com/photo-1618331835717-801e976710b2?q=80&w=400" alt="Zed_Boot" class="w-full h-full object-cover grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-110 transition-transform duration-700">
-                            <div class="absolute inset-0 bg-retro-pink/30 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                            <div class="absolute top-0 left-0 w-full h-[2px] bg-retro-white/50 opacity-0 group-hover:opacity-100 group-hover:animate-[crt-sweep_3s_linear_infinite]"></div>
-                        </div>
-                        <h3 class="font-arcade text-retro-pink text-lg mb-4 bg-retro-pink/10 p-2 text-center uppercase group-hover:bg-retro-pink group-hover:text-retro-black transition-colors">Zed_Boot</h3>
-                        <p class="font-terminal text-xl text-retro-white/80 mb-6 flex-grow">NPC Leal. Bot blindado de geração antiga que preserva o código original.</p>
-                        <div class="font-arcade text-[10px] space-y-3 text-retro-white border-t border-retro-white/10 pt-4">
-                            <div class="flex justify-between"><span class="text-retro-pink">DEF</span> <span>██████████</span></div>
-                            <div class="flex justify-between"><span class="text-retro-pink">MEM</span> <span>██████░░░░</span></div>
-                        </div>
-                    </article>
-
-                    <article class="window-panel p-6 group reveal-elem flex flex-col interactive bg-retro-black" data-delay="450">
-                        <div class="relative aspect-square border-2 border-retro-pink/50 overflow-hidden mb-6 bg-retro-pink/5 flex items-center justify-center">
-                            <span class="font-terminal text-8xl text-retro-pink group-hover:scale-125 transition-transform duration-300">?</span>
-                            <div class="absolute inset-0 bg-retro-pink/10 opacity-0 group-hover:opacity-100 animate-pulse"></div>
-                        </div>
-                        <h3 class="font-arcade text-retro-pink text-lg mb-4 border border-retro-pink p-2 text-center uppercase group-hover:bg-retro-pink group-hover:text-retro-black transition-colors">NULO_404</h3>
-                        <p class="font-terminal text-xl text-retro-pink/80 mb-6 flex-grow animate-blink">[DADOS CORROMPIDOS] Setor protegido pela Firewall primária.</p>
-                        <div class="font-arcade text-[10px] space-y-3 text-retro-pink border-t border-retro-pink/30 pt-4 opacity-50">
-                            <div class="flex justify-between"><span>ERR</span> <span>░░░░░░░░░░</span></div>
-                            <div class="flex justify-between"><span>ERR</span> <span>░░░░░░░░░░</span></div>
-                        </div>
-                    </article>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- ARSENAL DE DADOS -->
-        <section id="arsenal" class="py-24 md:py-32 relative z-40 bg-retro-black border-t-2 border-retro-white/20">
-            <div class="container mx-auto px-4 md:px-8 max-w-7xl">
-                <header class="text-center mb-20">
-                    <h2 class="font-arcade text-2xl md:text-5xl text-retro-white mb-6 uppercase text-scramble" data-text="Arsenal_de_Dados">Arsenal_de_Dados</h2>
-                    <p class="font-terminal text-retro-pink text-xl md:text-2xl inline-block border-b border-retro-pink pb-2">> Equipamento de Sobrevivência do Mainframe</p>
-                </header>
-
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                    
-                    <!-- Arma 1 -->
-                    <article class="window-panel p-8 group reveal-elem flex flex-col interactive bg-retro-black" data-delay="0">
-                        <div class="text-retro-pink mb-6 overflow-hidden flex justify-center bg-retro-white/5 border border-retro-white/20 p-4">
-                            <pre class="font-terminal text-xs md:text-sm leading-none group-hover:text-retro-white transition-colors">
-      /\      
-     /  \     
-    |    |    
-    |    |    
-    |    |    
-   =======\   
-     |  |     
-     |__|     
-                            </pre>
-                        </div>
-                        <h3 class="font-arcade text-retro-pink text-lg mb-2 uppercase group-hover:animate-pulse">Lâmina Térmica v2</h3>
-                        <p class="font-terminal text-sm text-retro-white/50 mb-4 uppercase">> Classe: Melee_Pesado</p>
-                        <p class="font-terminal text-xl text-retro-white/90 leading-relaxed flex-grow">Arma corpo-a-corpo que sobreaquece a cada golpe. Causa dano massivo em armaduras corrompidas, mas exige refrigeração passiva de 2 turnos após 3 usos seguidos.</p>
-                        <div class="mt-6 border-t border-retro-white/20 pt-4 flex justify-between font-arcade text-[10px] text-retro-white/70">
-                            <span>Dano: ALTO</span>
-                            <span class="text-retro-pink">Calor: +35%</span>
-                        </div>
-                    </article>
-
-                    <!-- Arma 2 -->
-                    <article class="window-panel p-8 group reveal-elem flex flex-col interactive bg-retro-black" data-delay="150">
-                        <div class="text-retro-pink mb-6 overflow-hidden flex justify-center bg-retro-white/5 border border-retro-white/20 p-4">
-                            <pre class="font-terminal text-xs md:text-sm leading-none group-hover:text-retro-white transition-colors">
- +---+---+---.
- |   |   |   |==>
- +---+---+---'
-   |   |
-   +---+
-                            </pre>
-                        </div>
-                        <h3 class="font-arcade text-retro-pink text-lg mb-2 uppercase group-hover:animate-pulse">Disruptor EMP</h3>
-                        <p class="font-terminal text-sm text-retro-white/50 mb-4 uppercase">> Classe: Ranged_Tático</p>
-                        <p class="font-terminal text-xl text-retro-white/90 leading-relaxed flex-grow">Lança pulsos eletromagnéticos codificados. Interrompe a execução de comandos dos bots inimigos por 1 ciclo de relógio. Excelente para controlo de multidões.</p>
-                        <div class="mt-6 border-t border-retro-white/20 pt-4 flex justify-between font-arcade text-[10px] text-retro-white/70">
-                            <span>Dano: BAIXO</span>
-                            <span class="text-retro-pink">Stun: SIM</span>
-                        </div>
-                    </article>
-
-                    <!-- Item 3 -->
-                    <article class="window-panel p-8 group reveal-elem flex flex-col interactive bg-retro-black" data-delay="300">
-                        <div class="text-retro-pink mb-6 overflow-hidden flex justify-center bg-retro-white/5 border border-retro-white/20 p-4">
-                            <pre class="font-terminal text-xs md:text-sm leading-none group-hover:text-retro-white transition-colors">
-  +---------+ 
-  | |_____| | 
-  |         | 
-  |  _____  | 
-  | |     | | 
-  +---------+ 
-                            </pre>
-                        </div>
-                        <h3 class="font-arcade text-retro-pink text-lg mb-2 uppercase group-hover:animate-pulse">Patch de Refrigeração</h3>
-                        <p class="font-terminal text-sm text-retro-white/50 mb-4 uppercase">> Classe: Consumível</p>
-                        <p class="font-terminal text-xl text-retro-white/90 leading-relaxed flex-grow">Disco rígido portátil contendo scripts de ventilação de emergência. Consumir este pacote reduz imediatamente a temperatura do núcleo em 40%.</p>
-                        <div class="mt-6 border-t border-retro-white/20 pt-4 flex justify-between font-arcade text-[10px] text-retro-white/70">
-                            <span>Uso: ÚNICO</span>
-                            <span class="text-retro-pink">Calor: -40%</span>
-                        </div>
-                    </article>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- ROADMAP -->
-        <section id="roadmap" class="py-24 md:py-32 relative z-40 bg-retro-black border-t-2 border-retro-white/20">
-            <div class="container mx-auto px-4 md:px-8 max-w-5xl">
-                <header class="text-center mb-20">
-                    <h2 class="font-arcade text-2xl md:text-5xl text-retro-white mb-6 uppercase text-scramble" data-text="Sys_Roadmap">Sys_Roadmap</h2>
-                    <p class="font-terminal text-retro-pink text-xl md:text-2xl inline-block border-b border-retro-pink pb-2">> Ciclo de Desenvolvimento do Software</p>
-                </header>
-
-                <div class="relative border-l-4 border-retro-white/20 ml-4 md:ml-10 space-y-16">
-                    
-                    <!-- Fase 1 -->
-                    <div class="relative pl-8 md:pl-16 reveal-elem" data-delay="0">
-                        <div class="absolute -left-[14px] top-0 w-6 h-6 bg-retro-pink border-4 border-retro-black shadow-[0_0_10px_rgba(229,109,177,0.8)]"></div>
-                        <div class="font-arcade text-retro-white/50 text-xs mb-2">FASE 01 - CONCLUÍDO</div>
-                        <h3 class="font-arcade text-retro-pink text-xl md:text-2xl mb-4">Compilação do Núcleo</h3>
-                        <div class="window-panel p-6 bg-retro-black/50 interactive">
-                            <ul class="font-terminal text-xl text-retro-white/80 space-y-2 list-disc list-inside">
-                                <li>Design da Arquitetura do Sistema</li>
-                                <li>Motor Gráfico de 16-bits estabilizado</li>
-                                <li>Mecânicas de Permadeath Térmico integradas</li>
-                                <li>Criação da Personagem: Kai_94</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Fase 2 -->
-                    <div class="relative pl-8 md:pl-16 reveal-elem" data-delay="150">
-                        <div class="absolute -left-[14px] top-0 w-6 h-6 bg-retro-white border-4 border-retro-black animate-pulse shadow-[0_0_10px_rgba(203,168,122,0.8)]"></div>
-                        <div class="font-arcade text-retro-white text-xs mb-2 animate-blink">FASE 02 - EM PROGRESSO</div>
-                        <h3 class="font-arcade text-retro-white text-xl md:text-2xl mb-4 drop-shadow-[2px_2px_0_rgba(203,168,122,0.5)]">Integração Neural</h3>
-                        <div class="window-panel p-6 bg-retro-white/5 interactive border-retro-white">
-                            <ul class="font-terminal text-xl text-retro-white/90 space-y-2 list-disc list-inside">
-                                <li>Testes Alpha Fechados com early adopters</li>
-                                <li>Expansão do Bestiário (Inimigos Modificados)</li>
-                                <li>Balanceamento do Overclock e Dano de Calor</li>
-                                <li>Implementação de Banda Sonora Chiptune Dinâmica</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Fase 3 -->
-                    <div class="relative pl-8 md:pl-16 reveal-elem" data-delay="300">
-                        <div class="absolute -left-[14px] top-0 w-6 h-6 bg-retro-black border-4 border-retro-white/30"></div>
-                        <div class="font-arcade text-retro-white/30 text-xs mb-2">FASE 03 - PENDENTE</div>
-                        <h3 class="font-arcade text-retro-white/50 text-xl md:text-2xl mb-4">Extração Final (Lançamento)</h3>
-                        <div class="window-panel p-6 bg-retro-black border-retro-white/30 border-dashed interactive opacity-50">
-                            <ul class="font-terminal text-xl text-retro-white/60 space-y-2 list-disc list-inside">
-                                <li>Polimento de Bugs e Glitches Não-Intencionais</li>
-                                <li>Lançamento Global do v1.0 (Gold Master)</li>
-                                <li>Libertação das Leaderboards Globais</li>
-                                <li>DLC Gratuito: "A Vingança de Luna_V"</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- TERMINAL FAQ -->
-        <section id="terminal" class="py-24 md:py-32 relative z-40 bg-retro-black border-t-2 border-retro-white/20">
-            <div class="container mx-auto px-4 md:px-8 max-w-4xl">
-                <header class="text-center mb-16">
-                    <h2 class="font-arcade text-2xl md:text-5xl text-retro-white mb-6 uppercase text-scramble" data-text="Logs_do_Terminal">Logs_do_Terminal</h2>
-                    <p class="font-terminal text-retro-pink text-xl md:text-2xl inline-block border-b border-retro-pink pb-2">> Base de Conhecimento (FAQ)</p>
-                </header>
-
-                <div class="window-panel flex flex-col interactive reveal-elem p-1" data-delay="0">
-                    <header class="window-header"><span>C:\FAQ_DATABASE.EXE</span><span>_</span></header>
-                    <div class="bg-retro-black p-6 md:p-10 flex flex-col gap-4">
-                        
-                        <!-- FAQ Item 1 -->
-                        <div class="border-2 border-retro-white/20 bg-retro-black p-4 interactive faq-item hover:border-retro-pink transition-colors group">
-                            <button class="faq-btn w-full text-left font-terminal text-xl md:text-2xl text-retro-white flex justify-between items-center outline-none cursor-none">
-                                <span class="group-hover:text-retro-pink transition-colors">> Quando o sistema fica online? (Lançamento)</span>
-                                <span class="faq-icon font-arcade text-sm text-retro-white/50">▼</span>
-                            </button>
-                            <div class="faq-answer font-terminal text-lg md:text-xl text-retro-white/70">
-                                <div>
-                                    A extração dos dados está programada para o Q4 de 1994 (ou Q3 de 2026 no calendário atual). Fica atento aos canais oficiais para patches de atualização.
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- FAQ Item 2 -->
-                        <div class="border-2 border-retro-white/20 bg-retro-black p-4 interactive faq-item hover:border-retro-pink transition-colors group">
-                            <button class="faq-btn w-full text-left font-terminal text-xl md:text-2xl text-retro-white flex justify-between items-center outline-none cursor-none">
-                                <span class="group-hover:text-retro-pink transition-colors">> Quais plataformas suportadas?</span>
-                                <span class="faq-icon font-arcade text-sm text-retro-white/50">▼</span>
-                            </button>
-                            <div class="faq-answer font-terminal text-lg md:text-xl text-retro-white/70">
-                                <div>
-                                    O IPSUM foi desenhado para rodar nativamente em DOS/Windows 95. Estamos a compilar portas de emulação para PC (Steam), Mac e consolas da geração atual.
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- FAQ Item 3 -->
-                        <div class="border-2 border-retro-white/20 bg-retro-black p-4 interactive faq-item hover:border-retro-pink transition-colors group">
-                            <button class="faq-btn w-full text-left font-terminal text-xl md:text-2xl text-retro-white flex justify-between items-center outline-none cursor-none">
-                                <span class="group-hover:text-retro-pink transition-colors">> O jogo terá modo Multiplayer?</span>
-                                <span class="faq-icon font-arcade text-sm text-retro-white/50">▼</span>
-                            </button>
-                            <div class="faq-answer font-terminal text-lg md:text-xl text-retro-white/70">
-                                <div>
-                                    Negativo. O núcleo suporta apenas conexões Single Player para garantir segurança térmica máxima. Contudo, podes partilhar os teus "High Scores" no terminal online para rank global.
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="py-12 text-center bg-retro-black border-t-2 border-retro-white/20 z-50 relative">
-        <div class="font-terminal text-retro-white/60 text-xl tracking-widest">
-            IPSUM STUDIO DIGITAL © 1994-2026. <br>
-            <span class="text-retro-pink mt-4 inline-block font-bold hover:text-retro-white transition-colors cursor-pointer interactive">> INSERT_COIN_TO_RESTART</span>
+          </div>
         </div>
-    </footer>
+
+        <div class="scroll-indicator" id="scroll-dots">
+          <div class="dot active"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALERIA DE ECOS -->
+  <section id="gallery" class="pattern-stripes">
+    <div class="container">
+      <h2 class="section-title pixel-font gs-pop">Galeria de Níveis</h2>
+      <p class="section-subtitle gs-pop" style="color: #FFF;">Imagens dos *Layouts* construídos</p>
+      
+      <div class="gallery-grid">
+        <div class="gallery-item gs-elastic-box"></div>
+        <div class="gallery-item gs-elastic-box" style="animation-delay: 0.1s;"></div>
+        <div class="gallery-item gs-elastic-box" style="animation-delay: 0.2s;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROADMAP ACADÊMICO SECTION -->
+  <section id="roadmap" style="background: var(--sky-light);">
+    <div class="container">
+      <h2 class="section-title pixel-font gs-pop">Desenvolvimento</h2>
+      <p class="section-subtitle gs-pop">As fases do projeto para a faculdade</p>
+      
+      <div class="roadmap-container">
+        <div class="milestone active block-jump">
+          <div class="milestone-date">FASE 1</div>
+          <h3>Conceito e Game Design Document (GDD)</h3>
+          <p>Definição da paleta de cores, criação dos *sprites* iniciais e validação da lógica de ritmo associada ao salto do personagem principal.</p>
+        </div>
+        <div class="milestone active block-jump">
+          <div class="milestone-date">FASE 2</div>
+          <h3>Protótipo no Construct 3</h3>
+          <p>Implementação dos behaviors nativos (Platform, Solid), configuração das Folhas de Eventos e testes de colisão no Nível 1.</p>
+        </div>
+        <div class="milestone block-jump">
+          <div class="milestone-date">FASE 3</div>
+          <h3>Entrega Final & Polimento</h3>
+          <p>Adição de som, correção de bugs, exportação em HTML5 para navegador e criação desta Landing Page de apresentação.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AVALIAÇÃO DO PROFESSOR -->
+  <section id="avaliacao" class="pattern-dots">
+    <div class="container">
+      <div class="avaliacao-box gs-elastic-box floating-slow">
+        <h2 class="pixel-font">Avaliação do Projeto</h2>
+        <p>Professor, deixe aqui o seu feedback técnico e a nota final para o protótipo jogável.</p>
+        <form class="form-group" onsubmit="event.preventDefault(); alert('Feedback enviado com sucesso! Muito obrigado pela avaliação.');">
+          <textarea placeholder="Deixe os seus comentários sobre a programação (Construct 3), game design e arte..." required></textarea>
+          <button type="submit" class="btn-3d pulse-btn">ENVIAR AVALIAÇÃO</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ ACADÊMICO -->
+  <section id="faq">
+    <div class="container" style="max-width: 800px;">
+      <h2 class="section-title pixel-font gs-pop" style="color: var(--brown-dark); text-shadow: none;">Sobre o Projeto</h2>
+      <p class="section-subtitle gs-pop" style="margin-bottom: 40px;">Detalhes técnicos do desenvolvimento</p>
+      
+      <div class="faq-item active gs-pop">
+        <div class="faq-question">Qual a Engine utilizada para o jogo? <span class="faq-icon">+</span></div>
+        <div class="faq-answer">Todo o jogo foi desenvolvido utilizando o <strong>Construct 3</strong>. Escolhemos o C3 pela facilidade em iterar rapidamente através do sistema de Eventos visuais e por oferecer suporte excelente para mecânicas de *Platformer* 2D.</div>
+      </div>
+      
+      <div class="faq-item gs-pop">
+        <div class="faq-question">Este jogo será lançado comercialmente? <span class="faq-icon">+</span></div>
+        <div class="faq-answer">Não. "Ecos do Andarilho" é estritamente um projeto acadêmico desenvolvido para a faculdade. Não temos planos de publicação comercial. Serve como prova de conceito.</div>
+      </div>
+      
+      <div class="faq-item gs-pop">
+        <div class="faq-question">Como posso testar e avaliar? <span class="faq-icon">+</span></div>
+        <div class="faq-answer">Pode clicar no botão "JOGAR NO NAVEGADOR" no topo da página para jogar a exportação em HTML5 diretamente, ou clicar em "BAIXAR JOGO" para obter os ficheiros locais. Depois, preencha o formulário na secção "Avaliação".</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEVS SECTION (Retos, sem torto) -->
+  <section id="devs" style="background: var(--stone); border-bottom: 8px solid var(--stone-dark);">
+    <div class="container">
+      <h2 class="section-title pixel-font gs-pop">Os Criadores</h2>
+      <p class="section-subtitle gs-pop" style="color: var(--bg-panel);">Os estudantes por trás do código e da arte</p>
+      
+      <div class="dev-grid">
+        <div class="dev-card dev-jump">
+          <div class="dev-avatar">A</div>
+          <h4 class="pixel-font">Alexandre</h4>
+          <span>Programação Visual (C3)</span>
+          <p>Responsável pelas folhas de eventos, *Behaviors* e por garantir que o jogo roda no navegador sem *lag*.</p>
+          <div class="dev-links">
+            <a href="#" class="btn-3d btn-secondary full">PORTFÓLIO ACADÊMICO</a>
+          </div>
+        </div>
+
+        <div class="dev-card dev-jump">
+          <div class="dev-avatar">M</div>
+          <h4 class="pixel-font">Marina</h4>
+          <span>Pixel Art & UI</span>
+          <p>Criadora dos Sprites e dos Tilemaps do jogo, além de construir o design responsivo desta Landing Page.</p>
+          <div class="dev-links">
+            <a href="#" class="btn-3d btn-secondary full">LINKEDIN</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="big-wishlist gs-elastic-box">
+        <h2 class="pixel-font">HORA DE AVALIAR!</h2>
+        <p style="color: var(--sky-light); margin-bottom: 30px; font-weight: 600;">Jogue a demonstração diretamente no seu navegador, não necessita de instalar nada.</p>
+        <a href="URL_DO_SEU_JOGO_AQUI" target="_blank" class="btn-3d pulse-btn" style="font-size: 14px; padding: 24px 48px; background: var(--grass); box-shadow: inset 0 4px 0 rgba(255,255,255,0.3), inset 0 -4px 0 rgba(0,0,0,0.2), 0 8px 0 var(--grass-dark), 0 12px 0 var(--brown-dark);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>
+          JOGAR AGORA
+        </a>
+      </div>
+
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4 class="pixel-font">PROJETO ACADÊMICO</h4>
+          <p style="font-size: 13px; color: #DDD; margin-bottom: 20px; font-weight: 600;">Desenvolvido puramente com fins educacionais como trabalho universitário.</p>
+        </div>
+        <div class="footer-col">
+          <h4 class="pixel-font">LINKS</h4>
+          <ul>
+            <li><a href="#gameplay">Ver Trailer</a></li>
+            <li><a href="#avaliacao">Avaliar Projeto</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright">
+        © 2026 Ecos do Andarilho. Trabalho Acadêmico desenvolvido no Construct 3.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    document.addEventListener("DOMContentLoaded", () => {
+      
+      // Título animado
+      const heroTitle = document.getElementById('hero-title');
+      const text = heroTitle.innerText;
+      heroTitle.innerHTML = '';
+      text.split('').forEach(char => {
+        let span = document.createElement('span');
+        span.className = 'char';
+        span.innerText = char === ' ' ? '\u00A0' : char; 
+        heroTitle.appendChild(span);
+      });
+
+      const tlHero = gsap.timeline();
+      tlHero.from(".char", { 
+        y: -100, opacity: 0, rotation: 45, 
+        duration: 1.5, stagger: 0.05, ease: "elastic.out(1, 0.3)", delay: 0.2 
+      })
+      .from(".reveal-hero", { 
+        y: 50, opacity: 0, duration: 1, stagger: 0.2, ease: "back.out(1.7)" 
+      }, "-=1");
+
+      // Parallax
+      if(window.innerWidth > 800) {
+        document.addEventListener("mousemove", (e) => {
+          const x = (window.innerWidth / 2 - e.pageX) * 0.01;
+          const y = (window.innerHeight / 2 - e.pageY) * 0.01;
+          gsap.to(".parallax-hero", { x: x, y: y, duration: 0.5, ease: "power1.out" });
+        });
+      }
+
+      // Elementos Pop
+      gsap.utils.toArray('.gs-pop').forEach(element => {
+        gsap.from(element, {
+          scrollTrigger: { trigger: element, start: "top 85%" },
+          scale: 0.8, opacity: 0, duration: 1.2, ease: "elastic.out(1, 0.4)"
+        });
+      });
+
+      // Elementos Reveal Lateral
+      gsap.from(".gs-reveal-left", { scrollTrigger: { trigger: element => element.parentElement, start: "top 75%" }, x: -100, opacity: 0, duration: 1, ease: "back.out(1.2)" });
+      gsap.from(".gs-reveal-right", { scrollTrigger: { trigger: element => element.parentElement, start: "top 75%" }, x: 100, scale: 0.8, opacity: 0, duration: 1, ease: "back.out(1.2)" });
+
+      // Listas
+      gsap.from(".list-stagger li", {
+        scrollTrigger: { trigger: ".list-stagger", start: "top 80%" },
+        x: -50, opacity: 0, duration: 0.8, stagger: 0.2, ease: "back.out(2)"
+      });
+
+      // Roadmap
+      gsap.utils.toArray('.block-jump').forEach(block => {
+        gsap.from(block, {
+          scrollTrigger: { trigger: block, start: "top 85%" },
+          y: 80, opacity: 0, duration: 0.8, ease: "back.out(2)"
+        });
+      });
+
+      // Devs
+      gsap.from(".dev-jump", {
+        scrollTrigger: { trigger: "#devs", start: "top 80%" },
+        y: 50, opacity: 0, duration: 0.8, stagger: 0.2, ease: "power2.out" // Suave, sem efeito "torto" elástico exagerado
+      });
+
+      // Caixas Elastic
+      gsap.utils.toArray('.gs-elastic-box').forEach(box => {
+        gsap.from(box, {
+          scrollTrigger: { trigger: box, start: "top 80%" },
+          scale: 0.9, y: 50, duration: 1.2, stagger: 0.1, ease: "elastic.out(1, 0.3)"
+        });
+      });
+
+      /* ==========================================================
+         LÓGICA RESPONSIVA PARA A SECÇÃO DOS PERSONAGENS (GSAP MatchMedia)
+         ========================================================== */
+      let mm = gsap.matchMedia();
+
+      mm.add("(min-width: 901px)", () => {
+        // DESKTOP: ROLAGEM HORIZONTAL
+        const pinContainer = document.querySelector("#pin-wrap");
+        const horizontalContainer = document.querySelector("#horizontal-container");
+        const panels = gsap.utils.toArray(".char-panel");
+        const dots = document.querySelectorAll(".dot");
+
+        if(pinContainer && horizontalContainer && panels.length > 1) {
+          const horizontalTween = gsap.to(panels, {
+            xPercent: -100 * (panels.length - 1),
+            ease: "none",
+            scrollTrigger: {
+              trigger: pinContainer, pin: true, scrub: 1, snap: 1 / (panels.length - 1),
+              end: () => "+=" + horizontalContainer.offsetWidth,
+              onUpdate: (self) => {
+                const progress = self.progress;
+                const activeIndex = Math.round(progress * (panels.length - 1));
+                dots.forEach((dot, index) => {
+                  if (index === activeIndex) dot.classList.add("active");
+                  else dot.classList.remove("active");
+                });
+              }
+            }
+          });
+
+          // Animação interna do avatar apenas no desktop
+          panels.forEach((panel) => {
+            const avatar = panel.querySelector(".char-avatar");
+            if(avatar) {
+               gsap.from(avatar, {
+                y: -50, scale: 0.5, duration: 1, ease: "elastic.out(1, 0.3)",
+                scrollTrigger: {
+                  trigger: panel, containerAnimation: horizontalTween, start: "left center",
+                  toggleActions: "restart none none reverse"
+                }
+              });
+            }
+          });
+        }
+        return () => { /* cleanup opcional */ };
+      });
+
+      mm.add("(max-width: 900px)", () => {
+        // MOBILE: ROLAGEM VERTICAL NORMAL
+        // O GSAP ScrollTrigger não aplica a rolagem horizontal aqui, os painéis caem naturalmente como colunas pelo CSS.
+        // Adicionamos apenas uma animação de fade-up simples para cada carta.
+        const cards = gsap.utils.toArray(".char-card");
+        cards.forEach((card) => {
+          gsap.from(card, {
+            scrollTrigger: { trigger: card, start: "top 85%" },
+            y: 50, opacity: 0, duration: 0.8, ease: "power2.out"
+          });
+        });
+      });
+
+      // Nuvens
+      const cloudsContainer = document.getElementById('clouds-container');
+      for(let i=0; i<4; i++){
+        let cloud = document.createElement('div');
+        cloud.className = 'cloud';
+        let size = 60 + Math.random() * 100;
+        cloud.style.width = size + 'px';
+        cloud.style.height = (size * 0.4) + 'px';
+        cloud.style.top = (10 + Math.random() * 60) + 'vh';
+        cloudsContainer.appendChild(cloud);
+        
+        gsap.fromTo(cloud, 
+          { x: '-20vw' }, 
+          { x: '120vw', duration: 25 + Math.random() * 30, repeat: -1, ease: "none", delay: Math.random() * -40 }
+        );
+        
+        gsap.to(cloud, {
+          y: -150, ease: "none",
+          scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: true }
+        });
+      }
+
+      // Moedas Decorativas
+      const sectionsForCoins = ['#about', '#roadmap', '#avaliacao'];
+      sectionsForCoins.forEach(selector => {
+        const section = document.querySelector(selector);
+        if(section) {
+          // Menos moedas em mobile para não poluir
+          let coinCount = window.innerWidth < 800 ? 1 : 3; 
+          for(let i=0; i<coinCount; i++) {
+            let coin = document.createElement('div');
+            coin.className = 'coin';
+            coin.style.left = (10 + Math.random() * 80) + '%';
+            coin.style.top = (10 + Math.random() * 80) + '%';
+            section.appendChild(coin);
+
+            gsap.to(coin, {
+              y: -80 * (Math.random() + 0.5), ease: "none",
+              scrollTrigger: { trigger: section, start: "top bottom", end: "bottom top", scrub: 1 }
+            });
+          }
+        }
+      });
+
+      // FAQ
+      const faqItems = document.querySelectorAll('.faq-item');
+      faqItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const isActive = item.classList.contains('active');
+          faqItems.forEach(faq => faq.classList.remove('active'));
+          if(!isActive) {
+            item.classList.add('active');
+            gsap.fromTo(item.querySelector('.faq-answer'), { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" });
+          }
+        });
+      });
+      
+      // Navbar scroll behavior
+      let lastScroll = 0;
+      const navWrapper = document.querySelector('.nav-wrapper');
+      window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+        if (currentScroll > 100 && currentScroll > lastScroll) {
+          navWrapper.style.transform = 'translateY(-150%)';
+        } else {
+          navWrapper.style.transform = 'translateY(0)';
+        }
+        lastScroll = currentScroll;
+      });
+
+    });
+  </script>
 </body>
 </html>
